@@ -1,7 +1,9 @@
+import { Outlet, Link } from "react-router-dom";
+
 export default function Root() {
     return(
-        <>
-            <p>Hello World!</p>
-        </>
-    );
+        <div>
+            <nav className="nav-bar"></nav>
+        </div>   
+    )
 }

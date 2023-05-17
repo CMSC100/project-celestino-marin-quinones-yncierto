@@ -6,7 +6,21 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Root from './components/Root';
 
 const router = createBrowserRouter([
-  {path: "/", element: <Root/>}
+  {path: "/", element: <LogIn />},
+  { path: "/signUp", element: <SignUp />},
+  { path: "/admin/:userCode", element: <AdminRoot />, children: [
+    { path: "/admin/:userCode", element: <AdminMain />},
+    { path: "/admin/:userCode/manage-apps", element: <PendingApplications />},
+    { path: "/admin/:userCode/show-approver", element: <ApproverList />},
+  ]},
+  { path: "/student/:userCode", element: <StudentRoot />, children: [
+    { path: "/student/:userCode", element: <StudentMain />},
+    
+  ]},
+  { path: "/approver/:userCode", element: <ApproverRoot />, children: [
+    { path: "/approver/:userCode", element: <ApproverMain />},
+    
+  ]}
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
