@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import Root from './components/Root';
+import Root from './components/LogIn';
 
 const router = createBrowserRouter([
   {path: "/", element: <Root/>}
