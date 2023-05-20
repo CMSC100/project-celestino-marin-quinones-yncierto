@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react';
 import validator from 'validator'
-import './LogIn.css';
+import './Login.css';
 
 export default function Root() {
     const [isValidEmail, setIsValidEmail] = useState(true)
