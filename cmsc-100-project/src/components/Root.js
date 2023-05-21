@@ -4,6 +4,6 @@ export default function Root() {
     return(
         <div>
             <nav className="nav-bar"></nav>
-        </div>   
+        </div>
     )
 }

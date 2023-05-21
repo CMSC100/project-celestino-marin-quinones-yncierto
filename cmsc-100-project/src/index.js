@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import Root from './components/Root';
-
 const router = createBrowserRouter([
   {path: "/", element: <LogIn />},
   { path: "/signUp", element: <SignUp />},
@@ -19,7 +17,8 @@ const router = createBrowserRouter([
   ]},
   { path: "/approver/:userCode", element: <ApproverRoot />, children: [
     { path: "/approver/:userCode", element: <ApproverMain />},
-    
+    { path: "/approver/:userCode/infoSubmit/:studentCode", element: <StudentSubmittedInfo />},
+    { path: "/approver/:userCode/remarks/:studentCode", element: <StudentRemarks />}
   ]}
 ]);
 
