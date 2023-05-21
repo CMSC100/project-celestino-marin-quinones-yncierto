@@ -1,0 +1,75 @@
+.login-container{
+  background-color: #f1f1f1;
+  width: 50%;
+  min-height: 100%;
+  margin: auto;
+  padding: 20px;
+}
+
+form {
+  border: 3px solid #f1f1f1;
+}
+
+label {
+  margin-left: 10px;
+}
+
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px;
+  margin: 8px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #0A4D68;
+  padding: 10px;
+  margin: 8px;
+  border: none;
+  cursor: pointer;
+  border-radius: 12px;
+  color: white;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+.login-btn-container {
+  text-align: center;
+}
+
+.login-btn {
+  margin-top: 15px;
+  width: 15%;
+}
+
+.signup-btn-container {
+  text-align: center;
+  padding-top: 0px !important;
+}
+
+.signup-btn {
+  width: 15%;
+}
+
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+}
+
+img.avatar {
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+}
+
+.error-msg {
+color: red;
+font-size: small;
+text-align: left;
+margin-left: 10px;
+margin-top: 0px;
+}
