@@ -5,9 +5,10 @@ const UserSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
   middleName: { type: String, required: true },
   lastName: { type: String, required: true },
-  studentNumber: { type: String, required: true },
+  studentNumber: { type: String },
   email: { type: String, required: true },
-  password: { type: String, required: true }
+  password: { type: String, required: true },
+  userType: { type: String, required: true}
 });
 
 UserSchema.pre("save", function(next) {
@@ -20,8 +21,9 @@ UserSchema.pre("save", function(next) {
 
     return bcrypt.hash(user.password, salt, (hashError, hash) => {
       if (hashError) { return next(hashError); }
-
+      console.log(user.password)
       user.password = hash;
+      console.log(user.password)
       return next();
     });
   });

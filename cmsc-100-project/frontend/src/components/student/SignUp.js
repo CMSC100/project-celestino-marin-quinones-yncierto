@@ -76,7 +76,8 @@ export default function SignUp() {
         lastName: document.getElementById("s-lname").value,
         studentNumber: document.getElementById("s-studno").value,
         email: document.getElementById("s-email").value,
-        password: document.getElementById("s-password").value
+        password: document.getElementById("s-password").value,
+        userType: "student"
       })
     })
       .then(response => response.json())

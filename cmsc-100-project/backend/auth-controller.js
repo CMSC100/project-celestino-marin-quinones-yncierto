@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 const User = mongoose.model("User");
 
 const signUp = async (req, res) => {
-  const { firstName, middleName, lastName, studentNumber, email, password } = req.body;
+  const { firstName, middleName, lastName, studentNumber, email, password, userType } = req.body;
 
   const newuser = new User({
     firstName: req.body.firstName,
@@ -14,7 +14,8 @@ const signUp = async (req, res) => {
     lastName: req.body.lastName,
     studentNumber: req.body.studentNumber,
     email: req.body.email,
-    password: req.body.password
+    password: req.body.password,
+    userType: req.body.userType
   });
 
   const result = await newuser.save();
@@ -24,6 +25,60 @@ const signUp = async (req, res) => {
 	} else {
 		res.send({ success: false })
 	}
+}
+
+const createApprover = async (req, res) => {
+  const { firstName, middleName, lastName, email, password, userType } = req.body;
+
+  const newapprover = new User({
+    firstName: firstName,
+    middleName: middleName,
+    lastName: lastName,
+    email: email,
+    password: password,
+    userType: userType
+  });
+
+  const result = await newapprover.save();
+
+  if (result._id) {
+		res.send({ success: true })
+	} else {
+		res.send({ success: false })
+	}
+}
+
+const getApproverAccounts = async (req, res) => {
+  const approverAccounts = await User.find({userType: "approver"});
+  res.send(approverAccounts)
+}
+
+const getApproverDetails = async (req, res) => {
+  console.log(req.query.docRef)
+  const approver = await User.find({_id: req.query.docRef});
+  console.log(approver)
+  res.send(approver)
+}
+
+const editApprover = async (req, res) => {
+  const newDetails = req.body;
+
+  let { docRef } = newDetails
+  console.log(docRef)
+  if (docRef) {
+    let update = await User.updateOne({_id: docRef}, {$set: {
+      firstName: newDetails.firstName,
+      middleName: newDetails.middleName,
+      lastName: newDetails.lastName,     
+    }})
+
+    if (update["acknowledged"] && update["matchedCount"] != 0) res.send({edited: true})
+    else res.send({edited: false});
+  } else res.send({edited: false})
+}
+
+const deleteApprover = async (req, res) => {
+  await User.deleteOne({_id: req.body.docRef})
 }
 
 const login = async (req, res) => {
@@ -86,4 +141,4 @@ const checkIfLoggedIn = async (req, res) => {
   }
 }
 
-export { signUp, login, checkIfLoggedIn }
+export { signUp, login, checkIfLoggedIn, createApprover, editApprover, getApproverDetails, getApproverAccounts, deleteApprover }

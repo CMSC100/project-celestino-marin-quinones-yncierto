@@ -53,6 +53,7 @@ export default function Root() {
     })
       .then((response) => response.json())
       .then((body) => {
+        console.log(body)
         if (body.success) {
           setIsLoggedIn(true);
           const cookies = new Cookies();
