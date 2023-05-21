@@ -6,16 +6,26 @@ import jwt from 'jsonwebtoken';
 const User = mongoose.model("User");
 
 const signUp = async (req, res) => {
+<<<<<<< HEAD
   const { firstName, middleName, lastName, studentNumber, email, password, userType } = req.body;
+=======
+  const { firstName, middleName, lastName, studentNumber, userType, email, password, applications, adviser } = req.body;
+>>>>>>> main
 
   const newuser = new User({
     firstName: req.body.firstName,
     middleName: req.body.middleName,
     lastName: req.body.lastName,
     studentNumber: req.body.studentNumber,
+    userType: req.body.userType,
     email: req.body.email,
     password: req.body.password,
+<<<<<<< HEAD
     userType: req.body.userType
+=======
+    applications: req.body.applications,
+    adviser: req.body.adviser,
+>>>>>>> main
   });
 
   const result = await newuser.save();

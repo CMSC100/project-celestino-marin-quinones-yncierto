@@ -6,9 +6,11 @@ const UserSchema = new mongoose.Schema({
   middleName: { type: String, required: true },
   lastName: { type: String, required: true },
   studentNumber: { type: String },
+  userType: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
-  userType: { type: String, required: true}
+  applications: { type: Array },
+  adviser: { type: String },
 });
 
 UserSchema.pre("save", function(next) {
