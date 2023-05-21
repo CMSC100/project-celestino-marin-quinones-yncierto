@@ -35,12 +35,13 @@ export default function Admin(props) {
             })
         })
             .then(response => response.json())
-            .then(body => {
-                if (body["success"]) alert("Approver account created.")
+            .then(function(body) {
+                if (body["success"]) {
+                    getApproverAccounts()
+                    alert("Approver account created.")
+                }
                 else alert("Creation of approver account failed.")
             })
-        
-        getApproverAccounts()
     }
 
     const editApprover = (e) => {
@@ -58,24 +59,25 @@ export default function Admin(props) {
             })
         })
             .then(response => response.json())
-            .then(body => {
+            .then(function(body) {
+                getApproverAccounts()
                 if (body["edited"]) alert("Approver account edited.")
                 else alert("Failed to edit approver account.")
             })
-        
-        getApproverAccounts();
     }
 
     const getApproverAccounts = () => {
         fetch("http://localhost:3001/getapproveraccounts")
             .then(response => response.json())
-            .then(body => setApproverAccounts(body))
+            .then(function(body) {
+                setApproverAccounts(body)
+            })
     }
 
     const getApproverDetails = (approverID) => {
         fetch(`http://localhost:3001/getapproverdetails?docRef=${approverID}`)
             .then(response => response.json())
-            .then(body => { console.log(body)
+            .then(function(body) { console.log(body)
                 setApproverDetails({
                 firstName: body[0].firstName,
                 middleName: body[0].middleName,
@@ -83,6 +85,9 @@ export default function Admin(props) {
                 // email: body[0].email,
                 // password: ""
             })})
+
+        setEditing(true)
+        setApproverID(approverID)
     }
 
     const deleteApprover = (approverID) => {
@@ -96,8 +101,12 @@ export default function Admin(props) {
                 docRef: approverID,
             })
         })
-
-        getApproverAccounts()
+            .then(response => response.json())
+            .then(function(body) {
+                getApproverAccounts()
+                if (body["deleted"]) alert("Successfully deleted approver account.")
+                else alert("Failed to delete approver account")
+            })
     }
 
     return (
@@ -108,8 +117,6 @@ export default function Admin(props) {
                         <li key={index}>
                             <p>{element.firstName}</p>
                             <button type='button' onClick={function() {
-                                setEditing(true)
-                                setApproverID(element._id)
                                 getApproverDetails(element._id)
                             }}>
                                 Edit

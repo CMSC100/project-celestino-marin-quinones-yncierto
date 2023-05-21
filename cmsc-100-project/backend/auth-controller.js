@@ -6,11 +6,7 @@ import jwt from 'jsonwebtoken';
 const User = mongoose.model("User");
 
 const signUp = async (req, res) => {
-<<<<<<< HEAD
-  const { firstName, middleName, lastName, studentNumber, email, password, userType } = req.body;
-=======
   const { firstName, middleName, lastName, studentNumber, userType, email, password, applications, adviser } = req.body;
->>>>>>> main
 
   const newuser = new User({
     firstName: req.body.firstName,
@@ -20,12 +16,8 @@ const signUp = async (req, res) => {
     userType: req.body.userType,
     email: req.body.email,
     password: req.body.password,
-<<<<<<< HEAD
-    userType: req.body.userType
-=======
     applications: req.body.applications,
     adviser: req.body.adviser,
->>>>>>> main
   });
 
   const result = await newuser.save();
@@ -88,7 +80,9 @@ const editApprover = async (req, res) => {
 }
 
 const deleteApprover = async (req, res) => {
-  await User.deleteOne({_id: req.body.docRef})
+  let del = await User.deleteOne({_id: req.body.docRef})
+  if (del["deletedCount"] != 0 && del["acknowledged"]) res.send({deleted: true})
+  else res.send({deleted: false})
 }
 
 const login = async (req, res) => {
