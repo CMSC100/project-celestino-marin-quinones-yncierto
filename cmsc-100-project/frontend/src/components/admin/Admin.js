@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { Outlet, Link } from 'react-router-dom';
 import './Admin.css'
 
 export default function Admin(props) {
@@ -82,9 +81,9 @@ export default function Admin(props) {
             .then(response => response.json())
             .then(function(body) { console.log(body)
                 setApproverDetails({
-                firstName: body[0].firstName,
-                middleName: body[0].middleName,
-                lastName: body[0].lastName,
+                firstName: body.firstName,
+                middleName: body.middleName,
+                lastName: body.lastName,
                 // email: body[0].email,
                 // password: ""
             })})
