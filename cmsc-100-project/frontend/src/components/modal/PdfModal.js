@@ -8,7 +8,7 @@ export default function PdfModal ({ setpdfModal }) {
     studNo: "2021-07177",
     acadAdviserName: "Reginald Recario",
     clearanceOfficer: "Katherine Tan",
-    currDate: "May 22, 2023"
+    currDate: `${new Date().toLocaleDateString()}`
   }
 
   return (
