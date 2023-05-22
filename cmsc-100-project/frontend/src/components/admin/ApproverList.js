@@ -1,6 +1,5 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
-import './Admin.css'
+import { useState, useEffect } from 'react';
+import './ApproverList.css'
 
 export default function Admin(props) {
     // for setting default value of edit text fields
