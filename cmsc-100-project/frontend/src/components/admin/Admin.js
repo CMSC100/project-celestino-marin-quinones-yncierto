@@ -13,12 +13,13 @@ export default function Admin(props) {
     const [approverAccounts, setApproverAccounts] = useState([])
     const [editing, setEditing] = useState(false)
     const [approverID, setApproverID] = useState("")
+    const [searchName, setSearchName] = useState("")
 
-    useEffect(() => {
-        getApproverAccounts()
+    useEffect(function() {
+        getApproverAccounts(searchName)
     }, [])
 
-    const createApprover = (e) => {
+    const createApprover = function(e) {
         e.preventDefault()
         fetch("http://localhost:3001/createapprover", {
             method: "POST",
@@ -44,7 +45,7 @@ export default function Admin(props) {
             })
     }
 
-    const editApprover = (e) => {
+    const editApprover = function(e) {
         e.preventDefault()
         fetch("http://localhost:3001/editapprover", {
             method: "POST",
@@ -66,15 +67,15 @@ export default function Admin(props) {
             })
     }
 
-    const getApproverAccounts = () => {
-        fetch("http://localhost:3001/getapproveraccounts")
+    const getApproverAccounts = function() {
+        fetch(`http://localhost:3001/getapproveraccounts?searchName=${searchName}`)
             .then(response => response.json())
             .then(function(body) {
                 setApproverAccounts(body)
             })
     }
 
-    const getApproverDetails = (approverID) => {
+    const getApproverDetails = function(approverID) {
         fetch(`http://localhost:3001/getapproverdetails?docRef=${approverID}`)
             .then(response => response.json())
             .then(function(body) { console.log(body)
@@ -90,7 +91,7 @@ export default function Admin(props) {
         setApproverID(approverID)
     }
 
-    const deleteApprover = (approverID) => {
+    const deleteApprover = function(approverID) {
         console.log("proceed")
         fetch("http://localhost:3001/deleteapprover", {
             method: "POST",
@@ -109,8 +110,19 @@ export default function Admin(props) {
             })
     }
 
+    const handleSearchNameChange = function(e) {
+        setSearchName(e.target.value)
+    }
+
+    const searchButton = function() {
+        getApproverAccounts(searchName)
+    }
+
     return (
         <>
+            <label>Search for Approver: </label>
+            <input type='text' id="searchName" name="searchName" placeholder='Enter name of approver' onChange={handleSearchNameChange}/>
+            <button type='button' id='searchButton' onClick={searchButton}>Search Approver</button>
             <ul>
                 {approverAccounts.map((element, index) => {
                     return (
@@ -158,19 +170,19 @@ export default function Admin(props) {
             <form onSubmit={createApprover}>
                     <div className="container-form">
                         <label htmlFor="fname"><b>First Name</b></label>
-                        <input id="s-fname" type="text" placeholder="Enter first name" defaultValue={approverDetails.firstName} name="fname" required />
+                        <input id="s-fname" type="text" placeholder="Enter first name" name="fname" required />
 
                         <label htmlFor="mname"><b>Middle Name</b></label>
-                        <input id="s-mname" type="text" placeholder="Enter middle name" defaultValue={approverDetails.middleName} name="mname" required />
+                        <input id="s-mname" type="text" placeholder="Enter middle name" name="mname" required />
 
                         <label htmlFor="lname"><b>Last Name</b></label>
-                        <input id="s-lname" type="text" placeholder="Enter last name" defaultValue={approverDetails.lastName} name="lname" required />
+                        <input id="s-lname" type="text" placeholder="Enter last name" name="lname" required />
 
                         <label htmlFor="email"><b>Email</b></label>
-                        <input id="s-email" type="text" placeholder="Enter Email" defaultValue={approverDetails.email} name="email" required />
+                        <input id="s-email" type="text" placeholder="Enter Email" name="email" required />
 
                         <label htmlFor="psw"><b>Password</b></label>
-                        <input id="s-password" type="password" placeholder="Enter Password" defaultValue={approverDetails.password} name="psw" required />
+                        <input id="s-password" type="password" placeholder="Enter Password" name="psw" required />
 
                         <div className="signup-back-btn">
                             <button className="signup-back-btn" type="submit">Submit</button>

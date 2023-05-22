@@ -51,7 +51,31 @@ const createApprover = async (req, res) => {
 }
 
 const getApproverAccounts = async (req, res) => {
-  const approverAccounts = await User.find({userType: "approver"});
+  let searchName = req.query.searchName
+  let approverAccounts;
+  if (searchName == "") {
+    approverAccounts = await User.find({userType: "approver"});
+  } else {
+    approverAccounts = await User.find(
+      {
+        $and: [
+          { $or: 
+            [
+              {firstName: {$regex: new RegExp(`${searchName}`, "gi")}},
+              {middleName: {$regex: new RegExp(`${searchName}`, "gi")}},
+              {lastName: {$regex: new RegExp(`${searchName}`, "gi")}}
+            ]
+          },
+          {
+            userType: "approver"
+          }
+        ]
+      }
+    );
+  }
+
+  console.log(approverAccounts)
+
   res.send(approverAccounts)
 }
 
