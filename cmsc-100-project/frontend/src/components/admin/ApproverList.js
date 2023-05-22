@@ -176,14 +176,15 @@ export default function Admin(props) {
 
     return (
         <>
-            for sorting
             <span>Sort Approver List:</span>
             <button type="button" name="sortButton" id="sortAscButton" className='active' onClick={sortApproverList} value={1}>Ascending</button>
             <button type='button' name="sortButton" id='sortDescButton' onClick={sortApproverList} value={-1}>Descending</button>
             <br/>
+
             <label htmlFor="searchName">Search for Approver: </label>
             <input type='text' id="searchName" name="searchName" placeholder='Enter name of approver' onChange={handleSearchNameChange} value={searchName}/>
             <button type='button' id='clearSearch' onClick={clearSearch}>Display All Approver</button>
+            
             <ul>
                 {approverAccounts.map((element, index) => {
                     return (
@@ -203,6 +204,7 @@ export default function Admin(props) {
                     )
                 })}
             </ul>
+
             {isEditing &&
                 <form onSubmit={editApprover}>
                     <div className="container-form">
@@ -227,6 +229,7 @@ export default function Admin(props) {
                     </div>
                 </form>
             }
+
             <form onSubmit={createApprover}>
                     <div className="container-form">
                         <label htmlFor="fname"><b>First Name</b></label>
