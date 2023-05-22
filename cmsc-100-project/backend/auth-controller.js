@@ -29,6 +29,94 @@ const signUp = async (req, res) => {
 	}
 }
 
+// create approver
+const createApprover = async (req, res) => {
+  // get details
+  const { firstName, middleName, lastName, email, password, userType } = req.body;
+
+  // create new user
+  const newapprover = new User({
+    firstName: firstName,
+    middleName: middleName,
+    lastName: lastName,
+    email: email,
+    password: password,
+    userType: userType
+  });
+
+  // save
+  const result = await newapprover.save();
+
+  if (result._id) {
+		res.send({ success: true })
+	} else {
+		res.send({ success: false })
+	}
+}
+
+// get all approver accounts based on search w/ sorting
+const getApproverAccounts = async (req, res) => {
+  let { searchName, sort } = req.query
+  let approverAccounts; // store approver accounts
+  if (searchName == "") {
+    // if empty query
+    // collation is for adjusting how the database sorts (makes it case-insensitive)
+    approverAccounts = await User.find({userType: "approver"}).collation({locale: "en"}).sort({firstName: sort, middleName: sort, lastName: sort});
+  } else {
+    approverAccounts = await User.find(
+      // use conditional operators
+      {
+        $and: [
+          { $or: 
+            [
+              // used regex to filter out names
+              {firstName: {$regex: new RegExp(`${searchName}`, "gi")}},
+              {middleName: {$regex: new RegExp(`${searchName}`, "gi")}},
+              {lastName: {$regex: new RegExp(`${searchName}`, "gi")}}
+            ]
+          },
+          {
+            userType: "approver"
+          }
+        ]
+      }
+    ).collation({locale: "en"}).sort({firstName: sort, middleName: sort, lastName: sort});
+  }
+
+  res.send(approverAccounts)
+}
+
+// get specific details of approver
+const getApproverDetails = async (req, res) => {
+  let { docRef } = req.query // objectID of specific approver
+  const approver = await User.findOne({_id: docRef});
+  res.send(approver)
+}
+
+//edit approver details
+const editApprover = async (req, res) => {
+  // get details
+  let { docRef, firstName, middleName, lastName} = req.body;
+  if (docRef) {
+    let update = await User.updateOne({_id: docRef}, {$set: {
+      firstName: firstName,
+      middleName: middleName,
+      lastName: lastName,     
+    }})
+
+    if (update["acknowledged"] && update["modifiedCount"] != 0) res.send({edited: "edited"})
+    else res.send({edited: "no fields changed"});
+  } else res.send({edited: "failed"})
+}
+
+// delete approver account
+const deleteApprover = async (req, res) => {
+  let { docRef } = req.body // approver account document reference
+  let del = await User.deleteOne({_id: docRef})
+  if (del["deletedCount"] != 0 && del["acknowledged"]) res.send({deleted: true})
+  else res.send({deleted: false})
+}
+
 const login = async (req, res) => {
   const email = req.body.email.trim();
   const password = req.body.password;
@@ -89,4 +177,4 @@ const checkIfLoggedIn = async (req, res) => {
   }
 }
 
-export { signUp, login, checkIfLoggedIn }
+export { signUp, login, checkIfLoggedIn, createApprover, editApprover, getApproverDetails, getApproverAccounts, deleteApprover }
