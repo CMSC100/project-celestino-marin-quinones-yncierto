@@ -52,7 +52,6 @@ const createApprover = async (req, res) => {
 
 const getApproverAccounts = async (req, res) => {
   let { searchName, filter } = req.query
-  console.log(filter)
   let approverAccounts;
   if (searchName == "") {
     approverAccounts = await User.find({userType: "approver"}).sort({firstName: filter, middleName: filter, lastName: filter});
@@ -75,15 +74,13 @@ const getApproverAccounts = async (req, res) => {
     ).sort({firstName: filter, middleName: filter, lastName: filter});
   }
 
-  console.log(approverAccounts)
 
   res.send(approverAccounts)
 }
 
 const getApproverDetails = async (req, res) => {
   let { docRef } = req.query
-  const approver = await User.findById(docRef);
-  console.log(approver)
+  const approver = await User.findOne({_id: docRef});
   res.send(approver)
 }
 
@@ -91,22 +88,23 @@ const editApprover = async (req, res) => {
   const newDetails = req.body;
 
   let { docRef } = newDetails
-  console.log(docRef)
   if (docRef) {
-    let update = await User.findByIdAndUpdate(docRef, {$set: {
+    let update = await User.updateOne({_id: docRef}, {$set: {
       firstName: newDetails.firstName,
       middleName: newDetails.middleName,
       lastName: newDetails.lastName,     
     }})
 
-    if (update["acknowledged"] && update["matchedCount"] != 0) res.send({edited: true})
-    else res.send({edited: false});
-  } else res.send({edited: false})
+    console.log(update)
+
+    if (update["acknowledged"] && update["modifiedCount"] != 0) res.send({edited: "edited"})
+    else res.send({edited: "no fields changed"});
+  } else res.send({edited: "failed"})
 }
 
 const deleteApprover = async (req, res) => {
   let { docRef } = req.body
-  let del = await User.findByIdAndDelete(docRef)
+  let del = await User.deleteOne({_id: docRef})
   if (del["deletedCount"] != 0 && del["acknowledged"]) res.send({deleted: true})
   else res.send({deleted: false})
 }

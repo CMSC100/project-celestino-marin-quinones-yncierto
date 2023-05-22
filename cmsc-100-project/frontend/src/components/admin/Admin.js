@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import './Admin.css'
 
 export default function Admin(props) {
+    // for setting default value of edit text fields
     const [approverDetails, setApproverDetails] = useState({
         firstName: "",
         middleName: "",
@@ -10,8 +11,17 @@ export default function Admin(props) {
         // email: "",
         // password: "",
     })
+    // for getting all approver accounts
     const [approverAccounts, setApproverAccounts] = useState([])
+    // 
     const [editing, setEditing] = useState(false)
+    const [editingApprover, setEditingApprover] = useState({
+        firstName: "",
+        middleName: "",
+        lastName: "",
+        // email: "",
+        // password: "",
+    })
     const [approverID, setApproverID] = useState("")
     const [searchName, setSearchName] = useState("")
     const [filter, setFilter] = useState(1)
@@ -19,6 +29,10 @@ export default function Admin(props) {
     useEffect(function() {
         getApproverAccounts(searchName, filter)
     }, [searchName, filter])
+
+    useEffect(function() {
+        setEditingApprover(approverDetails)
+    }, [approverDetails])
 
     const createApprover = function(e) {
         e.preventDefault()
@@ -63,9 +77,20 @@ export default function Admin(props) {
             .then(response => response.json())
             .then(function(body) {
                 getApproverAccounts(searchName, filter)
-                if (body["edited"]) alert("Approver account edited.")
+                if (body["edited"] == "edited") {
+                    alert("Approver account edited.")
+                    setEditing(false)
+                } else if (body["edited"] == "no fields changed") alert("No fields were edited.")
                 else alert("Failed to edit approver account.")
             })
+    }
+
+    const handleEditChange = function(e) {
+        let newDetails = {...editingApprover}
+        if (e.target.name == "fname") newDetails.firstName = e.target.value
+        else if (e.target.name == "mname") newDetails.middleName = e.target.value
+        else if (e.target.name == "lname") newDetails.lastName = e.target.value
+        setEditingApprover(newDetails)
     }
 
     const getApproverAccounts = function(searchName, filter) {
@@ -162,14 +187,13 @@ export default function Admin(props) {
                 <form onSubmit={editApprover}>
                     <div className="container-form">
                         <label htmlFor="fname"><b>First Name</b></label>
-                        <input id="s-fname" type="text" placeholder="Enter first name" defaultValue={approverDetails.firstName} name="fname" required />
+                        <input id="s-fname" type="text" placeholder="Enter first name" value={editingApprover.firstName} name="fname" onChange={handleEditChange} required />
 
                         <label htmlFor="mname"><b>Middle Name</b></label>
-                        <input id="s-mname" type="text" placeholder="Enter middle name" defaultValue={approverDetails.middleName} name="mname" required />
+                        <input id="s-mname" type="text" placeholder="Enter middle name" value={editingApprover.middleName} name="mname" onChange={handleEditChange} required />
 
                         <label htmlFor="lname"><b>Last Name</b></label>
-                        <input id="s-lname" type="text" placeholder="Enter last name" defaultValue={approverDetails.lastName} name="lname" required />
-
+                        <input id="s-lname" type="text" placeholder="Enter last name" value={editingApprover.lastName} name="lname" onChange={handleEditChange} required />
                         {/* <label htmlFor="email"><b>Email</b></label>
                         <input id="s-email" type="text" placeholder="Enter Email" defaultValue={approverDetails.email} name="email" required />
 
@@ -178,7 +202,7 @@ export default function Admin(props) {
 
                         <div className="signup-back-btn">
                             <button className="signup-back-btn" type="submit">Edit</button>
-                            <button type="reset" className="cancelbtn">Cancel</button>
+                            <button type="reset" className="cancelbtn" onClick={() => setEditing(false)}>Cancel</button>
                         </div>
                     </div>
                 </form>
