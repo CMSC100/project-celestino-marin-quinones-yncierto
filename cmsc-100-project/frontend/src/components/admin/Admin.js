@@ -14,10 +14,11 @@ export default function Admin(props) {
     const [editing, setEditing] = useState(false)
     const [approverID, setApproverID] = useState("")
     const [searchName, setSearchName] = useState("")
+    const [filter, setFilter] = useState(1)
 
     useEffect(function() {
-        getApproverAccounts(searchName)
-    }, [])
+        getApproverAccounts(searchName, filter)
+    }, [searchName, filter])
 
     const createApprover = function(e) {
         e.preventDefault()
@@ -38,7 +39,7 @@ export default function Admin(props) {
             .then(response => response.json())
             .then(function(body) {
                 if (body["success"]) {
-                    getApproverAccounts()
+                    getApproverAccounts(searchName, filter)
                     alert("Approver account created.")
                 }
                 else alert("Creation of approver account failed.")
@@ -61,14 +62,14 @@ export default function Admin(props) {
         })
             .then(response => response.json())
             .then(function(body) {
-                getApproverAccounts()
+                getApproverAccounts(searchName, filter)
                 if (body["edited"]) alert("Approver account edited.")
                 else alert("Failed to edit approver account.")
             })
     }
 
-    const getApproverAccounts = function() {
-        fetch(`http://localhost:3001/getapproveraccounts?searchName=${searchName}`)
+    const getApproverAccounts = function(searchName, filter) {
+        fetch(`http://localhost:3001/getapproveraccounts?searchName=${searchName}&filter=${filter}`)
             .then(response => response.json())
             .then(function(body) {
                 setApproverAccounts(body)
@@ -104,7 +105,7 @@ export default function Admin(props) {
         })
             .then(response => response.json())
             .then(function(body) {
-                getApproverAccounts()
+                getApproverAccounts(searchName, filter)
                 if (body["deleted"]) alert("Successfully deleted approver account.")
                 else alert("Failed to delete approver account")
             })
@@ -113,21 +114,31 @@ export default function Admin(props) {
     const handleSearchNameChange = function(e) {
         setSearchName(e.target.value)
     }
+    
+    const clearSearch = function() {
+        setSearchName("")
+        document.getElementById("clearSearch").value = ""
+    }
 
-    const searchButton = function() {
-        getApproverAccounts(searchName)
+    const filterApproverList = function(value) {
+        console.log(value)
+        setFilter(value)
     }
 
     return (
         <>
-            <label>Search for Approver: </label>
-            <input type='text' id="searchName" name="searchName" placeholder='Enter name of approver' onChange={handleSearchNameChange}/>
-            <button type='button' id='searchButton' onClick={searchButton}>Search Approver</button>
+            <span>Filter Approver List:</span>
+            <button type="button" id="filterAscButton" onClick={function() {filterApproverList(1)}}>Ascending</button>
+            <button type='button' id='filterDescButton' onClick={function() {filterApproverList(-1)}}>Descending</button>
+            <br/>
+            <label htmlFor="searchName">Search for Approver: </label>
+            <input type='text' id="searchName" name="searchName" placeholder='Enter name of approver' onChange={handleSearchNameChange} value={searchName}/>
+            <button type='button' id='clearSearch' onClick={clearSearch}>Display All Approver</button>
             <ul>
                 {approverAccounts.map((element, index) => {
                     return (
                         <li key={index}>
-                            <p>{element.firstName}</p>
+                            <p>{element.firstName} {element.middleName} {element.lastName}</p>
                             <button type='button' onClick={function() {
                                 getApproverDetails(element._id)
                             }}>
