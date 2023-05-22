@@ -54,7 +54,7 @@ const getApproverAccounts = async (req, res) => {
   let { searchName, filter } = req.query
   let approverAccounts;
   if (searchName == "") {
-    approverAccounts = await User.find({userType: "approver"}).sort({firstName: filter, middleName: filter, lastName: filter});
+    approverAccounts = await User.find({userType: "approver"}).collation({locale: "en"}).sort({firstName: filter, middleName: filter, lastName: filter});
   } else {
     approverAccounts = await User.find(
       {
@@ -71,9 +71,8 @@ const getApproverAccounts = async (req, res) => {
           }
         ]
       }
-    ).sort({firstName: filter, middleName: filter, lastName: filter});
+    ).collation({locale: "en"}).sort({firstName: filter, middleName: filter, lastName: filter});
   }
-
 
   res.send(approverAccounts)
 }

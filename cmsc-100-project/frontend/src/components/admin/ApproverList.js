@@ -12,8 +12,9 @@ export default function Admin(props) {
     })
     // for getting all approver accounts
     const [approverAccounts, setApproverAccounts] = useState([])
-    // store 
+    // store boolean for editing status
     const [isEditing, setIsEditing] = useState(false)
+    // details that editing text fields can change
     const [editingApprover, setEditingApprover] = useState({
         firstName: "",
         middleName: "",
@@ -21,18 +22,24 @@ export default function Admin(props) {
         // email: "",
         // password: "",
     })
+    // get approverID of which approver to delete/edit
     const [approverID, setApproverID] = useState("")
+    // store string for searching name
     const [searchName, setSearchName] = useState("")
+    // store int (1 or -1) for filtering
     const [filter, setFilter] = useState(1)
 
+    // reload approver accounts when searching or filter is changed
     useEffect(function() {
-        getApproverAccounts(searchName, filter)
+        getApproverAccounts()
     }, [searchName, filter])
 
+    // change editable approver details map
     useEffect(function() {
         setEditingApprover(approverDetails)
     }, [approverDetails])
 
+    // function for creating an approver
     const createApprover = function(e) {
         e.preventDefault()
         fetch("http://localhost:3001/createapprover", {
@@ -52,7 +59,8 @@ export default function Admin(props) {
             .then(response => response.json())
             .then(function(body) {
                 if (body["success"]) {
-                    getApproverAccounts(searchName, filter)
+                    // reload
+                    getApproverAccounts()
                     alert("Approver account created.")
                 }
                 else alert("Creation of approver account failed.")
@@ -75,7 +83,7 @@ export default function Admin(props) {
         })
             .then(response => response.json())
             .then(function(body) {
-                getApproverAccounts(searchName, filter)
+                getApproverAccounts()
                 if (body["edited"] == "edited") {
                     alert("Approver account edited.")
                     setIsEditing(false)
@@ -92,7 +100,7 @@ export default function Admin(props) {
         setEditingApprover(newDetails)
     }
 
-    const getApproverAccounts = function(searchName, filter) {
+    const getApproverAccounts = function() {
         fetch(`http://localhost:3001/getapproveraccounts?searchName=${searchName}&filter=${filter}`)
             .then(response => response.json())
             .then(function(body) {
@@ -129,7 +137,7 @@ export default function Admin(props) {
         })
             .then(response => response.json())
             .then(function(body) {
-                getApproverAccounts(searchName, filter)
+                getApproverAccounts()
                 if (body["deleted"]) alert("Successfully deleted approver account.")
                 else alert("Failed to delete approver account")
             })
