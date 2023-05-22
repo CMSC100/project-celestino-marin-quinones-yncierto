@@ -51,10 +51,10 @@ const createApprover = async (req, res) => {
 }
 
 const getApproverAccounts = async (req, res) => {
-  let { searchName, filter } = req.query
+  let { searchName, sort } = req.query
   let approverAccounts;
   if (searchName == "") {
-    approverAccounts = await User.find({userType: "approver"}).collation({locale: "en"}).sort({firstName: filter, middleName: filter, lastName: filter});
+    approverAccounts = await User.find({userType: "approver"}).collation({locale: "en"}).sort({firstName: sort, middleName: sort, lastName: sort});
   } else {
     approverAccounts = await User.find(
       {
@@ -71,7 +71,7 @@ const getApproverAccounts = async (req, res) => {
           }
         ]
       }
-    ).collation({locale: "en"}).sort({firstName: filter, middleName: filter, lastName: filter});
+    ).collation({locale: "en"}).sort({firstName: sort, middleName: sort, lastName: sort});
   }
 
   res.send(approverAccounts)

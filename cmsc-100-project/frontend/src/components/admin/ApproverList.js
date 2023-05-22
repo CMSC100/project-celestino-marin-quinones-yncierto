@@ -26,13 +26,13 @@ export default function Admin(props) {
     const [approverID, setApproverID] = useState("")
     // store string for searching name
     const [searchName, setSearchName] = useState("")
-    // store int (1 or -1) for filtering
-    const [filter, setFilter] = useState(1)
+    // store int (1 or -1) for sorting
+    const [sort, setSort] = useState(1)
 
-    // reload approver accounts when searching or filter is changed
+    // reload approver accounts when searching or sort is changed
     useEffect(function() {
         getApproverAccounts()
-    }, [searchName, filter])
+    }, [searchName, sort])
 
     // change editable approver details map
     useEffect(function() {
@@ -42,6 +42,7 @@ export default function Admin(props) {
     // function for creating an approver
     const createApprover = function(e) {
         e.preventDefault()
+        // send new data to api
         fetch("http://localhost:3001/createapprover", {
             method: "POST",
             headers: {
@@ -59,7 +60,7 @@ export default function Admin(props) {
             .then(response => response.json())
             .then(function(body) {
                 if (body["success"]) {
-                    // reload
+                    // reload approver list and display proper alert
                     getApproverAccounts()
                     alert("Approver account created.")
                 }
@@ -67,8 +68,10 @@ export default function Admin(props) {
             })
     }
 
+    // edit approver details
     const editApprover = function(e) {
         e.preventDefault()
+        // send edited value to api
         fetch("http://localhost:3001/editapprover", {
             method: "POST",
             headers: {
@@ -83,15 +86,17 @@ export default function Admin(props) {
         })
             .then(response => response.json())
             .then(function(body) {
+                // reload approver list
                 getApproverAccounts()
                 if (body["edited"] == "edited") {
                     alert("Approver account edited.")
-                    setIsEditing(false)
+                    setIsEditing(false) // remove edit form
                 } else if (body["edited"] == "no fields changed") alert("No fields were edited.")
                 else alert("Failed to edit approver account.")
             })
     }
 
+    // function for handling changes in text fields for editing
     const handleEditChange = function(e) {
         let newDetails = {...editingApprover}
         if (e.target.name == "fname") newDetails.firstName = e.target.value
@@ -100,14 +105,16 @@ export default function Admin(props) {
         setEditingApprover(newDetails)
     }
 
+    // load all approver accounts based on user search and sort
     const getApproverAccounts = function() {
-        fetch(`http://localhost:3001/getapproveraccounts?searchName=${searchName}&filter=${filter}`)
+        fetch(`http://localhost:3001/getapproveraccounts?searchName=${searchName}&sort=${sort}`)
             .then(response => response.json())
             .then(function(body) {
                 setApproverAccounts(body)
             })
     }
 
+    // get specific approver details for editing
     const getApproverDetails = function(approverID) {
         fetch(`http://localhost:3001/getapproverdetails?docRef=${approverID}`)
             .then(response => response.json())
@@ -124,6 +131,7 @@ export default function Admin(props) {
         setApproverID(approverID)
     }
 
+    // delete approver account
     const deleteApprover = function(approverID) {
         console.log("proceed")
         fetch("http://localhost:3001/deleteapprover", {
@@ -143,30 +151,35 @@ export default function Admin(props) {
             })
     }
 
+    // handling change in the value of search input field
     const handleSearchNameChange = function(e) {
         setSearchName(e.target.value)
     }
     
+    // clear search field
     const clearSearch = function() {
         setSearchName("")
         document.getElementById("clearSearch").value = ""
     }
 
-    const filterApproverList = function(e) {
-        let filterButtons = document.getElementsByName("filterButton")
-        filterButtons.forEach(function(element, index) {
+    // sort list of approver accounts
+    const sortApproverList = function(e) {
+        let sortButtons = document.getElementsByName("sortButton")
+        sortButtons.forEach(function(element) {
+            // add "active" class to clicked button, and remove for other buttons
             if (e.target.value == element.value) element.classList.add("active")
             else element.classList.remove("active")
         })
         console.log(e.target.value)
-        setFilter(e.target.value)
+        setSort(e.target.value) // set sort to new value
     }
 
     return (
         <>
-            <span>Filter Approver List:</span>
-            <button type="button" name="filterButton" id="filterAscButton" className='active' onClick={filterApproverList} value={1}>Ascending</button>
-            <button type='button' name="filterButton" id='filterDescButton' onClick={filterApproverList} value={-1}>Descending</button>
+            for sorting
+            <span>Sort Approver List:</span>
+            <button type="button" name="sortButton" id="sortAscButton" className='active' onClick={sortApproverList} value={1}>Ascending</button>
+            <button type='button' name="sortButton" id='sortDescButton' onClick={sortApproverList} value={-1}>Descending</button>
             <br/>
             <label htmlFor="searchName">Search for Approver: </label>
             <input type='text' id="searchName" name="searchName" placeholder='Enter name of approver' onChange={handleSearchNameChange} value={searchName}/>
