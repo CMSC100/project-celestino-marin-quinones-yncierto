@@ -13,8 +13,8 @@ export default function Admin(props) {
     })
     // for getting all approver accounts
     const [approverAccounts, setApproverAccounts] = useState([])
-    // 
-    const [editing, setEditing] = useState(false)
+    // store 
+    const [isEditing, setIsEditing] = useState(false)
     const [editingApprover, setEditingApprover] = useState({
         firstName: "",
         middleName: "",
@@ -79,7 +79,7 @@ export default function Admin(props) {
                 getApproverAccounts(searchName, filter)
                 if (body["edited"] == "edited") {
                     alert("Approver account edited.")
-                    setEditing(false)
+                    setIsEditing(false)
                 } else if (body["edited"] == "no fields changed") alert("No fields were edited.")
                 else alert("Failed to edit approver account.")
             })
@@ -113,7 +113,7 @@ export default function Admin(props) {
                 // password: ""
             })})
 
-        setEditing(true)
+        setIsEditing(true)
         setApproverID(approverID)
     }
 
@@ -183,7 +183,7 @@ export default function Admin(props) {
                     )
                 })}
             </ul>
-            {editing &&
+            {isEditing &&
                 <form onSubmit={editApprover}>
                     <div className="container-form">
                         <label htmlFor="fname"><b>First Name</b></label>
@@ -202,7 +202,7 @@ export default function Admin(props) {
 
                         <div className="signup-back-btn">
                             <button className="signup-back-btn" type="submit">Edit</button>
-                            <button type="reset" className="cancelbtn" onClick={() => setEditing(false)}>Cancel</button>
+                            <button type="reset" className="cancelbtn" onClick={() => setIsEditing(false)}>Cancel</button>
                         </div>
                     </div>
                 </form>
