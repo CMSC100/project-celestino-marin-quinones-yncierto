@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { Outlet, Link } from 'react-router-dom';
+import './Admin.css'
 
 export default function Admin(props) {
     const [approverDetails, setApproverDetails] = useState({
@@ -120,16 +121,21 @@ export default function Admin(props) {
         document.getElementById("clearSearch").value = ""
     }
 
-    const filterApproverList = function(value) {
-        console.log(value)
-        setFilter(value)
+    const filterApproverList = function(e) {
+        let filterButtons = document.getElementsByName("filterButton")
+        filterButtons.forEach(function(element, index) {
+            if (e.target.value == element.value) element.classList.add("active")
+            else element.classList.remove("active")
+        })
+        console.log(e.target.value)
+        setFilter(e.target.value)
     }
 
     return (
         <>
             <span>Filter Approver List:</span>
-            <button type="button" id="filterAscButton" onClick={function() {filterApproverList(1)}}>Ascending</button>
-            <button type='button' id='filterDescButton' onClick={function() {filterApproverList(-1)}}>Descending</button>
+            <button type="button" name="filterButton" id="filterAscButton" className='active' onClick={filterApproverList} value={1}>Ascending</button>
+            <button type='button' name="filterButton" id='filterDescButton' onClick={filterApproverList} value={-1}>Descending</button>
             <br/>
             <label htmlFor="searchName">Search for Approver: </label>
             <input type='text' id="searchName" name="searchName" placeholder='Enter name of approver' onChange={handleSearchNameChange} value={searchName}/>
