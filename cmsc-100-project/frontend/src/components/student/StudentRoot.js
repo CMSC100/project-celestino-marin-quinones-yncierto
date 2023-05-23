@@ -51,8 +51,8 @@ export default function ApproverRoot() {
                 <button className="logout-btn" onClick={handleLogout}>Log Out</button>
             </header>
             <Outlet/>
-            {modalOpen && <ApplicationModal setModalOpen={setModalOpen}/>}
-            {pdfModalOpen && <PdfModal setpdfModalOpen={setpdfModalOpen}/>}
+            {modalOpen && <ApplicationModal setOpenModal={setModalOpen}/>}
+            {pdfModalOpen && <PdfModal setpdfModal={setpdfModalOpen}/>}
         </div>
     )
 }
