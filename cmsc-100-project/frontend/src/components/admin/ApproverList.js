@@ -99,9 +99,9 @@ export default function Admin(props) {
     // function for handling changes in text fields for editing
     const handleEditChange = function(e) {
         let newDetails = {...editingApprover}
-        if (e.target.name == "fname") newDetails.firstName = e.target.value
-        else if (e.target.name == "mname") newDetails.middleName = e.target.value
-        else if (e.target.name == "lname") newDetails.lastName = e.target.value
+        if (e.target.name === "fname") newDetails.firstName = e.target.value
+        else if (e.target.name === "mname") newDetails.middleName = e.target.value
+        else if (e.target.name === "lname") newDetails.lastName = e.target.value
         setEditingApprover(newDetails)
     }
 
