@@ -12,7 +12,7 @@ export default function Root() {
   // handle the effect when isLoggedIn state changes
   useEffect(() => {
     if (isLoggedIn) {
-      navigate('/student-homepage');
+      navigate('/');
     }
   }, [isLoggedIn, navigate]);
 

@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import './SignUp.css'
 import ApplicationModal from "../modal/ApplicationModal";
 import PdfModal from "../modal/PdfModal"
@@ -9,6 +9,16 @@ export default function StudentHomepage() {
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false)
   const [pdfmodalOpen, setpdfModalOpen] = useState(false)
+  const [userData, setUserData] = useState({})
+
+  useEffect(() => {
+    fetch("http://localhost:3001/getloggedinuserdata", {
+      method: "POST",
+      credentials: "include"
+    })
+      .then(response => response.json())
+      .then(body => setUserData(body))
+  }, [])
 
   const handleLogout = (e) => {
     // Clear the authentication token (if applicable)
@@ -18,7 +28,7 @@ export default function StudentHomepage() {
 
     // Navigate to the homepage
     navigate('/');
-}
+  }
 
   return (
     <div className="student-homepage">
@@ -39,6 +49,8 @@ export default function StudentHomepage() {
     <p>Lorem Ipsum</p>
     <h1>P is for Papa, it's a Papas Parteh!!!</h1>
     <h2>filler langzxc</h2>
+    Sample User Data:
+    {JSON.stringify(userData)}
     </div>
   )
 }
