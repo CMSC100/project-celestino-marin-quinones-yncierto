@@ -44,7 +44,7 @@ export default function PdfModal ({ setpdfModal }) {
           <button onClick={() => { setpdfModal(false); }} id="cancelBtn"> 
             Cancel 
           </button>
-          {pdfDownload(applicationDetails, lName)}
+          {/* {pdfDownload(applicationDetails, lName)} */}
           {/* <button type="button" onClick={
             print
           }>Print</button> */}
@@ -64,17 +64,17 @@ function pdfViewer(applicationDetails) {
 }
 
 // download pdf
-function pdfDownload(applicationDetails, lName) {
-  return (
-    <PDFDownloadLink document={<PDFReactPDF applicationDetails={applicationDetails}/>} fileName={`ApplicationClearance_${lName}.pdf`}>
-      {({ blob, url, loading, error }) =>
-        loading
-          ? "" 
-          : <button type="button">Download</button>
-      }
-    </PDFDownloadLink>
-  )
-}
+// function pdfDownload(applicationDetails, lName) {
+//   return (
+//     <PDFDownloadLink document={<PDFReactPDF applicationDetails={applicationDetails}/>} fileName={`ApplicationClearance_${lName}.pdf`}>
+//       {({ blob, url, loading, error }) =>
+//         loading
+//           ? "" 
+//           : <button type="button">Download</button>
+//       }
+//     </PDFDownloadLink>
+//   )
+// }
 
 // the document itself
 function PDFReactPDF(props) {
