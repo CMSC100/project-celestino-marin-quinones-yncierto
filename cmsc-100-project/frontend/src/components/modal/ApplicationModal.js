@@ -7,6 +7,7 @@ export default function ApplicationModal ({ setOpenModal }) {
     setOpenModal(false);
   }
 
+
   return (
     <div className="modalBackground">
       <div className="modalContainer">

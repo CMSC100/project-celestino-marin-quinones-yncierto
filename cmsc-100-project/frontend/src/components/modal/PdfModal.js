@@ -19,6 +19,7 @@ export default function PdfModal ({ setpdfModal }) {
     currDate: `${new Date().toLocaleDateString()}`
   }
 
+  
   // const customProgressBar = (numLoadedPages, numPages) => (
   //   <div>
   //     <div>

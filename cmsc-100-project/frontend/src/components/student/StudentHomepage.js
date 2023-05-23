@@ -17,18 +17,38 @@ export default function StudentHomepage() {
     })
       .then(response => response.json())
       .then(body => setUserData(body))
+      .catch(error => console.log("Error:", error));
   }, [])
 
-  return (
-    <div className="student-homepage">
-      {modalOpen && <ApplicationModal setOpenModal={setModalOpen} />}
-      {pdfmodalOpen && <PdfModal setpdfModal={setpdfModalOpen} />}
+  const updateUserData = (updatedData) => {
+    setUserData(updatedData);
+  };
 
-      <p>Lorem Ipsum</p>
-      <h1>P is for Papa, it's a Papas Parteh!!!</h1>
-      <h2>filler langzxc</h2>
-      Sample User Data:
-      {JSON.stringify(userData)}
+  const applications = userData.applications || [];
+
+ return (
+    <div className="student-homepage">
+      {modalOpen && (
+        <ApplicationModal
+          setOpenModal={setModalOpen}
+          updateUserData={updateUserData}
+          userData={userData}
+        />
+      )}
+      {/* {pdfModalOpen && <PdfModal setPdfModal={setPdfModalOpen} />} */}
+
+      {applications.length > 0 ? (
+        <div>
+          <h3>Applications:</h3>
+          <ul>
+            {applications.map(application => (
+              <li key={application.id}>{application.name}</li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <p>No applications yet.</p>
+      )}
     </div>
-  )
+  );
 }

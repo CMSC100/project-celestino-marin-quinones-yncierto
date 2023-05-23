@@ -26,8 +26,8 @@ const checkIfLoggedInOnHome = async () => {
 
   // if user is logged in, check for user type and redirect to appropriate page
   if (isLoggedIn) {
-    if (userType == "student") return redirect("/student")
-    else if (userType == "approver") return redirect ("/approver")
+    if (userType === "student") return redirect("/student")
+    else if (userType === "approver") return redirect ("/approver")
     else return redirect ("/admin/manage-student-apps")
   }
   else return 0;
@@ -44,7 +44,7 @@ const checkIfLoggedInAsStudent = async () => {
 
   const { isLoggedIn, userType } = await res.json();
 
-  if (isLoggedIn && userType == "student") return true;
+  if (isLoggedIn && userType === "student") return true;
   else return redirect("/");
 };
 
@@ -57,7 +57,7 @@ const checkIfLoggedInAsAdmin = async () => {
 
   const { isLoggedIn, userType } = await res.json();
 
-  if (isLoggedIn && userType == "admin") return true;
+  if (isLoggedIn && userType === "admin") return true;
   else return redirect("/");
 };
 
@@ -70,7 +70,7 @@ const checkIfLoggedInAsApprover = async () => {
 
   const { isLoggedIn, userType } = await res.json();
 
-  if (isLoggedIn && userType == "approver") return true;
+  if (isLoggedIn && userType === "approver") return true;
   else return redirect("/");
 };
 

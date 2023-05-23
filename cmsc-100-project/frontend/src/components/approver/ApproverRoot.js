@@ -18,9 +18,15 @@ export default function ApproverRoot() {
     return(
         <div>
             <button type="button" onClick={handleLogout}>Logout</button>
+            <Link to="/admin/manage-student-apps">
+                <button type="button">Manage Student Applications</button>
+            </Link>
+            <Link to="/admin/manage-approvers">
+                <button type="button">Manage Approvers</button>
+            </Link>
             APPROVER
             <br/>
-            <Outlet/>
+            <Outlet />
         </div>
     )
 }
