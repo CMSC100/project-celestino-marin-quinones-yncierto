@@ -6,6 +6,7 @@ import Root from './components/LogIn';
 import SignUp from './components/SignUp';
 
 import StudentHomepage from './components/student/StudentHomepage';
+import StudentRoot from './components/student/StudentRoot'
 import PdfModal from './components/modal/PdfModal';
 
 import AdminRoot from './components/admin/AdminRoot'
@@ -107,7 +108,13 @@ const router = createBrowserRouter([
   },
   {
     path: '/student',
-    element: <StudentHomepage />,
+    element: <StudentRoot />,
+    children: [
+      {
+        path: "/student",
+        element: <StudentHomepage />
+      }
+    ],
     loader: checkIfLoggedInAsStudent
   },
   {
