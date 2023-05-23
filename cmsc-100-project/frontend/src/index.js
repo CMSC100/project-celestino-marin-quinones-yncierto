@@ -23,15 +23,17 @@ const checkIfLoggedInOnHome = async () => {
 
   const { isLoggedIn, userType } = await res.json();
 
+  // if user is logged in, check for user type and redirect to appropriate page
   if (isLoggedIn) {
     if (userType == "student") return redirect("/student")
     else if (userType == "approver") return redirect ("/approver")
-    else return redirect ("/admin")
+    else return redirect ("/admin/manage-student-apps")
   }
   else return 0;
 };
 
-// Send a POST request to API to check if the user is logged in. Redirect the user back to / if not logged in
+// Send a POST request to API to check if the user is a student, admin, or approver
+// each user type has own function for each type of root routes
 const checkIfLoggedInAsStudent = async () => {
   const res = await fetch("http://localhost:3001/checkifloggedin", 
   {
@@ -88,7 +90,7 @@ const router = createBrowserRouter([
     element: <AdminRoot />,
     children: [
       {
-        path: '/admin',
+        path: '/admin/manage-student-apps',
         element: <StudentApplications />
       },
       {

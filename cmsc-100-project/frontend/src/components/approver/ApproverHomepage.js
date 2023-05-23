@@ -6,6 +6,7 @@ export default function ApproverHomepage() {
     const [userData, setUserData] = useState({})
     const navigate = useNavigate()
 
+    // fetch user data based from credentials and set userData state
     useEffect(() => {
         fetch("http://localhost:3001/getloggedinuserdata", {
             method: "POST",

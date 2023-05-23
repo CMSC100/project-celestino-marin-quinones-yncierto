@@ -177,6 +177,7 @@ const checkIfLoggedIn = async (req, res) => {
   }
 }
 
+// get user data based from cookie
 const getLoggedInUserData = async (req, res) => {
   const tokenPayload = jwt.verify(req.cookies.authToken, 'THIS_IS_A_SECRET_STRING');
   const user = await User.findById(tokenPayload._id)

@@ -11,6 +11,7 @@ export default function StudentHomepage() {
   const [pdfmodalOpen, setpdfModalOpen] = useState(false)
   const [userData, setUserData] = useState({})
 
+  // fetch user data based from credentials and set userData state
   useEffect(() => {
     fetch("http://localhost:3001/getloggedinuserdata", {
       method: "POST",
