@@ -7,6 +7,7 @@ import '@react-pdf-viewer/print/lib/styles/index.css';
 import './Modal.css'
 
 export default function PdfModal ({ setpdfModal }) {
+  // student details
   let fName = "Juan"
   let mName = "Santos"
   let lName = "Dela Cruz"
@@ -18,17 +19,17 @@ export default function PdfModal ({ setpdfModal }) {
     currDate: `${new Date().toLocaleDateString()}`
   }
 
-  const customProgressBar = (numLoadedPages, numPages) => (
-    <div>
-      <div>
-        Preparing pages...
-      </div>
-      <div>
-        <Spinner />
-      </div>
-      <Button onClick={() => {}}>Cancel</Button>
-    </div>
-  )
+  // const customProgressBar = (numLoadedPages, numPages) => (
+  //   <div>
+  //     <div>
+  //       Preparing pages...
+  //     </div>
+  //     <div>
+  //       <Spinner />
+  //     </div>
+  //     <Button onClick={() => {}}>Cancel</Button>
+  //   </div>
+  // )
 
   // const printPluginInstance = printPlugin()
   // const { PrintButton } = printPluginInstance
@@ -53,6 +54,7 @@ export default function PdfModal ({ setpdfModal }) {
   )
 }
 
+// view pdf
 function pdfViewer(applicationDetails) {
   return (
     <PDFViewer className="pdf-file">
@@ -61,19 +63,25 @@ function pdfViewer(applicationDetails) {
   )
 }
 
+// download pdf
 function pdfDownload(applicationDetails, lName) {
-  <PDFDownloadLink document={<PDFReactPDF applicationDetails={applicationDetails}/>} fileName={`ApplicationClearance_${lName}.pdf`}>
-    {({ blob, url, loading, error }) =>
-      loading
-        ? "" 
-        : <button type="button">Download</button>
-    }
-  </PDFDownloadLink>
+  return (
+    <PDFDownloadLink document={<PDFReactPDF applicationDetails={applicationDetails}/>} fileName={`ApplicationClearance_${lName}.pdf`}>
+      {({ blob, url, loading, error }) =>
+        loading
+          ? "" 
+          : <button type="button">Download</button>
+      }
+    </PDFDownloadLink>
+  )
 }
 
+// the document itself
 function PDFReactPDF(props) {
-  Font.register({family: "Times-Roman", src: "source"})
+  Font.register({family: "Times-Roman", src: "source"}) // register font
+  // get details from props
   let { studName, studNo, acadAdviserName, clearanceOfficer, currDate } = props.applicationDetails
+  // stylesheet
   const styles = StyleSheet.create({
     document: {
       flexDirection: 'column',
