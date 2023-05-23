@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 import React, { useEffect, useState } from "react";
-import './SignUp.css'
 import ApplicationModal from "../modal/ApplicationModal";
 import PdfModal from "../modal/PdfModal"
 import Cookies from 'universal-cookie';

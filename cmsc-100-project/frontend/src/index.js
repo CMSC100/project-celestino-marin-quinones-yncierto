@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { redirect, createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import Root from './components/LogIn';
-import SignUp from './components/student/SignUp';
+import SignUp from './components/SignUp';
 
 import StudentHomepage from './components/student/StudentHomepage';
 import PdfModal from './components/modal/PdfModal';

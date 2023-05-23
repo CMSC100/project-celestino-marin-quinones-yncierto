@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react"
-import Cookies from 'universal-cookie';
-import { useNavigate } from 'react-router-dom';
 
 export default function ApproverHomepage() {
     const [userData, setUserData] = useState({})
-    const navigate = useNavigate()
 
     // fetch user data based from credentials and set userData state
     useEffect(() => {
@@ -16,21 +13,8 @@ export default function ApproverHomepage() {
             .then(body => setUserData(body))
     }, [])
 
-    const handleLogout = (e) => {
-        // Clear the authentication token (if applicable)
-        // Example: If you are using cookies, use the following code:
-        const cookies = new Cookies();
-        cookies.remove('authToken');
-    
-        // Navigate to the homepage
-        navigate('/');
-    }
-
     return(
         <div>
-            <button type="button" onClick={handleLogout}>Logout</button>
-            APPROVER
-            <br/>
             Display Sample Data:
             {JSON.stringify(userData)}
         </div>
