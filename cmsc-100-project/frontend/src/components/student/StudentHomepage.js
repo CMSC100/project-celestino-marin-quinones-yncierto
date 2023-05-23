@@ -28,6 +28,7 @@ export default function StudentHomepage() {
 
  return (
     <div className="student-homepage">
+      <h1>Hello, {userData.firstName}!</h1>
       {modalOpen && (
         <ApplicationModal
           setOpenModal={setModalOpen}
@@ -41,8 +42,12 @@ export default function StudentHomepage() {
         <div>
           <h3>Applications:</h3>
           <ul>
-            {applications.map(application => (
-              <li key={application.id}>{application.name}</li>
+            {applications.map((application, index) => (
+              <li key={index}>
+                <a href={application} target="_blank" rel="noopener noreferrer">
+                  Application {index + 1}
+                </a>
+              </li>
             ))}
           </ul>
         </div>
