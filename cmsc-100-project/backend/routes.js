@@ -1,4 +1,4 @@
-import { signUp, login, checkIfLoggedIn, createApprover, editApprover, getApproverDetails, getApproverAccounts, deleteApprover } from "./auth-controller.js";
+import { signUp, login, checkIfLoggedIn, createApprover, editApprover, getApproverDetails, getApproverAccounts, deleteApprover, getLoggedInUserData } from "./auth-controller.js";
 
 const setUpRoutes = (app) => {
   app.get("/", (req, res) => { res.send("API Home") });
@@ -11,6 +11,7 @@ const setUpRoutes = (app) => {
   app.post("/createapprover", createApprover);
   app.post("/editapprover", editApprover)
   app.post("/deleteapprover", deleteApprover)
+  app.post("/getloggedinuserdata", getLoggedInUserData)
 }
 
 export default setUpRoutes;

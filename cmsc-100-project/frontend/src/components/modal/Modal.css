@@ -27,8 +27,9 @@
 }
 
 .modalContainer .footer button, .pdfmodalContainer .footer button {
-  width: 70px;
-  height: 45px;
+  width: fit-content;
+  height: fit-content;
+  padding: 10px;
   margin: 10px;
   border: none;
   background-color: cornflowerblue;

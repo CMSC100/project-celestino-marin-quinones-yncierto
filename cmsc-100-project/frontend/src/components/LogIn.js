@@ -12,7 +12,8 @@ export default function Root() {
   // handle the effect when isLoggedIn state changes
   useEffect(() => {
     if (isLoggedIn) {
-      navigate('/student-homepage');
+      // essentially reloads page if logged in, "domino"-ing to their own appropriate page
+      navigate('/');
     }
   }, [isLoggedIn, navigate]);
 

@@ -166,7 +166,7 @@ const checkIfLoggedIn = async (req, res) => {
 
     if (user) {
       // SUCCESS Scenario - User is found
-      return res.send({ isLoggedIn: true })
+      return res.send({ isLoggedIn: true, userType: user.userType})
     } else {
       // FAIL Scenario 2 - Token is valid but user id not found
       return res.send({ isLoggedIn: false })
@@ -177,4 +177,12 @@ const checkIfLoggedIn = async (req, res) => {
   }
 }
 
-export { signUp, login, checkIfLoggedIn, createApprover, editApprover, getApproverDetails, getApproverAccounts, deleteApprover }
+// get user data based from cookie
+const getLoggedInUserData = async (req, res) => {
+  const tokenPayload = jwt.verify(req.cookies.authToken, 'THIS_IS_A_SECRET_STRING');
+  const user = await User.findById(tokenPayload._id)
+
+  res.send(user)
+}
+
+export { signUp, login, checkIfLoggedIn, createApprover, editApprover, getApproverDetails, getApproverAccounts, deleteApprover, getLoggedInUserData }
