@@ -101,10 +101,10 @@ export default function Admin(props) {
             .then(function(body) {
                 // reload approver list
                 getApproverAccounts()
-                if (body["edited"] == "edited") {
+                if (body["edited"] === "edited") {
                     alert("Approver account edited.")
                     setIsEditing(false) // remove edit form
-                } else if (body["edited"] == "no fields changed") alert("No fields were edited.")
+                } else if (body["edited"] === "no fields changed") alert("No fields were edited.")
                 else alert("Failed to edit approver account.")
             })
     }
@@ -180,7 +180,7 @@ export default function Admin(props) {
         let sortButtons = document.getElementsByName("sortButton")
         sortButtons.forEach(function(element) {
             // add "active" class to clicked button, and remove for other buttons
-            if (e.target.value == element.value) element.classList.add("active")
+            if (e.target.value === element.value) element.classList.add("active")
             else element.classList.remove("active")
         })
         console.log(e.target.value)
