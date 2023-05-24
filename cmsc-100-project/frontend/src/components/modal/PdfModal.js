@@ -1,6 +1,5 @@
 import React from "react";
 import { Page, Text, View, Document, StyleSheet, PDFViewer, Line, Svg, Font} from '@react-pdf/renderer';
-import '@react-pdf-viewer/print/lib/styles/index.css';
 import './Modal.css'
 
 export default function PdfModal ({ setpdfModal }) {
