@@ -69,14 +69,14 @@ const getApproverAccounts = async (req, res) => {
       // use conditional operators
       {
         $and: [
-          { $or: 
-            [
-              // used regex to filter out names
-              {fullName: {$regex: new RegExp(`${searchName}`, "gi")}}
-            ]
-          },
+          // used regex to filter out names
+          {fullName: {$regex: new RegExp(`${searchName}`, "gi")}},
           {
-            userType: "approver"
+            $or:
+            [
+              {userType: "adviser"},
+              {userType: "officer"}
+            ]
           }
         ]
       }

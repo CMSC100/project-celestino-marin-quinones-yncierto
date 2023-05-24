@@ -11,6 +11,16 @@ export default function StudentApplications() {
         })
             .then(response => response.json())
             .then(body => setUserData(body))
+
+        fetch("http://localhost:3001/createapplication", {
+            method: "POST",
+            headers: {
+                "Content-Type": "aplication/json"
+            },
+            body: JSON.stringify({name: "name"})
+        })
+            .then(response => response.json())
+            .then(body => console.log(body))
     }, [])
 
     return(

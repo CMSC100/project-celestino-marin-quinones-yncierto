@@ -14,7 +14,7 @@ const setUpRoutes = (app) => {
   app.post("/editapprover", editApprover)
   app.post("/deleteapprover", deleteApprover)
   app.post("/getloggedinuserdata", getLoggedInUserData)
-  app.post("/createApplication", createApplication)
+  app.post("/createapplication", createApplication)
 }
 
 export default setUpRoutes;

@@ -66,7 +66,7 @@ export default function Admin(props) {
                 lastName: document.getElementById("s-lname").value,
                 email: document.getElementById("s-email").value,
                 password: document.getElementById("s-password").value,
-                userType: "approver"
+                userType: "adviser"
             })
         })
             .then(response => response.json())
