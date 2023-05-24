@@ -34,8 +34,8 @@ const createApplication = async (req, res) => {
         status: status,
         step: step,
         remarks: remarks,
-        studentSubmission: new mongoose.Types.ObjectId(studentID),
-        studentID: studentID
+        studentSubmission: studentSubmission,
+        studentID: new mongoose.Types.ObjectId(studentID),
     })
 
     const result = await newApplication.save();

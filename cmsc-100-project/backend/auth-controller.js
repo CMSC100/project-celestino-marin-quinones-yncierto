@@ -6,53 +6,49 @@ import jwt from 'jsonwebtoken';
 const User = mongoose.model("User");
 
 const signUp = async (req, res) => {
-  const { firstName, middleName, lastName, studentNumber, userType, email, password, applications, adviser } = req.body;
+  // const { firstName, middleName, lastName, studentNumber, userType, email, password, applications, adviser } = req.body;
+  const { firstName, middleName, lastName, userType, email, password } = req.body
+  let user = await User.findOne({email: email})
+  console.log(user)
+  if (user) {
+    console.log("lmao")
+    return res.send({success: false, emailExists: true})
+  }
 
-  const newuser = new User({
-    firstName: firstName,
-    middleName: middleName,
-    lastName: lastName,
-    fullName: `${firstName} ${middleName} ${lastName}`,
-    studentNumber: studentNumber,
-    userType: userType,
-    email: email,
-    password: password,
-    applications: applications,
-    adviser: adviser,
-  });
+  if (userType === "user") {
+    var { studentNumber, applications, adviser } = req.body
+    var newuser = new User({
+      firstName: firstName,
+      middleName: middleName,
+      lastName: lastName,
+      fullName: `${firstName} ${middleName} ${lastName}`,
+      studentNumber: studentNumber,
+      userType: userType,
+      email: email,
+      password: password,
+      applications: applications,
+      adviser: adviser,
+    });
+  } else {
+    var newuser = new User({
+      firstName: firstName,
+      middleName: middleName,
+      lastName: lastName,
+      fullName: `${firstName} ${middleName} ${lastName}`,
+      email: email,
+      password: password,
+      userType: userType
+    });
+  }
+
+  console.log(newuser)
 
   const result = await newuser.save();
 
   if (result._id) {
 		res.send({ success: true })
 	} else {
-		res.send({ success: false })
-	}
-}
-
-// create approver
-const createApprover = async (req, res) => {
-  // get details
-  const { firstName, middleName, lastName, email, password, userType } = req.body;
-
-  // create new user
-  const newapprover = new User({
-    firstName: firstName,
-    middleName: middleName,
-    lastName: lastName,
-    fullName: `${firstName} ${middleName} ${lastName}`,
-    email: email,
-    password: password,
-    userType: userType
-  });
-
-  // save
-  const result = await newapprover.save();
-
-  if (result._id) {
-		res.send({ success: true })
-	} else {
-		res.send({ success: false })
+		res.send({ success: false, emailExists: false})
 	}
 }
 
@@ -63,7 +59,12 @@ const getApproverAccounts = async (req, res) => {
   if (searchName == "") {
     // if empty query
     // collation is for adjusting how the database sorts (makes it case-insensitive)
-    approverAccounts = await User.find({userType: "approver"}).collation({locale: "en"}).sort({firstName: sort, middleName: sort, lastName: sort});
+    approverAccounts = await User.find({
+      $or: [
+        {userType: "adviser"},
+        {userType: "officer"}
+      ]
+    }).collation({locale: "en"}).sort({fullName: sort});
   } else {
     approverAccounts = await User.find(
       // use conditional operators
@@ -80,7 +81,7 @@ const getApproverAccounts = async (req, res) => {
           }
         ]
       }
-    ).collation({locale: "en"}).sort({firstName: sort, middleName: sort, lastName: sort});
+    ).collation({locale: "en"}).sort({fullName: sort});
   }
 
   res.send(approverAccounts)
@@ -115,6 +116,12 @@ const deleteApprover = async (req, res) => {
   let del = await User.deleteOne({_id: docRef})
   if (del["deletedCount"] != 0 && del["acknowledged"]) res.send({deleted: true})
   else res.send({deleted: false})
+}
+
+const getPendingAccounts = async(req, res) => {
+  let { sort } = req.query
+  let pendingAccounts = await User.find({userType: "user"}).collation({locale: "en"}).sort({[`${sort}`]: 1})
+  res.send(pendingAccounts)
 }
 
 const login = async (req, res) => {
@@ -187,4 +194,4 @@ const getLoggedInUserData = async (req, res) => {
   res.send(user)
 }
 
-export { signUp, login, checkIfLoggedIn, createApprover, editApprover, getApproverDetails, getApproverAccounts, deleteApprover, getLoggedInUserData }
+export { signUp, login, checkIfLoggedIn, editApprover, getApproverDetails, getApproverAccounts, deleteApprover, getLoggedInUserData, getPendingAccounts }

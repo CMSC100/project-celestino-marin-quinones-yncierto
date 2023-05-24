@@ -52,10 +52,11 @@ export default function Admin(props) {
     }, [])
 
     // function for creating an approver
-    const createApprover = function(e) {
+    const signUp = function(e) {
+        console.log(document.getElementById("s-fname").value)
         e.preventDefault()
         // send new data to api
-        fetch("http://localhost:3001/createapprover", {
+        fetch("http://localhost:3001/signup", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -71,14 +72,19 @@ export default function Admin(props) {
         })
             .then(response => response.json())
             .then(function(body) {
+                console.log(body)
                 if (body["success"]) {
                     // reload approver list and display proper alert
+                    document.getElementById("create-form").reset()
                     getApproverAccounts()
-                    alert("Approver account created.")
+                    alert("Adviser account created.")
+                } else if (body["emailExists"]) {
+                    console.log("lmao2")
+                    alert("Email already exists.")
+                } else {
+                    alert("Failed to create adviser account")
                 }
-                else alert("Creation of approver account failed.")
             })
-        document.getElementById("create-form").reset()
     }
 
     // edit approver details
@@ -243,7 +249,7 @@ export default function Admin(props) {
                 </form>
             }
 
-            <form onSubmit={createApprover} id="create-form">
+            <form onSubmit={signUp} id="create-form">
                     <div className="container-form">
                         <label htmlFor="fname"><b>First Name</b></label>
                         <input id="s-fname" type="text" placeholder="Enter first name" name="fname" required />
