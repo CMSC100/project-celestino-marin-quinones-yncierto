@@ -75,7 +75,7 @@ export default function SignUp() {
         middleName: document.getElementById("s-mname").value,
         lastName: document.getElementById("s-lname").value,
         studentNumber: document.getElementById("s-studno").value,
-        userType: "student",
+        userType: "user",
         email: document.getElementById("s-email").value,
         password: document.getElementById("s-password").value,
         applications: [],

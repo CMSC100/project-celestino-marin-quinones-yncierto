@@ -65,7 +65,11 @@ export default function Root() {
           });
           localStorage.setItem('username', body.username);
         } else {
-          alert('Log in failed');
+          if (body.userExists) {
+            alert("Your account has not yet been approved.")
+          } else {
+            alert("Login failed.")
+          }
         }
       });
   };

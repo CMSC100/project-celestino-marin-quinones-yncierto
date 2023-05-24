@@ -28,7 +28,11 @@ const checkIfLoggedInOnHome = async () => {
   if (isLoggedIn) {
     if (userType === "student") return redirect("/student")
     else if (userType === "adviser" || userType === "officer") return redirect ("/approver")
-    else return redirect ("/admin/manage-student-apps")
+    else if (userType === "admin") return redirect ("/admin/manage-student-apps")
+    else {
+      alert("Your account has not yet been approved.")
+      return 0
+    }
   }
   else return 0;
 };

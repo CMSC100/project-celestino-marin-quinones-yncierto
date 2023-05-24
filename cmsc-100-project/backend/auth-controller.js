@@ -126,7 +126,7 @@ const login = async (req, res) => {
 
   //  Scenario 1: FAIL - User doesn't exist
   if (!user) {
-    return res.send({ success: false })
+    return res.send({ success: false, userExists: false })
   }
 
   // Check if password is correct using the Schema method defined in User Schema
@@ -134,6 +134,8 @@ const login = async (req, res) => {
     if (err || !isMatch) {
       // Scenario 2: FAIL - Wrong password
       return res.send({ success: false });
+    } else if (isMatch && user.userType === "user") {
+      return res.send({success: false, userExists: true})
     }
 
     // Scenario 3: SUCCESS - time to create a token
