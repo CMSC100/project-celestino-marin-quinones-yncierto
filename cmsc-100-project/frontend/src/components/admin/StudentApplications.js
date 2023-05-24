@@ -75,21 +75,45 @@ export default function StudentApplications() {
             })
     }
 
+    const changeActiveButton = (e) => {
+        let names = document.getElementsByName(e.target.name)
+        names.forEach((element) => {
+            element.classList.remove("active")
+        })
+        e.target.classList.add("active")
+    }
+
     return(
         <div>
-            <button type="button" onClick={() => {changeDisplay("pending accounts")}}>View Pending Accounts</button>
-            <button type="button" onClick={() => {changeDisplay("students")}}>View Students</button>
+            <button type="button" name="display-buttons" className='active' onClick={(e) => {
+                changeActiveButton(e)
+                changeDisplay("pending accounts")
+            }}>View Pending Accounts</button>
+            
+            <button type="button" name="display-buttons" onClick={(e) => {
+                changeActiveButton(e)
+                changeDisplay("students")
+            }}>View Students</button>
             {
                 showDisplay === "pending accounts" &&
                     <div>
                         Sort By:
-                        <button type="button" onClick={() => {changeSort("fullName")}}>Full Name</button>
-                        <button type="button" onClick={() => {changeSort("studentNumber")}}>Student Number</button>
+                        <button type="button" name="sort-buttons" className='active' onClick={(e) => {
+                            changeActiveButton(e)
+                            changeSort("fullName")
+                        }}>Full Name</button>
+
+                        <button type="button" name="sort-buttons" onClick={(e) => {
+                            changeActiveButton(e)
+                            changeSort("studentNumber")
+                        }}>Student Number</button>
+
                         <div style={{display: "flex", flexDirection: "column", rowGap: 20}}>
                             {pendingAccounts.map(function(element, index) {
                                 return (
                                     <div key={index} style={{backgroundColor: "gainsboro"}}>
                                         <span>{element.fullName} {element.studentNumber} {element.email}</span>
+
                                         <div>
                                             <button type='button' onClick={() => {approveAccount(element._id)}}>Approve</button>
                                             <button type='button' onClick={() => {rejectAccount(element._id)}}>Reject</button>
