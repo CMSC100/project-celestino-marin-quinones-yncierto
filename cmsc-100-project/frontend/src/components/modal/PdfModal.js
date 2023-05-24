@@ -1,8 +1,5 @@
 import React from "react";
-import { Page, Text, View, Document, StyleSheet, PDFViewer, PDFDownloadLink, Line, Svg, Font} from '@react-pdf/renderer';
-import { printPlugin } from '@react-pdf-viewer/print';
-import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout'
-import { Button, Spinner, Viewer } from '@react-pdf-viewer/core'
+import { Page, Text, View, Document, StyleSheet, PDFViewer, Line, Svg, Font} from '@react-pdf/renderer';
 import '@react-pdf-viewer/print/lib/styles/index.css';
 import './Modal.css'
 
@@ -19,36 +16,14 @@ export default function PdfModal ({ setpdfModal }) {
     currDate: `${new Date().toLocaleDateString()}`
   }
 
-  
-  // const customProgressBar = (numLoadedPages, numPages) => (
-  //   <div>
-  //     <div>
-  //       Preparing pages...
-  //     </div>
-  //     <div>
-  //       <Spinner />
-  //     </div>
-  //     <Button onClick={() => {}}>Cancel</Button>
-  //   </div>
-  // )
-
-  // const printPluginInstance = printPlugin()
-  // const { PrintButton } = printPluginInstance
-
   return (
     <div className="pdfmodalBackground">
       <div className="pdfmodalContainer">
         {pdfViewer(applicationDetails)}
-        {/* <PrintButton />
-        <Viewer fileUrl="./sample.pdf" plugins={[printPluginInstance]}/> */}
         <div className="footer">
           <button onClick={() => { setpdfModal(false); }} id="cancelBtn"> 
             Cancel 
           </button>
-          {/* {pdfDownload(applicationDetails, lName)} */}
-          {/* <button type="button" onClick={
-            print
-          }>Print</button> */}
         </div>
       </div>
     </div>
@@ -63,19 +38,6 @@ function pdfViewer(applicationDetails) {
     </PDFViewer>
   )
 }
-
-// download pdf
-// function pdfDownload(applicationDetails, lName) {
-//   return (
-//     <PDFDownloadLink document={<PDFReactPDF applicationDetails={applicationDetails}/>} fileName={`ApplicationClearance_${lName}.pdf`}>
-//       {({ blob, url, loading, error }) =>
-//         loading
-//           ? "" 
-//           : <button type="button">Download</button>
-//       }
-//     </PDFDownloadLink>
-//   )
-// }
 
 // the document itself
 function PDFReactPDF(props) {
