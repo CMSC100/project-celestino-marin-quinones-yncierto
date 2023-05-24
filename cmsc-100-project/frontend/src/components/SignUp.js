@@ -86,9 +86,13 @@ export default function SignUp() {
       .then(body => {
         if (body.success) {
           setIsSignedUp(true);
-          alert("Successfully signed up!");
+          alert("Successfully signed up! Please wait for your account to be approved.");
         } else {
-          alert("Sign up failed");
+          if (body.emailExists) {
+            alert("Email already taken.")
+          } else {
+            alert("Sign up failed.")
+          }
         }
       });
   };
