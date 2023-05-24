@@ -78,6 +78,7 @@ export default function Admin(props) {
                 }
                 else alert("Creation of approver account failed.")
             })
+        document.getElementById("create-form").reset()
     }
 
     // edit approver details
@@ -242,7 +243,7 @@ export default function Admin(props) {
                 </form>
             }
 
-            <form onSubmit={createApprover}>
+            <form onSubmit={createApprover} id="create-form">
                     <div className="container-form">
                         <label htmlFor="fname"><b>First Name</b></label>
                         <input id="s-fname" type="text" placeholder="Enter first name" name="fname" required />
@@ -261,7 +262,7 @@ export default function Admin(props) {
 
                         <div className="signup-back-btn">
                             <button className="signup-back-btn" type="submit">Submit</button>
-                            <button type="reset" className="cancelbtn">Cancel</button>
+                            <button type="reset" className="cancelbtn">Reset</button>
                         </div>
                     </div>
                 </form>
