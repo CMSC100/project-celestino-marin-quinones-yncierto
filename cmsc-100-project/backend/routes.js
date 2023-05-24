@@ -1,4 +1,4 @@
-import { signUp, login, checkIfLoggedIn, editApprover, getApproverDetails, getApproverAccounts, deleteApprover, getLoggedInUserData, getPendingAccounts } from "./auth-controller.js";
+import { signUp, login, checkIfLoggedIn, editApprover, getApproverDetails, getApproverAccounts, deleteApprover, getLoggedInUserData, getPendingAccounts, approveAccount, rejectAccount } from "./auth-controller.js";
 import { createApplication } from "./app-controller.js"
 
 const setUpRoutes = (app) => {
@@ -14,6 +14,8 @@ const setUpRoutes = (app) => {
   app.post("/deleteapprover", deleteApprover)
   app.post("/getloggedinuserdata", getLoggedInUserData)
   app.post("/createapplication", createApplication)
+  app.post("/approveaccount", approveAccount)
+  app.post("/rejectaccount", rejectAccount)
 }
 
 export default setUpRoutes;

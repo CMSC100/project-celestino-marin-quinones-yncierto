@@ -124,6 +124,20 @@ const getPendingAccounts = async(req, res) => {
   res.send(pendingAccounts)
 }
 
+const approveAccount = async(req, res) => {
+  let { docRef } = req.body
+  let update = await User.updateOne({_id: docRef}, {$set: {userType: "student"}})
+  if (update["acknowledged"] && update["modifiedCount"] != 0) res.send({success: true})
+  else res.send({success: false})
+}
+
+const rejectAccount = async(req, res) => {
+  let { docRef } = req.body
+  let del = await User.deleteOne({_id: docRef})
+  if (del["deletedCount"] != 0 && del["acknowledged"]) res.send({deleted: true})
+  else res.send({deleted: false})
+}
+
 const login = async (req, res) => {
   const email = req.body.email.trim();
   const password = req.body.password;
@@ -194,4 +208,4 @@ const getLoggedInUserData = async (req, res) => {
   res.send(user)
 }
 
-export { signUp, login, checkIfLoggedIn, editApprover, getApproverDetails, getApproverAccounts, deleteApprover, getLoggedInUserData, getPendingAccounts }
+export { signUp, login, checkIfLoggedIn, editApprover, getApproverDetails, getApproverAccounts, deleteApprover, getLoggedInUserData, getPendingAccounts, approveAccount, rejectAccount }
