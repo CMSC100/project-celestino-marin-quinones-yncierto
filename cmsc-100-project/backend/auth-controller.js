@@ -9,15 +9,16 @@ const signUp = async (req, res) => {
   const { firstName, middleName, lastName, studentNumber, userType, email, password, applications, adviser } = req.body;
 
   const newuser = new User({
-    firstName: req.body.firstName,
-    middleName: req.body.middleName,
-    lastName: req.body.lastName,
-    studentNumber: req.body.studentNumber,
-    userType: req.body.userType,
-    email: req.body.email,
-    password: req.body.password,
-    applications: req.body.applications,
-    adviser: req.body.adviser,
+    firstName: firstName,
+    middleName: middleName,
+    lastName: lastName,
+    fullName: `${firstName} ${middleName} ${lastName}`,
+    studentNumber: studentNumber,
+    userType: userType,
+    email: email,
+    password: password,
+    applications: applications,
+    adviser: adviser,
   });
 
   const result = await newuser.save();
@@ -39,6 +40,7 @@ const createApprover = async (req, res) => {
     firstName: firstName,
     middleName: middleName,
     lastName: lastName,
+    fullName: `${firstName} ${middleName} ${lastName}`,
     email: email,
     password: password,
     userType: userType
@@ -70,9 +72,7 @@ const getApproverAccounts = async (req, res) => {
           { $or: 
             [
               // used regex to filter out names
-              {firstName: {$regex: new RegExp(`${searchName}`, "gi")}},
-              {middleName: {$regex: new RegExp(`${searchName}`, "gi")}},
-              {lastName: {$regex: new RegExp(`${searchName}`, "gi")}}
+              {fullName: {$regex: new RegExp(`${searchName}`, "gi")}}
             ]
           },
           {
