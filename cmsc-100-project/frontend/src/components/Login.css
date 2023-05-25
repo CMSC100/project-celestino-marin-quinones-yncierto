@@ -1,26 +1,50 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  position: relative;
+  height: 100%;
+}
+
 .login-container{
   background-color: #f1f1f1;
-  width: 50%;
-  min-height: 100%;
+  width: 450px;
+  height: 660px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   margin: auto;
   padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  overflow: auto;
 }
 
 form {
-  border: 3px solid #f1f1f1;
+  border: none;
 }
 
 label {
-  margin-left: 10px;
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
 }
 
-input[type=text], input[type=password] {
+input[type=text], 
+input[type=password] {
   width: 100%;
   padding: 12px;
-  margin: 8px;
+  margin: 8px 0;
   display: inline-block;
   border: 1px solid #ccc;
   box-sizing: border-box;
+  border-radius: 5px;
 }
 
 button {
@@ -37,23 +61,17 @@ button:hover {
   opacity: 0.8;
 }
 
+
 .login-btn-container {
   text-align: center;
 }
 
 .login-btn {
+  background-color: #4caf50;
   margin-top: 15px;
   width: 15%;
 }
 
-.signup-btn-container {
-  text-align: center;
-  padding-top: 0px !important;
-}
-
-.signup-btn {
-  width: 15%;
-}
 
 .imgcontainer {
   text-align: center;
@@ -67,9 +85,9 @@ img.avatar {
 }
 
 .error-msg {
-color: red;
-font-size: small;
-text-align: left;
-margin-left: 10px;
-margin-top: 0px;
+  color: red;
+  font-size: small;
+  text-align: left;
+  margin-left: 10px;
+  margin-top: 0px;
 }
