@@ -104,26 +104,44 @@ export default function SignUp() {
           <div className="imgcontainer">
             <img src="https://hips.hearstapps.com/hmg-prod/images/domestic-cat-lies-in-a-basket-with-a-knitted-royalty-free-image-1592337336.jpg?crop=0.668xw:1.00xh;0.247xw,0&resize=1200:*" alt="Avatar" className="avatar" />
           </div>
-
+  
           <div className="container-form">
-            <label htmlFor="fname"><b>First Name</b></label>
-            <input id = "s-fname" type="text" placeholder="Enter first name" name="fname" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
-
-            <label htmlFor="mname"><b>Middle Name</b></label>
-            <input id = "s-mname" type="text" placeholder="Enter middle name" name="mname" value={middleName} onChange={(e) => setMiddleName(e.target.value)} required />
-
-            <label htmlFor="lname"><b>Last Name</b></label>
-            <input id = "s-lname" type="text" placeholder="Enter last name" name="lname" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
-
-            <label htmlFor="studno"><b>Student Number</b></label>
-            <input id = "s-studno" type="text" placeholder="Enter student number" name="studno" value={studentNumber} onChange={(e) => setStudentNumber(e.target.value)} required />
-
-            <label htmlFor="email"><b>Email</b></label>
-            <input id = "s-email" type="text" placeholder="Enter Email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-
-            <label htmlFor="psw"><b>Password</b></label>
-            <input id = "s-password" type="password" placeholder="Enter Password" name="psw" value={password} onChange={(e) => setPassword(e.target.value)} required />
-
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="fname"><b>First Name</b></label>
+                <input id="s-fname" type="text" placeholder="Enter first name" name="fname" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
+              </div>
+              <div className="form-group">
+                <label htmlFor="mname"><b>Middle Name</b></label>
+                <input id="s-mname" type="text" placeholder="Enter middle name" name="mname" value={middleName} onChange={(e) => setMiddleName(e.target.value)} required />
+              </div>
+              <div className="form-group">
+                <label htmlFor="lname"><b>Last Name</b></label>
+                <input id="s-lname" type="text" placeholder="Enter last name" name="lname" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
+              </div>
+            </div>
+  
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="studno"><b>Student Number</b></label>
+                <input id="s-studno" type="text" placeholder="Enter student number" name="studno" value={studentNumber} onChange={(e) => setStudentNumber(e.target.value)} required />
+              </div>
+            </div>
+  
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="email"><b>Email</b></label>
+                <input id="s-email" type="text" placeholder="Enter Email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              </div>
+            </div>
+  
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="psw"><b>Password</b></label>
+                <input id="s-password" type="password" placeholder="Enter Password" name="psw" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              </div>
+            </div>
+  
             <div className="signup-back-btn">
               <button className="signup-back-btn" type="submit">Sign Up</button>
               <button type="reset" className="cancelbtn">Cancel</button>
@@ -133,4 +151,5 @@ export default function SignUp() {
       </div>
     </>
   );
+  
 }
