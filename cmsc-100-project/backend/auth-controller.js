@@ -138,6 +138,24 @@ const rejectAccount = async(req, res) => {
   else res.send({deleted: false})
 }
 
+const getStudents = async(req, res) => {
+  let { sort } = req.query
+  let students = await User.find({userType: "student"}).collation({locale: "en"}).sort({[`${sort}`]: 1})
+  res.send(students)
+}
+
+const getAdvisers = async(req, res) => {
+  let advisers = await User.find({userType: "adviser"}).collation({locale: "en"}).sort({"fullName": 1})
+  res.send(advisers)
+}
+
+const assignAdviser = async(req, res) => {
+  let { studentIDAssign, adviserIDAssign } = req.body
+  let update = await User.updateOne({_id: studentIDAssign}, {$set: {adviser: new mongoose.Types.ObjectId(adviserIDAssign)}})
+  if (update["acknowledged"] && update["modifiedCount"] != 0) res.send({success: "true"})
+  else res.send({success: "false"})
+}
+
 const login = async (req, res) => {
   const email = req.body.email.trim();
   const password = req.body.password;
@@ -208,4 +226,4 @@ const getLoggedInUserData = async (req, res) => {
   res.send(user)
 }
 
-export { signUp, login, checkIfLoggedIn, editApprover, getApproverDetails, getApproverAccounts, deleteApprover, getLoggedInUserData, getPendingAccounts, approveAccount, rejectAccount }
+export { signUp, login, checkIfLoggedIn, editApprover, getApproverDetails, getApproverAccounts, deleteApprover, getLoggedInUserData, getPendingAccounts, approveAccount, rejectAccount, getStudents, getAdvisers, assignAdviser}

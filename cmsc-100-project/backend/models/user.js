@@ -11,7 +11,7 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, required: true },
   password: { type: String, required: true },
   applications: { type: Array },
-  adviser: { type: String },
+  adviser: { type: mongoose.Schema.Types.ObjectId },
 });
 
 UserSchema.pre("save", function(next) {
