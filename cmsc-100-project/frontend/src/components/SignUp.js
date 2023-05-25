@@ -108,8 +108,8 @@ export default function SignUp() {
           <div className="container-form">
             <div className="form-row">
               <div className="form-group">
-                <label htmlFor="fname"><b>First Name</b></label>
-                <input id="s-fname" type="text" placeholder="Enter first name" name="fname" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
+                <label htmlFor="fname"><b>Given Name</b></label>
+                <input id="s-fname" type="text" placeholder="Enter given name" name="fname" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
               </div>
               <div className="form-group">
                 <label htmlFor="mname"><b>Middle Name</b></label>
@@ -124,7 +124,7 @@ export default function SignUp() {
             <div className="form-row">
               <div className="form-group">
                 <label htmlFor="studno"><b>Student Number</b></label>
-                <input id="s-studno" type="text" placeholder="Enter student number" name="studno" value={studentNumber} onChange={(e) => setStudentNumber(e.target.value)} required />
+                <input id="s-studno" type="text" placeholder="Enter student number (e.g., 2023-12345)" name="studno" value={studentNumber} onChange={(e) => setStudentNumber(e.target.value)} required />
               </div>
             </div>
   
