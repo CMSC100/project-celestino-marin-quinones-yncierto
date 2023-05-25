@@ -26,7 +26,6 @@ const signUp = async (req, res) => {
       userType: userType,
       email: email,
       password: password,
-      applications: applications,
       adviser: adviser,
     });
   } else {
@@ -156,6 +155,8 @@ const assignAdviser = async(req, res) => {
   else res.send({success: "false"})
 }
 
+
+
 const login = async (req, res) => {
   const email = req.body.email.trim();
   const password = req.body.password;
@@ -225,5 +226,6 @@ const getLoggedInUserData = async (req, res) => {
 
   res.send(user)
 }
+
 
 export { signUp, login, checkIfLoggedIn, editApprover, getApproverDetails, getApproverAccounts, deleteApprover, getLoggedInUserData, getPendingAccounts, approveAccount, rejectAccount, getStudents, getAdvisers, assignAdviser}

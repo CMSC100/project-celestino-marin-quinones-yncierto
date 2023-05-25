@@ -37,6 +37,7 @@ const checkIfLoggedInOnHome = async () => {
   else return 0;
 };
 
+
 // Send a POST request to API to check if the user is a student, admin, or approver
 // each user type has own function for each type of root routes
 const checkIfLoggedInAsStudent = async () => {

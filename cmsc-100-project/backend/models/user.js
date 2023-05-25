@@ -10,7 +10,6 @@ const UserSchema = new mongoose.Schema({
   userType: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
-  applications: { type: Array },
   adviser: { type: mongoose.Schema.Types.ObjectId },
 });
 

@@ -1,5 +1,5 @@
 import { signUp, login, checkIfLoggedIn, editApprover, getApproverDetails, getApproverAccounts, deleteApprover, getLoggedInUserData, getPendingAccounts, approveAccount, rejectAccount, getStudents, getAdvisers, assignAdviser } from "./auth-controller.js";
-import { createApplication } from "./app-controller.js"
+import { createApplication, getApplications } from "./app-controller.js"
 
 const setUpRoutes = (app) => {
   app.get("/", (req, res) => { res.send("API Home") });
@@ -8,6 +8,7 @@ const setUpRoutes = (app) => {
   app.get("/getpendingaccounts", getPendingAccounts)
   app.get("/getstudents", getStudents)
   app.get("/getadvisers", getAdvisers)
+  app.post("/getapplications", getApplications)
 
   app.post("/signup", signUp);
   app.post("/login", login);
@@ -16,7 +17,7 @@ const setUpRoutes = (app) => {
   app.post("/deleteapprover", deleteApprover)
   app.post("/getloggedinuserdata", getLoggedInUserData)
 
-  // app.post("/createapplication", createApplication)
+  app.post("/createapplication", createApplication)
   
   app.post("/approveaccount", approveAccount)
   app.post("/rejectaccount", rejectAccount)
