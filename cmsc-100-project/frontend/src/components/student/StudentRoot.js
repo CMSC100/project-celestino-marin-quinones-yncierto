@@ -80,7 +80,7 @@ setpdfModalOpen(true);
 
 return(
 <div className="student-homepage">
-{userData && <p>Welcome, {userData._id}!</p>}
+{/* {userData && <p>Welcome, {userData._id}!</p>} */}
 
     <header>
         <img 

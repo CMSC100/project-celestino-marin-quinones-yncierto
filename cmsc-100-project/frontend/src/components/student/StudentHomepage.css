@@ -1,0 +1,30 @@
+
+
+  .application-card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .application-card h4 {
+    margin-top: 0;
+  }
+  
+  .application-card ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .application-card li {
+    margin-bottom: 5px;
+  }
+  
+  .application-card li strong {
+    font-weight: bold;
+  }
+  
+  .application-card li:last-child {
+    margin-bottom: 0;
+  }
+  
