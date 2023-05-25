@@ -1,11 +1,24 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .signup-container {
   background-color: #f1f1f1;
   width: 50%;
-  min-height: 100%;
   margin: auto;
   padding: 20px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
+  overflow: auto;
 }
 
 form {
@@ -73,8 +86,8 @@ input[type=password] {
 }
 
 .avatar {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 20px;
