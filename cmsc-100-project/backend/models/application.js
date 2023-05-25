@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 const ApplicationSchema = new mongoose.Schema({
+    status: { type: String, required: true },
     step: {type: Number, required: true},
     remarks: [{
         remark: {type: String, required: true},
@@ -14,7 +15,8 @@ const ApplicationSchema = new mongoose.Schema({
             date: {type: Date, default: Date.now},
             stepGiven: {type: Number}
         }]
-    }
+    },
+    studentID: { type: mongoose.Schema.Types.ObjectId }
 });
 
 mongoose.model("Application", ApplicationSchema);
