@@ -99,7 +99,7 @@ export default function Root() {
         </form>
         <div className="signup-btn-container">
         <br/>
-        <p>Don't have an account yet? <span onClick={handleSignUp}>Sign up instead</span></p>
+        <p>Don't have an account yet? <span className="signup-link" onClick={handleSignUp}>Sign up instead</span></p>
         </div>
       </div>
     </>

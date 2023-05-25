@@ -133,6 +133,18 @@ label {
   margin-bottom: 0;
 }
 
+.signup-link {
+  color: blue;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.signup-link:hover {
+  color: red;
+}
+
+
+
 
 .avatar {
   width: 80px;
