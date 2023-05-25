@@ -88,6 +88,15 @@ label {
   background-color: #4caf50;
 }
 
+.signup-btn-container {
+  text-align: center;
+}
+
+.signup-text {
+  margin-bottom: 0;
+}
+
+
 .avatar {
   width: 80px;
   height: 80px;
