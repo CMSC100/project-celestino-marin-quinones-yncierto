@@ -4,7 +4,11 @@ import mongoose from "mongoose";
 
 // import UserSchema from "./models/user.js";
 import "./models/user.js";
+import "./models/application.js";
+
 import setUpRoutes from "./routes.js";
+
+
 
 // connect to Mongo DB
 await mongoose.connect("mongodb://127.0.0.1:27017/AUTH");
