@@ -29,6 +29,21 @@ body {
   overflow: auto;
 }
 
+.cancel-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.cancel-icon {
+  font-size: 24px;
+  font-weight: bold;
+  color: black;
+  cursor: pointer;
+}
+
+
 input[type=text], 
 input[type=password] {
   width: 100%;
@@ -66,15 +81,30 @@ label {
   margin-top: 10px;
   display: flex;
   justify-content: space-between;
+  text-align: center;
 }
 
-.cancelbtn {
-  background-color: #f44336;
+.cancel-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #ff6666;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
 
-.cancelbtn:hover {
-  background-color: #da190b;
+.cancel-icon {
+  font-size: 18px;
+  font-weight: bold;
+  color: #f8f8f8;
+  cursor: pointer;
 }
+
 
 .signup-back-btn button {
   padding: 10px;
@@ -85,11 +115,14 @@ label {
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s;
+  
 }
 
 
 .signupbtn {
   background-color: #4caf50;
+  display: block;
+  margin: 0 auto;
 }
 
 .signup-btn-container {
