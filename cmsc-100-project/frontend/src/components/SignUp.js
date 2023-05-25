@@ -143,7 +143,7 @@ export default function SignUp() {
             </div>
   
             <div className="signup-back-btn">
-              <button className="signup-back-btn" type="submit">Sign Up</button>
+              <button className="signupbtn" type="submit">Sign Up</button>
               <button type="reset" className="cancelbtn">Cancel</button>
             </div>
           </div>

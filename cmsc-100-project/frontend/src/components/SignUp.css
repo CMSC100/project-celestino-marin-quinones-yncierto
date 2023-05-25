@@ -4,15 +4,18 @@
   min-height: 100%;
   margin: auto;
   padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
 }
 
 form {
-  border: 3px solid #f1f1f1;
+  border: none;
 }
 
 .form-row {
   display: flex;
   margin-bottom: 10px;
+  flex-wrap: wrap;
 }
 
 .form-group {
@@ -24,6 +27,7 @@ label {
   display: block;
   font-weight: bold;
   margin-bottom: 5px;
+  color: #333;
 }
 
 
@@ -35,7 +39,7 @@ input[type=password] {
   display: inline-block;
   border: 1px solid #ccc;
   box-sizing: border-box;
-  
+  border-radius: 5px;
 }
 
 .signup-back-btn {
@@ -46,7 +50,6 @@ input[type=password] {
 
 .cancelbtn {
   background-color: #f44336;
-  color: white;
 }
 
 .cancelbtn:hover {
@@ -55,6 +58,18 @@ input[type=password] {
 
 .signup-back-btn button {
   padding: 10px;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+
+.signupbtn {
+  background-color: #4caf50;
 }
 
 .avatar {
