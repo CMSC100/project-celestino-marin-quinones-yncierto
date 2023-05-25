@@ -79,7 +79,11 @@ export default function Root() {
       <div className="login-container">
         <form onSubmit={handleLogin}>
           <div className="imgcontainer">
-            <img src="https://hips.hearstapps.com/hmg-prod/images/domestic-cat-lies-in-a-basket-with-a-knitted-royalty-free-image-1592337336.jpg?crop=0.668xw:1.00xh;0.247xw,0&resize=1200:*" alt="Avatar" className="avatar" />
+            <img 
+              src="https://hips.hearstapps.com/hmg-prod/images/domestic-cat-lies-in-a-basket-with-a-knitted-royalty-free-image-1592337336.jpg?crop=0.668xw:1.00xh;0.247xw,0&resize=1200:*" 
+              alt="Avatar" 
+              className="avatar" 
+            />
           </div>
 
           <div className="container-form">
@@ -94,8 +98,8 @@ export default function Root() {
           </div>
         </form>
         <div className="signup-btn-container">
-          <p>Don't have an account yet? Sign up instead.</p>
-          <button className="signup-btn" onClick={handleSignUp}>Sign Up</button>
+        <p>Don't have an account yet? <a href="/sign-up">Sign up instead</a></p>
+          {/* <button className="signup-btn" onClick={handleSignUp}>Sign Up</button> */}
         </div>
       </div>
     </>
