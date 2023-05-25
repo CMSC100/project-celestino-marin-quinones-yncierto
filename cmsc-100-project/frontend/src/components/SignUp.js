@@ -79,7 +79,7 @@ export default function SignUp() {
         email: document.getElementById("s-email").value,
         password: document.getElementById("s-password").value,
         applications: [],
-        adviser: ""
+        adviser: null,
       })
     })
       .then(response => response.json())
