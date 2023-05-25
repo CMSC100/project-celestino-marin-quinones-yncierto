@@ -5,6 +5,9 @@ export default function StudentApplications() {
     const [pendingAccounts, setPendingAccounts] = useState([])
     const [sort, setSort] = useState("fullName")
     const [showDisplay, setShowDisplay]  = useState("pending accounts")
+    const [students, setStudents] = useState([])
+    const [studentIDAssign, setStudentIDAssign] = useState(0)
+    const [advisers, setAdvisers] = useState([])
     
     // get admin data from DB
     useEffect(() => {
@@ -14,10 +17,12 @@ export default function StudentApplications() {
         })
             .then(response => response.json())
             .then(body => setUserData(body))
+        getAdvisers()
     }, [])
 
     useEffect(() => {
         getPendingAccounts()
+        getStudents()
     }, [sort])
 
     const getPendingAccounts = function() {
@@ -27,9 +32,7 @@ export default function StudentApplications() {
     }
 
     const changeDisplay = function(value) {
-        if (value === "pending accounts") {
-            changeSort("fullName")
-        }
+        changeSort("fullName")
         setShowDisplay(value)
     }
 
@@ -49,6 +52,7 @@ export default function StudentApplications() {
             .then(body => {
                 if (body["success"]) {
                     getPendingAccounts()
+                    getStudents()
                     alert("User account has been approved.")
                 } else {
                     alert("Failed to approve user account.")
@@ -83,13 +87,43 @@ export default function StudentApplications() {
         e.target.classList.add("active")
     }
 
+    const getStudents = function() {
+        fetch(`http://localhost:3001/getstudents?sort=${sort}`)
+            .then(response => response.json())
+            .then(body => setStudents(body))
+    }
+
+    const getAdvisers = function() {
+        fetch("http://localhost:3001/getadvisers")
+            .then(response => response.json())
+            .then(body => setAdvisers(body))
+    }
+
+    const assignAdviser = function(adviserIDAssign) {
+        fetch("http://localhost:3001/assignadviser", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({studentIDAssign, adviserIDAssign})
+        })
+            .then(response => response.json())
+            .then(body => {
+                if (body["success"]) {
+                    alert("Adviser successfully assigned to student.")
+                } else {
+                    alert("Failed adviser assignment.")
+                }
+            })
+    }
+
     return(
         <div>
             <button type="button" name="display-buttons" className='active' onClick={(e) => {
                 changeActiveButton(e)
                 changeDisplay("pending accounts")
             }}>View Pending Accounts</button>
-            
+
             <button type="button" name="display-buttons" onClick={(e) => {
                 changeActiveButton(e)
                 changeDisplay("students")
@@ -126,9 +160,37 @@ export default function StudentApplications() {
             }
             {
                 showDisplay === "students" &&
-                    <div>
-                        
+                <div style={{display: "flex", columnGap: 10}}>
+                    <div style={{display: "flex", flexDirection: "column", rowGap: 20}}>
+                        {students.map(function(element, index) {
+                            return (
+                                <div key={index} style={{backgroundColor: "lightgray"}}>
+                                    <span>{element.fullName} {element.studentNumber} {element.email}</span>
+
+                                    <button type='button' onClick={() => {
+                                        document.getElementById("modal").style.display = "block"
+                                        setStudentIDAssign(element._id)
+                                    }}>Assign Adviser</button>
+                                </div>
+                            )
+                        })}
                     </div>
+                    <div id="modal" style={{display: "none", position: "abosolue", width: 500, height: 500, flexDirection: "column", rowGap: 10}}>
+                        <div>
+                            {
+                                advisers.map((element, index) => {
+                                    return (
+                                        <div style={{backgroundColor: "lightgray"}} key={index}>
+                                            {element.fullName}
+                                            <button type="button" onClick={() => assignAdviser(element._id)}>Assign</button>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+                    </div>
+                </div>
+                    
             }
         </div>
     )
