@@ -52,16 +52,25 @@ export default function Root() {
           if (body.userExists) {
             alert("Your account has not yet been approved.")
           } else {
-            // alert("Login failed.")
             // make the outline of the input fields red
             document.getElementById('email').style.borderColor = 'red';
             document.getElementById('psw').style.borderColor = 'red';
-            // make something that says Email or Password is incorrect not alert, it should be in the ui
+            // make something that says Email or Password is incorrect not alert
             setLoginError('Email or Password is incorrect.');
+            // clear the input fields
+            document.getElementById('email').value = '';
+            document.getElementById('psw').value = '';
             
           }
         }
       });
+  };
+
+  // handle input change and clear loginError
+  const handleInputChange = () => {
+    setLoginError('');
+    document.getElementById('email').style.borderColor = '#ccc';
+    document.getElementById('psw').style.borderColor = '#ccc';
   };
 
   return (
@@ -78,10 +87,10 @@ export default function Root() {
 
           <div className="container-form">
             <label htmlFor="email"><b>Email</b></label>
-            <input type="text" placeholder="Enter Email" name="email" id="email" required />
+            <input type="text" placeholder="Enter Email" name="email" id="email" required onChange={handleInputChange} />
 
             <label htmlFor="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="psw" id="psw" required />
+            <input type="password" placeholder="Enter Password" name="psw" id="psw" required onChange={handleInputChange}/>
           </div>
           {loginError && <p className="error-message">{loginError}</p>}
           <div className="login-btn-container">
