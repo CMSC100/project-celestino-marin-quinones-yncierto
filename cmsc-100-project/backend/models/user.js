@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
+import csvParser from 'csv-parser';
 
 const UserSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
@@ -35,4 +36,6 @@ UserSchema.methods.comparePassword = function(password, callback) {
   bcrypt.compare(password, this.password, callback);
 }
 
-mongoose.model("User", UserSchema);
+const User = mongoose.model("User", UserSchema);
+
+export default User;

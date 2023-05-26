@@ -22,6 +22,7 @@ const setUpRoutes = (app) => {
   app.post("/approveaccount", approveAccount)
   app.post("/rejectaccount", rejectAccount)
   app.post("/assignadviser", assignAdviser)
+
 }
 
 export default setUpRoutes;
