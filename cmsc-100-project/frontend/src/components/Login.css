@@ -32,6 +32,13 @@ form {
   border: none;
 }
 
+.error-message {
+  color: red;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+
 label {
   display: block;
   font-weight: bold;

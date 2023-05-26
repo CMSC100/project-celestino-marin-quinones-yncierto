@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import validator from 'validator';
@@ -8,6 +8,7 @@ import './Login.css';
 export default function Root() {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loginError, setLoginError] = useState('');
 
   // handle the effect when isLoggedIn state changes
   useEffect(() => {
@@ -33,12 +34,12 @@ export default function Root() {
 
     // Perform validation
     if (!validator.isEmail(email)) {
-      alert('Invalid Email');
+      setLoginError('Invalid Email');
       return;
     }
 
     if (password.length < 6) {
-      alert('Password should be at least 6 characters long');
+      setLoginError('Password should be at least 6 characters long');
       return;
     }
 
@@ -68,7 +69,13 @@ export default function Root() {
           if (body.userExists) {
             alert("Your account has not yet been approved.")
           } else {
-            alert("Login failed.")
+            // alert("Login failed.")
+            // make the outline of the input fields red
+            document.getElementById('email').style.borderColor = 'red';
+            document.getElementById('psw').style.borderColor = 'red';
+            // make something that says Email or Password is incorrect not alert, it should be in the ui
+            setLoginError('Email or Password is incorrect.');
+            
           }
         }
       });
@@ -93,6 +100,7 @@ export default function Root() {
             <label htmlFor="psw"><b>Password</b></label>
             <input type="password" placeholder="Enter Password" name="psw" id="psw" required />
           </div>
+          {loginError && <p className="error-message">{loginError}</p>}
           <div className="login-btn-container">
             <button type="submit" className="login-btn">Login</button>
           </div>
