@@ -1,8 +1,5 @@
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
-import csvParser from 'csv-parser';
-import fs from 'fs';
-
 
 // get user model registered in Mongoose
 const User = mongoose.model("User");

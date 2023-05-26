@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie';
-import validator from 'validator';
 
 import './Login.css';
 
@@ -26,22 +25,6 @@ export default function Root() {
   // handle the login form submission. Sends POST request to API with email and password from the form. If successful, set isLoggedIn to true, set the cookie, and set the username in localStorage
   const handleLogin = (e) => {
     e.preventDefault();
-
-    // perform validation
-    // Get the input values
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('psw').value;
-
-    // Perform validation
-    if (!validator.isEmail(email)) {
-      setLoginError('Invalid Email');
-      return;
-    }
-
-    if (password.length < 6) {
-      setLoginError('Password should be at least 6 characters long');
-      return;
-    }
 
     fetch('http://localhost:3001/login', {
       method: 'POST',
