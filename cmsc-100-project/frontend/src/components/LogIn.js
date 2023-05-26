@@ -50,7 +50,7 @@ export default function Root() {
           localStorage.setItem('username', body.username);
         } else {
           if (body.userExists) {
-            alert("Your account has not yet been approved.")
+            setLoginError("Your account has not yet been approved.")
           } else {
             // make the outline of the input fields red
             document.getElementById('email').style.borderColor = 'red';
