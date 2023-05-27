@@ -16,7 +16,7 @@ body {
   justify-content: center;
   background-color: #f1f1f1;
   width: 450px;
-  height: 660px;
+  height: 700px;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -34,8 +34,8 @@ form {
 
 .error-message {
   color: red;
-  margin-top: 10px;
-  font-size: 14px;
+  margin-top: 0;
+  font-size: 12px;
 }
 
 
