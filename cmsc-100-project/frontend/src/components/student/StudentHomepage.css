@@ -1,14 +1,24 @@
-
-
   .application-card {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 30px;
+    background-color: #E4E9F7;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  .application-list h3 {
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: x-large;
+    border-bottom: 2px solid rgb(66, 64, 64);
   }
   
   .application-card h4 {
     margin-top: 0;
+    padding-bottom: 15px;
   }
   
   .application-card ul {
@@ -26,5 +36,193 @@
   
   .application-card li:last-child {
     margin-bottom: 0;
+  }
+
+  .app-card-btns{
+    /* background-color: red; */
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .student-homepage .refresh-app{
+    margin-top: 10px;
+    padding-right: 80px;
+    text-align: right;
+  }
+
+  /* ===Main content=== */
+.main-content{
+  position: relative;
+  overflow: scroll;
+  left: 250px;
+  height: 100vh;
+  width: calc(100% - 250px);
+}
+
+.student-homepage h1 {
+  padding: 30px;
+}
+
+.application-list{
+  width: 85%;
+  height: fit-content;
+  padding: 10px;
+  overflow: auto;
+  margin: auto;
+  background-color: #aec2fd;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.no-application {
+  text-align: center;
+}
+
+  /* ===Side bar=== */
+
+  *{
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+  }
+  
+  .body{
+    height: 100vh;
+    background-color: #E4E9F7;
+  }
+  
+  .sidebar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 250px;
+    padding: 10px 14px;
+    background-color: #FFF;
+    z-index: 100;
+  }
+  
+  .nav-header {
+    margin-top: 5px;
+  }
+  
+  /* ===Reusable CSS=== */
+  .sidebar .text{
+    padding: 5px;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  
+  .sidebar .image{
+    min-width: 70px;
+    display: flex;
+    align-items: center;
+    color: #707070;
+  }
+  /* =================== */
+  
+  .sidebar li { 
+    height: 50px;
+    margin-top: 10px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+  }
+  
+  .sidebar li button {
+    background-color: transparent;
+    margin-left: 0;
+  }
+  
+  .sidebar li div {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    border-radius: 6px;
+    background-color: transparent;
+    transition: all 0.2s ease;
+  }
+  
+  .sidebar li div:hover{
+    background-color: #695CFE;
+  }
+  
+  .sidebar li .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 60px;
+    font-size: 20px;
+  }
+  
+  .sidebar li .text,
+  .sidebar li .icon {
+    color: #707070;
+    transition: all 0.3s ease;
+  }
+  
+  .sidebar li:hover .text,
+  .sidebar li:hover .icon {
+    color: #FFF;
+  }
+  
+  .sidebar header{
+    position: relative;
+  }
+  
+  .sidebar .image-text img{
+    width: 60px;
+    border-radius: 6px;
+  }
+  
+  .sidebar header .image-text{
+    display: flex;
+    align-items: center;
+  }
+  
+  header .image-text .header-text{
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .header-text .name{
+    font-weight: 600;
+  }
+  
+  .header-text .usertype{
+    font-style: italic;
+    color: rgb(94, 93, 93);
+    margin-top: 10px;
+  }
+  
+  .sidebar header .toggle{
+    position: absolute;
+    top: 50%;
+    right: -25px;
+    transform: translateY(-50%);
+    height: 25px;
+    width: 25px;
+    background-color: #695CFE;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #FFF;
+    font-size: 22px;
+  }
+  
+  .sidebar .menu-bar{
+    height: calc(100% - 50px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .sidebar .menu-bar .bottom-content{
+    margin-bottom: 10px;
   }
   

@@ -3,6 +3,7 @@
   "dependencies": {
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.6",
+    "csv-parser": "^3.0.0",
     "curl": "^0.1.4",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
