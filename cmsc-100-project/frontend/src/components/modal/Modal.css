@@ -1,4 +1,6 @@
 .modalBackground, .pdfmodalBackground {
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(200, 200, 200, 0.7);
@@ -6,6 +8,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: scroll;
 }
 
 .modalContainer {
@@ -39,8 +42,8 @@
 }
 
 .pdfmodalContainer {
-  width: 30%;
-  height: 70%;
+  width: 50%;
+  height: 80%;
   border-radius: 12px;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -57,4 +60,52 @@
 
 .pdf-file h1 {
   text-align: center;
+}
+
+/* ===Profile CSS=== */
+
+.profile-bg {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(200, 200, 200, 0.7);
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-container {
+  width: 40%;
+  height: max-content;
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+}
+
+.profile-bg .image-text img{
+  width: 70px;
+  border-radius: 6px;
+}
+
+.profile-bg .image-text{
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid black;
+  padding-bottom: 10px;
+}
+
+.image-text .header-text{
+  display: flex;
+  flex-direction: column;
+  padding-left: 20px;
+}
+
+.profile-bg .header-text .name{
+  font-weight: 600;
+  font-size: large;
 }
