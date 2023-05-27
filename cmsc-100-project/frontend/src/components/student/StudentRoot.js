@@ -94,35 +94,6 @@ const handleDashboard = () => {
 }
 
 return(
-// {/* <div className="student-homepage"> */}
-// {/* {userData && <p>Welcome, {userData._id}!</p>} */}
-
-//     <header>
-//         <img 
-//             src="https://hips.hearstapps.com/hmg-prod/images/domestic-cat-lies-in-a-basket-with-a-knitted-royalty-free-image-1592337336.jpg?crop=0.668xw:1.00xh;0.247xw,0&resize=1200:*" 
-//             alt="Avatar" 
-//             className="logo" 
-//         />
-//         <nav>
-//         <ul className='nav-list'>
-//             <li>
-//                 <button onClick={handleOpenApplication}>Open an Application</button>
-//             </li>
-//             <li>
-//                 <button>Profile</button>
-//             </li>
-//             <li>
-//                 <button onClick={handlePrintPDF}>Print PDF</button>
-//             </li>
-//         </ul>
-//         </nav>
-//         <button className="logout-btn" onClick={handleLogout}>Log Out</button>
-//     </header>
-//     <Outlet/>
-//     {/* {modalOpen && <ApplicationModal setOpenModal={setModalOpen}/>} */}
-//     {pdfModalOpen && <PdfModal setpdfModal={setpdfModalOpen}/>}
-// </div>
-
 <div className='body'>
         <nav className='sidebar'>
             <header className='nav-header'>
