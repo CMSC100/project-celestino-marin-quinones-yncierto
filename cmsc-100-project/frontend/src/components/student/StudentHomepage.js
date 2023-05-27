@@ -7,7 +7,7 @@ import './StudentHomepage.css';
 
 export default function StudentHomepage() {
   const [modalOpen, setModalOpen] = useState(false);
-  const [pdfmodalOpen, setpdfModalOpen] = useState(false);
+  const [pdfModalOpen, setpdfModalOpen] = useState(false);
   const [userData, setUserData] = useState({});
   const [applications, setApplications] = useState([]);
   const [updateFlag, setUpdateFlag] = useState(false); // Flag to trigger manual update
@@ -71,6 +71,10 @@ export default function StudentHomepage() {
     setUpdateFlag(!updateFlag); // Toggle the updateFlag to trigger manual update
   };
 
+  const handlePrintPDF = () => {
+    setpdfModalOpen(true);
+  };
+
   return (
     <div className="student-homepage">
       <h1>Hello, {userData.firstName}!</h1>
@@ -83,10 +87,11 @@ export default function StudentHomepage() {
       )}
 
       {applications.length > 0 ? (
-        <div>
-          <h3>Applications:</h3>
+        <div className='application-list'>
+          <h3>APPLICATIONS</h3>
           {applications.map((application, index) => (
             <div className="application-card" key={index}>
+            <div className='application-info'>
               <h4>Application {index + 1}</h4>
               <ul>
                 {Object.entries(application).map(([field, value]) => (
@@ -96,13 +101,22 @@ export default function StudentHomepage() {
                 ))}
               </ul>
             </div>
+            <div className='app-card-btns'>
+                <button className='print-app' onClick={handlePrintPDF}>Print as PDF</button>
+                <button className='close-app'>Close Application</button>
+            </div>
+            </div>
           ))}
         </div>
       ) : (
-        <p>No applications yet.</p>
+        <div className='application-list'>
+          <p className='no-application'>No applications yet.</p>
+        </div>
       )}
-
-      <button onClick={handleManualUpdate}>Refresh Applications</button>
+      <div className='refresh-app'>
+        <button onClick={handleManualUpdate}>Refresh Applications</button>
+      </div>
+      {pdfModalOpen && <PdfModal setpdfModal={setpdfModalOpen}/>}
     </div>
   );
 }
