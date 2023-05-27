@@ -3,16 +3,24 @@ import mongoose from "mongoose";
 const Application = mongoose.model("Application");
 
 const createApplication = async (req, res) => {
+  const {studentID} = req.body;
     try {
-        const newApplication = new Application({
-            status: "pending",
-            step: 0,
-            remarks: [],
-            studentSubmission: [],
-            studentID: req.body.studentID
-        });
-        const savedApplication = await newApplication.save();
-        res.status(200).json(savedApplication);
+      let checkForOpen = await Application.find({studentID, status:"open"})
+
+      if (checkForOpen.length >= 1) {
+        res.send({hasOpen: true})
+        return;
+      }
+      
+      const newApplication = new Application({
+          status: "open",
+          step: 0,
+          remarks: [],
+          studentSubmission: [],
+          studentID: req.body.studentID
+      });
+      const savedApplication = await newApplication.save();
+      res.status(200).json(savedApplication);
         
     } catch (error) {
         res.status(500).json(error);
@@ -20,8 +28,8 @@ const createApplication = async (req, res) => {
 }
 
 const getApplications = async (req, res) => {
-    try {
-      const { studentID } = req.body;
+  const { studentID } = req.query;
+  try {
       const applications = await Application.find({ studentID });
       res.status(200).json(applications);
     } catch (error) {

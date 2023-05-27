@@ -8,7 +8,7 @@ const setUpRoutes = (app) => {
   app.get("/getpendingaccounts", getPendingAccounts)
   app.get("/getstudents", getStudents)
   app.get("/getadvisers", getAdvisers)
-  app.post("/getapplications", getApplications)
+  app.get("/getapplications", getApplications)
 
   app.post("/signup", signUp);
   app.post("/login", login);

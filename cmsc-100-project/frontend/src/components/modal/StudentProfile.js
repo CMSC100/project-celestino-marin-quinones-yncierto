@@ -1,7 +1,7 @@
 import React from "react";
 import './Modal.css'
 
-export default function StudentProfile ({setProfileModal}) {
+export default function StudentProfile ({setProfileModal, userData}) {
 
   return(
     <div className="profile-bg">
@@ -13,9 +13,9 @@ export default function StudentProfile ({setProfileModal}) {
 
           <div className='text header-text'>
               {/* dapat dito yung fullname ng nag log in*/}
-              <span className='name'>Full name</span>
+              <span className='name'>{userData.fullName}</span>
               {/* dito yung type ng user */}
-              <span className='usertype'>usertype</span>
+              <span className='usertype'>{userData.userType}</span>
           </div>
         </div>
         <div>

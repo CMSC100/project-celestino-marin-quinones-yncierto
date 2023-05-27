@@ -185,7 +185,7 @@ const login = async (req, res) => {
     const token = jwt.sign(tokenPayload, "THIS_IS_A_SECRET_STRING");
 
     // return the token to the client
-    return res.send({ success: true, token, username: user.name });
+    return res.send({ success: true, token, username: user.name, userData: user });
 
 
   })
