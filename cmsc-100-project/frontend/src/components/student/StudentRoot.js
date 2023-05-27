@@ -3,11 +3,18 @@ import { useNavigate, Outlet, Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import ApplicationModal from '../modal/ApplicationModal';
 import PdfModal from '../modal/PdfModal';
+import StudentProfile from '../modal/StudentProfile';
+
+import {AiOutlineHome} from "react-icons/ai"
+import {HiOutlineDocumentText} from "react-icons/hi"
+import {CgProfile} from "react-icons/cg"
+import {BiLogOut} from "react-icons/bi"
 
 export default function ApproverRoot() {
     const navigate = useNavigate()
     const [pdfModalOpen, setpdfModalOpen] = useState(false);
     const [userData, setUserData] = useState(true);
+    const [profileModal, setProfileModalOpen] = useState(false);
 
     useEffect(() => {
         // Function to fetch user data
@@ -78,34 +85,71 @@ const handlePrintPDF = () => {
 setpdfModalOpen(true);
 }
 
-return(
-<div className="student-homepage">
-{/* {userData && <p>Welcome, {userData._id}!</p>} */}
+const handleProfile = () => {
+    setProfileModalOpen(true);
+}
 
-    <header>
-        <img 
-            src="https://hips.hearstapps.com/hmg-prod/images/domestic-cat-lies-in-a-basket-with-a-knitted-royalty-free-image-1592337336.jpg?crop=0.668xw:1.00xh;0.247xw,0&resize=1200:*" 
-            alt="Avatar" 
-            className="logo" 
-        />
-        <nav>
-        <ul className='nav-list'>
-            <li>
-                <button onClick={handleOpenApplication}>Open an Application</button>
-            </li>
-            <li>
-                <button>Profile</button>
-            </li>
-            <li>
-                <button onClick={handlePrintPDF}>Print PDF</button>
-            </li>
-        </ul>
+const handleDashboard = () => {
+    setProfileModalOpen(false);
+}
+
+return(
+<div className='body'>
+        <nav className='sidebar'>
+            <header className='nav-header'>
+                <div className='image-text'>
+                    <span className='image'>
+                        <img src= {require("./aprub.png")} alt=""/>
+                    </span>
+
+                    <div className='text header-text'>
+                        {/* dapat dito yung name ng nag log in, kahit 1st name lang siguro */}
+                        <span className='name'>Student name</span>
+                        {/* dito yung type ng user */}
+                        <span className='usertype'>usertype</span>
+                    </div>
+                </div>
+            </header>
+
+            <div className='menu-bar'> 
+                <div className='menu'>
+                    <li className='nav-link'>
+                        <div>
+                            {/* pakigawang active initially yung dashboard ehehehehehehhehe, parang yung ginawa sa admin */}
+                            <AiOutlineHome className='icon'/>
+                            <button className='text nav-text' onClick={handleDashboard}>Dashboard</button>
+                        </div>
+                    </li>
+
+                    <li className='nav-link'>
+                        <div>
+                            <HiOutlineDocumentText className='icon'/>
+                            <button className='text nav-text' onClick={handleOpenApplication}>Open Application</button>
+                        </div>
+                    </li>
+
+                    <li className='nav-link'>
+                        <div>
+                            <CgProfile className='icon'/>
+                            <button className='text nav-text' onClick={handleProfile}>Profile</button>
+                        </div>
+                    </li>
+                </div>
+
+                <div className='bottom-content'>
+                    <li className=''>
+                        <div>
+                            <BiLogOut className='icon'/>
+                            <button className='text nav-text' onClick={handleLogout}>Logout</button>
+                        </div>
+                    </li>
+                </div>
+            </div>
         </nav>
-        <button className="logout-btn" onClick={handleLogout}>Log Out</button>
-    </header>
-    <Outlet/>
-    {/* {modalOpen && <ApplicationModal setOpenModal={setModalOpen}/>} */}
-    {pdfModalOpen && <PdfModal setpdfModal={setpdfModalOpen}/>}
-</div>
+        <div className='main-content'>
+            <Outlet/>
+        </div>
+        {profileModal && <StudentProfile setProfileModal={setProfileModalOpen}/>}
+    </div>
 )
 }

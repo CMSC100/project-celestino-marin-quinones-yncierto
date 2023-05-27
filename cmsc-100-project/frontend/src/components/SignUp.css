@@ -105,7 +105,7 @@ label {
 }
 
 
-.signup-back-btn button {
+.signupbtn-container button {
   padding: 10px;
   color: white;
   border: none;
@@ -119,7 +119,7 @@ label {
 
 
 .signupbtn {
-  background-color: #4caf50;
+  background-color: #695CFE;
   display: block;
   margin: 0 auto;
 }
@@ -142,9 +142,6 @@ label {
   color: red;
 }
 
-
-
-
 .avatar {
   width: 80px;
   height: 80px;
@@ -153,74 +150,6 @@ label {
   margin-bottom: 20px;
 }
 
-/* {*css for student homepage*} */
-
-.nav-contents {
-  justify-content: space-between;
-}
-
-nav {
-  background-color: #f1f1f1;
-}
-
-.student-homepage {
-  background-color: #e8eff1;
-}
-
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #0A4D68;
-  text-align: center;
-  margin-bottom: 0%;
-}
-
-img.logo {
-  width: 50px !important;
-  height: 50px !important;
-  border-radius: 50%;
-  padding-left: 15px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-nav {
-  background-color: #0A4D68;
-}
-
-.nav-list {
-  padding-top: 0%;
-  padding-bottom: 0%;
-  list-style: none;
-}
-
-.nav-list button {
-  padding-top: 0%;
-  padding-bottom: 0%;
-  width: max-content;
-}
-
-.nav-list button:hover {
-  text-decoration: underline;
-}
-
-.nav-list li {
-  display: inline-block;
-  padding: 0 20px;
-}
-
-
-.logout-btn {
-  background-color: transparent !important;
-  height: fit-content;
-  width: 6%;
-}
-
-.logout-btn:hover {
-  color: black !important;
-  background-color: #e8eff1 !important;
-}
 
 
 
