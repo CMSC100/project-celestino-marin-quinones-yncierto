@@ -13,6 +13,7 @@ export default function StudentHomepage() {
   const [triggerFetchApp, setTriggerFetchApp] = useOutletContext();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
+
   const navigate = useNavigate();
 
   const fetchUserData = async () => {
@@ -89,7 +90,7 @@ export default function StudentHomepage() {
   }
 
   return (
-    <div className="student-homepage">
+    <div className={`student-homepage ${showSuccessMessage ? "overlay-visible" : ""}`}>
       <h1>Hello, {userData.firstName}!</h1>
       {modalOpen && (
         <ApplicationModal
