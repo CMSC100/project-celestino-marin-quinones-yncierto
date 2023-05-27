@@ -20,6 +20,7 @@ const ApplicationSchema = new mongoose.Schema({
     // },
     studentID: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required : true},
     adviserID: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    createdAt: { type: Date, default: Date.now }
 });
 
 mongoose.model("Application", ApplicationSchema);
