@@ -110,7 +110,7 @@ export default function StudentHomepage() {
               </ul>
             </div>
             <div className='app-card-btns'>
-                {<button className='print-app' onClick={handlePrintPDF}>Print as PDF</button>}
+                {application.status === "cleared" && <button className='print-app' onClick={handlePrintPDF}>Print as PDF</button>}
                 <button className='close-app' onClick={
                   () => {
                     closeApplication(application._id);
