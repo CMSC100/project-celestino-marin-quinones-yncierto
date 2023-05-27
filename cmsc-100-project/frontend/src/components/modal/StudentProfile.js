@@ -13,9 +13,9 @@ export default function StudentProfile ({setProfileModal}) {
 
           <div className='text header-text'>
               {/* dapat dito yung fullname ng nag log in*/}
-              <span className='name'>Kyla Cristine Miraflor Celestino</span>
+              <span className='name'>Full name</span>
               {/* dito yung type ng user */}
-              <span className='usertype'>Student</span>
+              <span className='usertype'>usertype</span>
           </div>
         </div>
         <div>

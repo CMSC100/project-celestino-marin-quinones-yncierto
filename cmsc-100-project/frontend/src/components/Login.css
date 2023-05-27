@@ -77,7 +77,7 @@ button:hover {
 }
 
 .login-btn {
-  background-color: #4caf50;
+  background-color: #695CFE;
   margin-top: 15px;
   width: 15%;
 }
@@ -89,12 +89,12 @@ button:hover {
 .imgcontainer {
   text-align: center;
   margin: 0 0 12px 0;
+  /* background-color: #E4E9F7 */
 }
 
 img.avatar {
-  width: 40%;
-  height: 40%;
-  border-radius: 50%;
+  width: 70%;
+  height: 70%;
 }
 
 .error-msg {
