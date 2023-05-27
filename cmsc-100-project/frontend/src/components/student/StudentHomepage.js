@@ -10,7 +10,8 @@ export default function StudentHomepage() {
   const [pdfModalOpen, setpdfModalOpen] = useState(false);
   const [applications, setApplications] = useState([]);
   const [userData, setUserData] = useState({})
-  const [triggerFetchApp, setTriggerFetchApp] = useOutletContext()
+  const [triggerFetchApp, setTriggerFetchApp] = useOutletContext();
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   const navigate = useNavigate();
 
@@ -77,7 +78,11 @@ export default function StudentHomepage() {
     })
     
     if (result.ok) {
-      alert("Successfully closed the application.")
+      setShowSuccessMessage(true);
+      setTriggerFetchApp(!triggerFetchApp);
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+      }, 1000); 
     } else {
       alert("Failed to close application.")
     }
@@ -137,6 +142,13 @@ export default function StudentHomepage() {
         </div>
       )}
       {pdfModalOpen && <PdfModal setpdfModal={setpdfModalOpen}/>}
+      {showSuccessMessage && (
+        <div className="popup">
+          <div className="popup-content">
+            Successfully closed the application.
+          </div>
+        </div>
+      )}
     </div>
   );
 }
