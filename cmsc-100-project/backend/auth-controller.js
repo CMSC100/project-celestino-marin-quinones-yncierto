@@ -7,10 +7,9 @@ const User = mongoose.model("User");
 const signUp = async (req, res) => {
   // const { firstName, middleName, lastName, studentNumber, userType, email, password, applications, adviser } = req.body;
   const { firstName, middleName, lastName, userType, email, password } = req.body
-  let user = await User.findOne({email: email})
+  let user = await User.findOne({email})
   console.log(user)
   if (user) {
-    console.log("lmao")
     return res.send({success: false, emailExists: true})
   }
 
@@ -26,6 +25,7 @@ const signUp = async (req, res) => {
       email: email,
       password: password,
       adviser: adviser,
+      applications: []
     });
   } else {
     var newuser = new User({
@@ -111,6 +111,7 @@ const editApprover = async (req, res) => {
 // delete approver account
 const deleteApprover = async (req, res) => {
   let { docRef } = req.body // approver account document reference
+  await User.updateMany({adviser: new mongoose.Types.ObjectId(docRef)}, {$set: {adviser: null}})
   let del = await User.deleteOne({_id: docRef})
   if (del["deletedCount"] != 0 && del["acknowledged"]) res.send({deleted: true})
   else res.send({deleted: false})

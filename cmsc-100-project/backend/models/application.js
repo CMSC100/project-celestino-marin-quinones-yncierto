@@ -19,6 +19,7 @@ const ApplicationSchema = new mongoose.Schema({
     //     }]
     // },
     studentID: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required : true},
+    adviserID: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
 });
 
 mongoose.model("Application", ApplicationSchema);

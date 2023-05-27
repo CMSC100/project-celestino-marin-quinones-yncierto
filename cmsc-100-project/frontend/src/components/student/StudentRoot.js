@@ -62,6 +62,7 @@ const handleOpenApplication = async () => {
         },
         body: JSON.stringify({
             studentID: userData._id,
+            adviserID: userData.adviser
         })
       });
   

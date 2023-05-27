@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const Application = mongoose.model("Application");
 
 const createApplication = async (req, res) => {
-  const {studentID} = req.body;
+  const {studentID, adviserID} = req.body;
     try {
       let checkForOpen = await Application.find({studentID, status:"open"})
 
@@ -17,7 +17,8 @@ const createApplication = async (req, res) => {
           step: 0,
           remarks: [],
           studentSubmission: [],
-          studentID: req.body.studentID
+          studentID: studentID,
+          adviserID: adviserID
       });
       const savedApplication = await newApplication.save();
       res.status(200).json(savedApplication);
