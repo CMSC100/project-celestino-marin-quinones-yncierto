@@ -45,10 +45,21 @@
     flex-direction: column;
   }
 
+  .app-card-btns button:hover{
+    background-color: #695CFE;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
   .student-homepage .refresh-app{
-    margin-top: 10px;
+    margin-top: 20px;
     padding-right: 80px;
     text-align: right;
+  }
+
+  .student-homepage .refresh-app button{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 30px;
   }
 
   /* ===Main content=== */
@@ -102,6 +113,7 @@
     padding: 10px 14px;
     background-color: #FFF;
     z-index: 100;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   }
   
   .nav-header {
@@ -135,6 +147,11 @@
     background-color: transparent;
     margin-left: 0;
   }
+
+  .sidebar .bottom-content li button{
+    background-color: transparent;
+    margin-left: 0;
+  }
   
   .sidebar li div {
     height: 100%;
@@ -149,6 +166,7 @@
   
   .sidebar li div:hover{
     background-color: #695CFE;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   }
   
   .sidebar li .icon {
@@ -223,6 +241,6 @@
   }
   
   .sidebar .menu-bar .bottom-content{
-    margin-bottom: 10px;
+    margin-bottom: 20px;
   }
   
