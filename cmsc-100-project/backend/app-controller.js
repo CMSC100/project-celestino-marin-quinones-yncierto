@@ -14,7 +14,7 @@ const createApplication = async (req, res) => {
       
       const newApplication = new Application({
           status: "open",
-          step: 0,
+          step: 1,
           remarks: [],
           studentSubmission: [],
           studentID: studentID,
@@ -29,14 +29,34 @@ const createApplication = async (req, res) => {
 }
 
 const getApplications = async (req, res) => {
-  const { studentID } = req.query;
+  const { studentID, adviserID, search } = req.query;
+  console.log(studentID)
   try {
-      const applications = await Application.find({ studentID });
-      res.status(200).json(applications);
-    } catch (error) {
-      res.status(500).json(error);
-    }
-  };
+    var applications;
+    if (studentID) applications = await Application.find({ studentID });
+    else if (adviserID && search == "") {
+      applications = await Application.find(
+        {$and: [
+          {adviserID}, 
+          {$or: [{status: "pending"}, {status: "cleared"}]}
+        ]}
+      )
+      }
+    // } else {
+    //   applications = await Application.find(
+    //     {$and: [
+    //       {adviserID}, 
+    //       {$or: [{status: "pending"}, {status: "cleared"}]}, 
+    //       {$or: [{fullName: `${search}`}, {studentNumber: `${search}`}]}
+    //     ]}
+    //   )
+    // }
+    console.log(applications)
+    res.status(200).json(applications);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
   
 const closeApplication = async (req, res) => {
   const {appID} = req.body;

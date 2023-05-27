@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import './Modal.css'
 
 export default function StudentProfile ({setProfileModal, userData}) {
+  const [adviserName, setAdviserName] = useState("")
+
+  useEffect(() => {
+    fetch(`http://localhost:3001/getapproverdetails?docRef=${userData.adviser}`)
+      .then(response => response.json())
+      .then(body => setAdviserName(body.fullName))
+  }, [])
 
   return(
     <div className="profile-bg">
@@ -22,7 +29,7 @@ export default function StudentProfile ({setProfileModal, userData}) {
           {/* student number, email, adviser, application id(?) */}
           <p><strong>Student number: </strong>{userData.studentNumber}</p>
           <p><strong>Email: </strong>{userData.email}</p>
-          <p><strong>Adviser: </strong> {userData.adviser}</p>
+          <p><strong>Adviser: </strong> {(adviserName) ? adviserName : "No adviser assigned."}</p>
           <p><strong>Application ID: </strong>{userData._id}</p>
         </div>
         <button onClick={() => { setProfileModal(false); }} id="cancelBtn"> Close </button>

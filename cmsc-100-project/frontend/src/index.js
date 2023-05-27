@@ -12,7 +12,9 @@ import PdfModal from './components/modal/PdfModal';
 import AdminRoot from './components/admin/AdminRoot'
 import ApproverList from './components/admin/ApproverList';
 import StudentApplications from './components/admin/StudentApplications';
+
 import ApproverHomepage from './components/approver/ApproverHomepage';
+import ApproverRoot from './components/approver/ApproverRoot'
 
 // Send a POST request to API to check if the user is logged in. Redirect the user to /student-homepage if already logged in
 const checkIfLoggedInOnHome = async () => {
@@ -108,7 +110,13 @@ const router = createBrowserRouter([
   },
   {
     path: '/approver',
-    element: <ApproverHomepage/>,
+    element: <ApproverRoot/>,
+    children: [
+      {
+        path: '/approver',
+        element: <ApproverHomepage />
+      }
+    ],
     loader: checkIfLoggedInAsApprover
   },
   {

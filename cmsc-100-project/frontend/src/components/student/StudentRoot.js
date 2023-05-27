@@ -89,7 +89,7 @@ const handleOpenApplication = async () => {
 }
 
 const handlePrintPDF = () => {
-setpdfModalOpen(true);
+    setpdfModalOpen(true);
 }
 
 const handleProfile = () => {
