@@ -122,14 +122,6 @@ const router = createBrowserRouter([
     ],
     loader: checkIfLoggedInAsStudent
   },
-  {
-    path: '/approver-list',
-    element: <ApproverList />,
-  },
-  {
-    path: '/pdf-modal',
-    element: <PdfModal />
-  },
 ]);
 
 // render the router to the page
