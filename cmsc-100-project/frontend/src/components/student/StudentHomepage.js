@@ -102,7 +102,7 @@ export default function StudentHomepage() {
               application.status === 'closed' ? 'closed' : ''
             }`} key={index}>
             <div className='application-info'>
-              <h4>Application {index + 1}</h4>
+              <h4>Application {applications.length - index} </h4>
               {application.studentSubmission.length > 0 ? (
                 <ul>
                 {Object.entries(application).map(([field, value]) => (
