@@ -110,9 +110,7 @@ return(
                     </span>
 
                     <div className='text header-text'>
-                        {/* dapat dito yung name ng nag log in, kahit 1st name lang siguro */}
                         <span className='name'>{userData.fullName}</span>
-                        {/* dito yung type ng user */}
                         <span className='usertype'>{userData.userType}</span>
                     </div>
                 </div>
@@ -122,7 +120,6 @@ return(
                 <div className='menu'>
                     <li className='nav-link'>
                         <div>
-                            {/* pakigawang active initially yung dashboard ehehehehehehhehe, parang yung ginawa sa admin */}
                             <AiOutlineHome className='icon'/>
                             <button className='text nav-text' onClick={handleDashboard}>Dashboard</button>
                         </div>
