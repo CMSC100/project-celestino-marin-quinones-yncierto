@@ -18,8 +18,12 @@ export default function StudentProfile ({setProfileModal, userData}) {
               <span className='usertype'>{userData.userType}</span>
           </div>
         </div>
-        <div>
+        <div className="profile-info">
           {/* student number, email, adviser, application id(?) */}
+          <p><strong>Student number: </strong>{userData.studentNumber}</p>
+          <p><strong>Email: </strong>{userData.email}</p>
+          <p><strong>Adviser: </strong> {userData.adviser}</p>
+          <p><strong>Application ID: </strong>{userData._id}</p>
         </div>
         <button onClick={() => { setProfileModal(false); }} id="cancelBtn"> Close </button>
       </div>

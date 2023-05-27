@@ -109,3 +109,12 @@
   font-weight: 600;
   font-size: large;
 }
+
+.profile-info{
+  margin: 10px;
+  padding-top: 10px;
+}
+
+.profile-info p{
+  padding-bottom: 10px;
+}
