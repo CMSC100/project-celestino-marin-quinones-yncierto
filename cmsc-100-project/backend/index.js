@@ -11,6 +11,7 @@ import User from "./models/user.js";
 
 
 import setUpRoutes from "./routes.js";
+import { create } from "domain";
 
 
 
@@ -36,8 +37,8 @@ app.use((req, res, next) => {
   next();
 });
 
-const createAdminAccountFromCSV = async () => {
-  const filePath = './models/admin.csv';
+const createAccountFromCSV = async () => {
+  const filePath = './models/builtinusers.csv';
   fs.access(filePath, fs.constants.R_OK, (err) => {
     if (err) {
       console.error('Error accessing CSV file:', err);
@@ -49,37 +50,32 @@ const createAdminAccountFromCSV = async () => {
       .pipe(csvParser())
       .on('data', (data) => results.push(data))
       .on('end', async () => {
-        if (results.length !== 1) {
-          console.error('Invalid CSV file format');
-          return;
-        }
 
-        const adminData = results[0];
-        const { firstName, middleName, lastName, userType, email, password } = adminData;
-
-        const existingAdmin = await User.findOne({ email });
-        if (existingAdmin) {
-          console.error('Admin account already exists');
-          return;
-        }
-
-        const newAdmin = new User({
-          firstName,
-          middleName,
-          lastName,
-          fullName: `${firstName} ${middleName} ${lastName}`,
-          userType,
-          email,
-          password,
-        });
-
-        const result = await newAdmin.save();
-
-        if (result._id) {
-          console.log('Admin account created successfully');
-        } else {
-          console.error('Failed to create admin account');
-        }
+        results.forEach(async (object) => {
+          let existingUser = await User.findOne({email: object.email});
+          if (existingUser) {
+            console.error(`${object.userType.toString()} account already exists.`);
+          } else {
+            let { firstName, middleName, lastName, userType, email, password } = object;
+            let newUser = new User({
+              firstName,
+              middleName,
+              lastName,
+              fullName: `${firstName} ${middleName} ${lastName}`,
+              userType,
+              email,
+              password,
+            });
+    
+            let result = await newUser.save();
+    
+            if (result._id) {
+              console.log(`${userType} account created successfully.`);
+            } else {
+              console.error(`Failed to create ${userType} account.`);
+            }
+          }
+        })
       });
   });
 };
@@ -88,7 +84,7 @@ const createAdminAccountFromCSV = async () => {
 setUpRoutes(app);
 
 // create admin account from CSV file
-createAdminAccountFromCSV();
+createAccountFromCSV();
 
 // start server
 app.listen(3001, () => { console.log("API listening to port 3001 ")});
