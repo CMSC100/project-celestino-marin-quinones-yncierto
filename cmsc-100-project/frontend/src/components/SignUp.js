@@ -12,6 +12,11 @@ export default function SignUp() {
   const [lastName, setLastName] = useState('');
   const [studentNumber, setStudentNumber] = useState('');
   const [isSignedUp, setIsSignedUp] = useState(false);
+  const [inputErrors, setInputErrors] = useState({
+    studentNumber: '',
+    email: '',
+    password: ''
+  });
 
   const navigate = useNavigate();
 
@@ -31,37 +36,33 @@ export default function SignUp() {
   const handleSignUp = (e) => {
     e.preventDefault();
 
-    // Form validation goes here
-    // Perform form validation
-    if (firstName.trim() === '') {
-      alert('First Name is required');
-      return;
-    }
+    // Reset errors
+    setInputErrors({
+      firstName: '',
+      lastName: '',
+      studentNumber: '',
+      email: '',
+      password: ''
+    });
 
-    if (middleName.trim() === '') {
-      alert('Middle Name is required');
-      return;
-    }
-
-    if (lastName.trim() === '') {
-      alert('Last Name is required');
-      return;
-    }
+    const errors = {};
 
     var pattern = /^[0-9]{4}-[0-9]{5}$/;
     var validStdnum = pattern.test(studentNumber);
     if (!validStdnum) {
-      alert('Invalid Student Number');
-      return;
+      errors.studentNumber = 'Invalid Student Number';
     }
 
     if (!validator.isEmail(email)) {
-      alert('Invalid Email');
-      return;
+      errors.email = 'Invalid Email';
     }
 
     if (password.length < 6) {
-      alert('Password should be at least 6 characters long');
+      errors.password = 'Password should be at least 6 characters long';
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setInputErrors(errors);
       return;
     }
   
@@ -109,38 +110,102 @@ export default function SignUp() {
             </div>
           <div className="container-form">
             <div className="form-row">
-              <div className="form-group">
+
+              <div className={`form-group ${inputErrors.firstName ? 'has-error' : ''}`}>
                 <label htmlFor="fname"><b>Given Name</b></label>
-                <input id="s-fname" type="text" placeholder="Enter given name" name="fname" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
+                <input 
+                  id="s-fname" 
+                  type="text" 
+                  placeholder="Enter given name" 
+                  name="fname" 
+                  value={firstName} 
+                  onChange={(e) => setFirstName(e.target.value)} 
+                  required
+                />
               </div>
+
               <div className="form-group">
                 <label htmlFor="mname"><b>Middle Name</b></label>
-                <input id="s-mname" type="text" placeholder="Enter middle name" name="mname" value={middleName} onChange={(e) => setMiddleName(e.target.value)} required />
+                <input 
+                  id="s-mname" 
+                  type="text" 
+                  placeholder="Enter middle name" 
+                  name="mname" 
+                  value={middleName} 
+                  onChange={(e) => setMiddleName(e.target.value)} 
+                  required 
+                />
               </div>
-              <div className="form-group">
+
+              <div className={`form-group ${inputErrors.lastName ? 'has-error' : ''}`}>
                 <label htmlFor="lname"><b>Last Name</b></label>
-                <input id="s-lname" type="text" placeholder="Enter last name" name="lname" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
+                <input 
+                  id="s-lname" 
+                  type="text" 
+                  placeholder="Enter last name" 
+                  name="lname" 
+                  value={lastName} 
+                  onChange={(e) => setLastName(e.target.value)} 
+                  required 
+                />
               </div>
             </div>
   
             <div className="form-row">
-              <div className="form-group">
+              <div className={`form-group ${inputErrors.studentNumber ? 'has-error' : ''}`}>
                 <label htmlFor="studno"><b>Student Number</b></label>
-                <input id="s-studno" type="text" placeholder="Enter student number (e.g., 2023-12345)" name="studno" value={studentNumber} onChange={(e) => setStudentNumber(e.target.value)} required />
+                <input 
+                  id="s-studno" 
+                  type="text" 
+                  placeholder="Enter student number (e.g., 2023-12345)" 
+                  name="studno" 
+                  value={studentNumber} 
+                  onChange={(e) => {
+                    setStudentNumber(e.target.value);
+                    setInputErrors({ ...inputErrors, studentNumber: '' });
+                  }} 
+                  required 
+                />
+                {inputErrors.studentNumber && <p className="error-message">{inputErrors.studentNumber}</p>}
               </div>
             </div>
   
             <div className="form-row">
-              <div className="form-group">
+              <div className={`form-group ${inputErrors.email ? 'has-error' : ''}`}>
                 <label htmlFor="email"><b>Email</b></label>
-                <input id="s-email" type="text" placeholder="Enter Email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                <input 
+                  id="s-email" 
+                  type="text" 
+                  placeholder="Enter Email" 
+                  name="email" 
+                  value={email} 
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setInputErrors({ ...inputErrors, email: '' });
+                  }} 
+                  required 
+                />
+                {inputErrors.email && <p className="error-message">{inputErrors.email}</p>}
               </div>
             </div>
   
             <div className="form-row">
-              <div className="form-group">
+              <div className={`form-group ${inputErrors.password ? 'has-error' : ''}`}>
                 <label htmlFor="psw"><b>Password</b></label>
-                <input id="s-password" type="password" placeholder="Enter Password" name="psw" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                <input 
+                id="s-password" 
+                type="password" 
+                placeholder="Enter Password" 
+                name="psw" 
+                value={password} 
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setInputErrors({ ...inputErrors, password: '' });
+                }} 
+                required 
+                />
+                {inputErrors.password && <p className="error-message">{inputErrors.password}</p>}
+
               </div>
             </div>
             <br/>

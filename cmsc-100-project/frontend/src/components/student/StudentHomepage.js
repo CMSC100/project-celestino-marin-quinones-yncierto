@@ -89,7 +89,7 @@ export default function StudentHomepage() {
       {modalOpen && (
         <ApplicationModal
           setOpenModal={setModalOpen}
-          updateUserData={updateUserData}
+          // updateUserData={updateUserData}
           userData={userData}
         />
       )}
