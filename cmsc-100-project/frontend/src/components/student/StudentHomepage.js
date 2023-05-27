@@ -41,7 +41,7 @@ export default function StudentHomepage() {
 
       if (applicationsResponse.ok) {
         const applicationsData = await applicationsResponse.json();
-        setApplications(applicationsData);
+        setApplications(applicationsData.reverse());
       } else {
         console.error("Failed to fetch applications:", applicationsResponse);
       }
