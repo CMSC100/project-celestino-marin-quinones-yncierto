@@ -101,13 +101,17 @@ export default function StudentHomepage() {
             <div className="application-card" key={index}>
             <div className='application-info'>
               <h4>Application {index + 1}</h4>
-              <ul>
+              {application.studentSubmission.length > 0 ? (
+                <ul>
                 {Object.entries(application).map(([field, value]) => (
                   <li key={field}>
                     <strong>{field}:</strong> {JSON.stringify(value)}
                   </li>
                 ))}
               </ul>
+              ) : (
+                <p>No application submitted yet</p>
+              )}
             </div>
             <div className='app-card-btns'>
                 {application.status === "cleared" && <button className='print-app' onClick={handlePrintPDF}>Print as PDF</button>}
@@ -130,5 +134,3 @@ export default function StudentHomepage() {
     </div>
   );
 }
-
-// gagawin ko pang real-time update ung fetching
