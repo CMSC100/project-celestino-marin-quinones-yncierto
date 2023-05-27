@@ -16,6 +16,7 @@ export default function ApproverRoot() {
     const [userData, setUserData] = useState(true);
     const [profileModal, setProfileModalOpen] = useState(false);
     const [triggerFetchApp, setTriggerFetchApp] = useState(false);
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     useEffect(() => {
         // Function to fetch user data
@@ -75,7 +76,10 @@ const handleOpenApplication = async () => {
         } else {
             setTriggerFetchApp(!triggerFetchApp);
             console.log('Application created:', application);
-            alert("Successfully created application!")
+            setShowSuccessMessage(true);
+            setTimeout(() => {
+                setShowSuccessMessage(false);
+            }, 1000); 
         }
       } else {
         // Failed to create the application
@@ -101,7 +105,7 @@ const handleDashboard = () => {
 }
 
 return(
-<div className='body'>
+<div className={`body ${showSuccessMessage ? "overlay-visible" : ""}`}>
         <nav className='sidebar'>
             <header className='nav-header'>
                 <div className='image-text'>
@@ -154,6 +158,13 @@ return(
             <Outlet context={[triggerFetchApp, setTriggerFetchApp]}/>
         </div>
         {profileModal && <StudentProfile setProfileModal={setProfileModalOpen} userData={userData}/>}
+        {showSuccessMessage && (
+        <div className="popup">
+          <div className="popup-content">
+            Successfully opened an application!
+          </div>
+        </div>
+      )}
     </div>
 )
 }
