@@ -98,7 +98,9 @@ export default function StudentHomepage() {
         <div className='application-list'>
           <h3>APPLICATIONS</h3>
           {applications.map((application, index) => (
-            <div className="application-card" key={index}>
+            <div className={`application-card ${
+              application.status === 'closed' ? 'closed' : ''
+            }`} key={index}>
             <div className='application-info'>
               <h4>Application {index + 1}</h4>
               {application.studentSubmission.length > 0 ? (
@@ -117,17 +119,21 @@ export default function StudentHomepage() {
                 {application.status === "cleared" && <button className='print-app' onClick={handlePrintPDF}>Print as PDF</button>}
                 <button className='close-app' onClick={
                   () => {
-                    closeApplication(application._id);
-                    setTriggerFetchApp(!triggerFetchApp)
+                    if (application.status !== 'closed') {
+                      closeApplication(application._id);
+                      setTriggerFetchApp(!triggerFetchApp);
+                    }
                   }
-                }>Close Application</button>
+                }
+                disabled={application.status === 'closed'}
+                >{application.status === 'closed' ? 'Closed' : 'Close Application'}</button>
             </div>
             </div>
           ))}
         </div>
       ) : (
         <div className='application-list'>
-          <p className='no-application'>No applications yet.</p>
+          <p className='no-application'>No applications yet</p>
         </div>
       )}
       {pdfModalOpen && <PdfModal setpdfModal={setpdfModalOpen}/>}

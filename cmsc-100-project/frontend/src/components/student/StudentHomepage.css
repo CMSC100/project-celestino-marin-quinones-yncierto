@@ -8,6 +8,17 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   }
 
+  .application-card.closed {
+    filter: grayscale(100%);
+    pointer-events: none;
+  }
+  
+  .application-card.closed .close-app {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+
   .application-list h3 {
     text-align: center;
     padding-top: 10px;
