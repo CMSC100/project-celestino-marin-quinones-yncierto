@@ -37,6 +37,16 @@ const getApplications = async (req, res) => {
     }
   };
   
+const closeApplication = async (req, res) => {
+  const {appID} = req.body;
+  try {
+    const update = await Application.updateOne({_id: appID}, {$set: {status: "closed"}})
+    if (update["acknowledged"] && update["modifiedCount"] != 0) res.status(200).json({close: true})
+    else res.status(500).json({close: false})
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
 
 
-export { createApplication, getApplications }
+export { createApplication, getApplications, closeApplication }

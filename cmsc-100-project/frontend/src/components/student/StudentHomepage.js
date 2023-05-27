@@ -10,7 +10,7 @@ export default function StudentHomepage() {
   const [pdfModalOpen, setpdfModalOpen] = useState(false);
   const [applications, setApplications] = useState([]);
   const [userData, setUserData] = useState({})
-  const [triggerFetchApp] = useOutletContext()
+  const [triggerFetchApp, setTriggerFetchApp] = useOutletContext()
 
   const navigate = useNavigate();
 
@@ -67,6 +67,22 @@ export default function StudentHomepage() {
     setpdfModalOpen(true);
   };
 
+  const closeApplication = async (appID) => {
+    let result = await fetch('http://localhost:3001/closeapplication', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({appID})
+    })
+    
+    if (result.ok) {
+      alert("Successfully closed the application.")
+    } else {
+      alert("Failed to close application.")
+    }
+  }
+
   return (
     <div className="student-homepage">
       <h1>Hello, {userData.firstName}!</h1>
@@ -94,8 +110,13 @@ export default function StudentHomepage() {
               </ul>
             </div>
             <div className='app-card-btns'>
-                <button className='print-app' onClick={handlePrintPDF}>Print as PDF</button>
-                <button className='close-app'>Close Application</button>
+                {<button className='print-app' onClick={handlePrintPDF}>Print as PDF</button>}
+                <button className='close-app' onClick={
+                  () => {
+                    closeApplication(application._id);
+                    setTriggerFetchApp(!triggerFetchApp)
+                  }
+                }>Close Application</button>
             </div>
             </div>
           ))}

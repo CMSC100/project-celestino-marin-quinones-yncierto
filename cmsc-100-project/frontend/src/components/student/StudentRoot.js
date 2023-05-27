@@ -153,7 +153,7 @@ return(
             </div>
         </nav>
         <div className='main-content'>
-            <Outlet context={[triggerFetchApp]}/>
+            <Outlet context={[triggerFetchApp, setTriggerFetchApp]}/>
         </div>
         {profileModal && <StudentProfile setProfileModal={setProfileModalOpen} userData={userData}/>}
     </div>
