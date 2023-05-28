@@ -151,8 +151,16 @@ export default function StudentHomepage() {
                   <p><b>Student Number:</b> {userData.studentNumber}</p>
                   <p><b>Email:</b> {userData.email}</p>
                   <p><b>Adviser:</b> {userData.adviser || "Not yet assigned"}</p>
-                  <p><b>GitHub Link:</b> <a href={application.studentSubmission[0].githubLink} target="_blank" rel="noopener noreferrer">{application.studentSubmission[0].githubLink}</a></p>
-
+                  <p><b>GitHub Links:</b></p>
+                  <ul style={{ listStyleType: 'disc', marginLeft: '3em' }}>
+                    {application.studentSubmission.map((submission, index) => (
+                      <li key={index}>
+                        <a href={submission.githubLink} target="_blank" rel="noopener noreferrer">
+                          {submission.githubLink}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
                 </>
               ) : (
                 <p>No application submitted yet</p>
