@@ -96,9 +96,9 @@ export default function StudentHomepage() {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ appID, githubLink })
+        body: JSON.stringify({ appID, githubLink }) // Include githubLink in the request body
       });
-
+  
       if (response.ok) {
         setShowSuccessMessage(true);
         setTriggerFetchApp(!triggerFetchApp);
@@ -113,6 +113,7 @@ export default function StudentHomepage() {
       console.log("Error:", error);
     }
   };
+  
 
   return (
     <div className={`student-homepage ${showSuccessMessage ? "overlay-visible" : ""}`}>
@@ -142,16 +143,16 @@ export default function StudentHomepage() {
                   <p><b>Email:</b> {userData.email}</p>
                   <p><b>Adviser:</b> {userData.adviser || "Not yet assigned"}</p>
                   <label><b>Link to GitHub repository</b></label>
-                  <input type="text" placeholder="https://github.com/..." />
+                  <input type="text" placeholder="https://github.com/..."  value={githubLink} onChange={(e) => setGithubLink(e.target.value)}/>
                 </>
               ) : application.studentSubmission.length > 0 ? (
-                <ul>
-                  {Object.entries(application).map(([field, value]) => (
-                    <li key={field}>
-                      <strong>{field}:</strong> {JSON.stringify(value)}
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  <p><b>Name:</b> {userData.fullName}</p>
+                  <p><b>Student Number:</b> {userData.studentNumber}</p>
+                  <p><b>Email:</b> {userData.email}</p>
+                  <p><b>Adviser:</b> {userData.adviser || "Not yet assigned"}</p>
+                  <p><b>GitHub Link:</b> {application.studentSubmission[0].githubLink}</p>
+                </>
               ) : (
                 <p>No application submitted yet</p>
               )}
