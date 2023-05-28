@@ -69,5 +69,28 @@ const closeApplication = async (req, res) => {
   }
 }
 
+const submitApplication = async (req, res) => {
+  const { appID, githubLink } = req.body;
+  try {
+    const application = await Application.findById(appID);
 
-export { createApplication, getApplications, closeApplication }
+    if (!application) {
+      res.status(404).json({ error: "Application not found" });
+      return;
+    }
+
+    application.studentSubmission.push({
+      githubLink,
+      createdAt: new Date(),
+      remarks: [],
+    });
+
+    const savedApplication = await application.save();
+    res.status(200).json(savedApplication);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+
+export { createApplication, getApplications, closeApplication, submitApplication }

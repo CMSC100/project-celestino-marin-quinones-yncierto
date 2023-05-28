@@ -12,7 +12,7 @@ export default function StudentHomepage() {
   const [userData, setUserData] = useState({})
   const [triggerFetchApp, setTriggerFetchApp] = useOutletContext();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-
+  const [githubLink, setGithubLink] = useState("");
 
   const navigate = useNavigate();
 
@@ -89,6 +89,31 @@ export default function StudentHomepage() {
     }
   }
 
+  const submitApplication = async (appID) => {
+    try {
+      const response = await fetch('http://localhost:3001/submitapplication', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ appID, githubLink })
+      });
+
+      if (response.ok) {
+        setShowSuccessMessage(true);
+        setTriggerFetchApp(!triggerFetchApp);
+        setGithubLink("");
+        setTimeout(() => {
+          setShowSuccessMessage(false);
+        }, 1000);
+      } else {
+        alert("Failed to submit application.");
+      }
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
   return (
     <div className={`student-homepage ${showSuccessMessage ? "overlay-visible" : ""}`}>
       <h1>Hello, {userData.firstName}!</h1>
@@ -150,7 +175,7 @@ export default function StudentHomepage() {
                 {application.status === 'closed' ? 'Closed' : 'Close Application'}
               </button>
               {application.status === 'open' && application.studentSubmission.length === 0 && (
-                <button className='submit-app'>Submit Application</button>
+                <button className='submit-app' onClick={() => submitApplication(application._id)}>Submit Application</button>
               )}
             </div>
           </div>
