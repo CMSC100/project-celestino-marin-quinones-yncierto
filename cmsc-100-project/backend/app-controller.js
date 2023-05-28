@@ -46,6 +46,7 @@ const getApplications = async (req, res) => {
         {
           $match: {
             $and: [
+              {step: {$ne: 1}},
               {adviserID: new mongoose.Types.ObjectId(adviserID)},
               {
                 $or: [
@@ -59,37 +60,6 @@ const getApplications = async (req, res) => {
         }
       ])
     }
-
-    // applications = await Application.find({ $where: function() {
-    //   console.log(this.adviserID == new mongoose.Types.ObjectId(adviserID))
-    //   return (
-    //     this.adviserID == new mongoose.Types.ObjectId(adviserID) &&
-    //     (this.status == "pending") || (this.status == "cleared") &&
-    //     ((search != "" 
-    //       ? User.find({$and: [
-    //         {_id: application.studentID},
-    //         {
-    //           $or: [
-    //             {fullName: {$regex: new RegExp(`${search}`, "gi")}},
-    //             {studentNumber: {$regex: new RegExp(`${search}`, "gi")}},
-    //           ]
-    //         }
-    //       ]})
-    //       : true
-    //     ))
-        
-    //   )
-    // }})
-      
-    // } else {
-    //   applications = await Application.find(
-    //     {$and: [
-    //       {adviserID}, 
-    //       {$or: [{status: "pending"}, {status: "cleared"}]}, 
-    //       {$or: [{fullName: `${search}`}, {studentNumber: `${search}`}]}
-    //     ]}
-    //   )
-    // }
     console.log(applications)
     res.status(200).json(applications);
   } catch (error) {
@@ -131,5 +101,13 @@ const submitApplication = async (req, res) => {
   }
 };
 
+const approveApplication = async(req, res) => {
+  const {appID} = req.body
+  let update = await Application.updateOne({_id: appID}, {$set: {step: "3"}})
 
-export { createApplication, getApplications, closeApplication, submitApplication }
+  if (update["acknowledged"] && update["modifiedCount"] != 0) res.send({updated: true})
+  else res.send({updated: false})
+}
+
+
+export { createApplication, getApplications, closeApplication, submitApplication, approveApplication }

@@ -45,6 +45,18 @@ export default function ApproverHomepage() {
     setSearch(e.target.value)
   }
 
+  const approveApplication = (appID) => {
+    fetch("http://localhost:3001/approveapplication", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({appID: appID})
+    })
+      .then(response => response.json())
+      .then(body => alert(JSON.stringify(body)))
+  }
+
   return (
     <div>
       <h3>Student Applications</h3>
@@ -55,7 +67,7 @@ export default function ApproverHomepage() {
             return (
               <div key={index} style={{backgroundColor: "lightgray"}}>
                 {JSON.stringify(application, null, 2)}
-                <button type="button">Approve</button>
+                <button type="button" onClick={() => approveApplication(application._id)}>Approve</button>
                 <button type="button">Return with Remarks</button>
               </div>
             )
