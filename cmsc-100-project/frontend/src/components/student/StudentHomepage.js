@@ -149,6 +149,9 @@ export default function StudentHomepage() {
               >
                 {application.status === 'closed' ? 'Closed' : 'Close Application'}
               </button>
+              {application.status === 'open' && application.studentSubmission.length === 0 && (
+                <button className='submit-app'>Submit Application</button>
+              )}
             </div>
           </div>
         ))}
