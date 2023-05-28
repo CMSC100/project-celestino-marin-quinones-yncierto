@@ -112,10 +112,12 @@ export default function StudentHomepage() {
               <h4>Application {applications.length - index}</h4>
               {application.status === 'open' && application.studentSubmission.length === 0 ? (
                 <>
-                  <p>Name: {userData.fullName}</p>
-                  <p>Student Number: {userData.studentNumber}</p>
-                  <p>Adviser: {userData.adviser}</p>
-                  <input type="text" placeholder="GitHub Link" />
+                  <p><b>Name:</b> {userData.fullName}</p>
+                  <p><b>Student Number:</b> {userData.studentNumber}</p>
+                  <p><b>Email:</b> {userData.email}</p>
+                  <p><b>Adviser:</b> {userData.adviser || "Not yet assigned"}</p>
+                  <label><b>Link to GitHub repository</b></label>
+                  <input type="text" placeholder="https://github.com/..." />
                 </>
               ) : application.studentSubmission.length > 0 ? (
                 <ul>
