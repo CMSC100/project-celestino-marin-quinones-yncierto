@@ -29,7 +29,9 @@ const createApplication = async (req, res) => {
 }
 
 const getApplications = async (req, res) => {
-  const { studentID, adviserID, search } = req.query;
+  const { studentID, adviserID, search, filter, filterValue, sort } = req.query;
+  console.log()
+  let sortBy = (sort === "date") ? {createdAt: -1} : (sort === "nameA") ? {"studentData.0.fullName": 1} : {"studentData.0.fullName": -1}
   try {
     var applications;
     if (studentID) applications = await Application.find({ studentID });
@@ -58,9 +60,8 @@ const getApplications = async (req, res) => {
 
           }
         }
-      ])
+      ]).collation({locale: "en"}).sort(sortBy)
     }
-    console.log(applications)
     res.status(200).json(applications);
   } catch (error) {
     res.status(500).json(error);
