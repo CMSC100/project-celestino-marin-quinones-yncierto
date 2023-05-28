@@ -11,7 +11,7 @@ const createApplication = async (req, res) => {
         res.send({hasOpen: true})
         return;
       }
-      
+
       const newApplication = new Application({
           status: "open",
           step: 1,
@@ -30,18 +30,57 @@ const createApplication = async (req, res) => {
 
 const getApplications = async (req, res) => {
   const { studentID, adviserID, search } = req.query;
-  console.log(studentID)
   try {
     var applications;
     if (studentID) applications = await Application.find({ studentID });
-    else if (adviserID && search == "") {
-      applications = await Application.find(
-        {$and: [
-          {adviserID}, 
-          {$or: [{status: "pending"}, {status: "cleared"}]}
-        ]}
-      )
-      }
+    else {
+      applications = await Application.aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "studentID",
+            foreignField: "_id",
+            as: "studentData"
+          }
+        },
+        {
+          $match: {
+            $and: [
+              {adviserID: new mongoose.Types.ObjectId(adviserID)},
+              {
+                $or: [
+                  {"studentData.0.fullName": {$regex: new RegExp(`${search}`, "gi")}},
+                  {"studentData.0.studentNumber": {$regex: new RegExp(`${search}`, "gi")}}
+                ]
+              }
+            ]
+
+          }
+        }
+      ])
+    }
+
+    // applications = await Application.find({ $where: function() {
+    //   console.log(this.adviserID == new mongoose.Types.ObjectId(adviserID))
+    //   return (
+    //     this.adviserID == new mongoose.Types.ObjectId(adviserID) &&
+    //     (this.status == "pending") || (this.status == "cleared") &&
+    //     ((search != "" 
+    //       ? User.find({$and: [
+    //         {_id: application.studentID},
+    //         {
+    //           $or: [
+    //             {fullName: {$regex: new RegExp(`${search}`, "gi")}},
+    //             {studentNumber: {$regex: new RegExp(`${search}`, "gi")}},
+    //           ]
+    //         }
+    //       ]})
+    //       : true
+    //     ))
+        
+    //   )
+    // }})
+      
     // } else {
     //   applications = await Application.find(
     //     {$and: [

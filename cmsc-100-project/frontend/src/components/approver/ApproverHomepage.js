@@ -48,7 +48,7 @@ export default function ApproverHomepage() {
   return (
     <div>
       <h3>Student Applications</h3>
-      {/* <input type="text" onChange={handleSearch} placeholder="Search for Name or Student No."/> */}
+      <input type="text" onChange={handleSearch} placeholder="Search for Name or Student No."/>
       <div style={{display: "flex", flexDirection: "column", rowGap: 10}}>
         {
           applications.map((application, index) => {

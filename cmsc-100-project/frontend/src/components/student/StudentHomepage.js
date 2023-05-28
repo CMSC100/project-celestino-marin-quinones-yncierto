@@ -13,6 +13,7 @@ export default function StudentHomepage() {
   const [triggerFetchApp, setTriggerFetchApp] = useOutletContext();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [githubLink, setGithubLink] = useState("");
+  const [adviserName, setAdviserName] = useState("");
 
   const navigate = useNavigate();
 
@@ -135,7 +136,7 @@ export default function StudentHomepage() {
             key={index}
           >
             <div className='application-info'>
-              <h4>Application {applications.length - index}</h4>
+              <h4>Application {index + 1}</h4>
               {application.status === 'open' && application.studentSubmission.length === 0 ? (
                 <>
                   <p><b>Name:</b> {userData.fullName}</p>
