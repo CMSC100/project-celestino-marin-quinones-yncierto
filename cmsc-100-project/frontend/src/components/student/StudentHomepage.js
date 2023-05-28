@@ -104,38 +104,52 @@ export default function StudentHomepage() {
         <div className='application-list'>
           <h3>APPLICATIONS</h3>
           {applications.map((application, index) => (
-            <div className={`application-card ${
-              application.status === 'closed' ? 'closed' : ''
-            }`} key={index}>
+          <div
+            className={`application-card ${application.status === 'closed' ? 'closed' : ''}`}
+            key={index}
+          >
             <div className='application-info'>
-              <h4>Application {applications.length - index} </h4>
-              {application.studentSubmission.length > 0 ? (
+              <h4>Application {applications.length - index}</h4>
+              {application.status === 'open' && application.studentSubmission.length === 0 ? (
+                <>
+                  <p>Name: {userData.fullName}</p>
+                  <p>Student Number: {userData.studentNumber}</p>
+                  <p>Adviser: {userData.adviser}</p>
+                  <input type="text" placeholder="GitHub Link" />
+                </>
+              ) : application.studentSubmission.length > 0 ? (
                 <ul>
-                {Object.entries(application).map(([field, value]) => (
-                  <li key={field}>
-                    <strong>{field}:</strong> {JSON.stringify(value)}
-                  </li>
-                ))}
-              </ul>
+                  {Object.entries(application).map(([field, value]) => (
+                    <li key={field}>
+                      <strong>{field}:</strong> {JSON.stringify(value)}
+                    </li>
+                  ))}
+                </ul>
               ) : (
                 <p>No application submitted yet</p>
               )}
             </div>
             <div className='app-card-btns'>
-                {application.status === "cleared" && <button className='print-app' onClick={handlePrintPDF}>Print as PDF</button>}
-                <button className='close-app' onClick={
-                  () => {
-                    if (application.status !== 'closed') {
-                      closeApplication(application._id);
-                      setTriggerFetchApp(!triggerFetchApp);
-                    }
+              {application.status === 'cleared' && (
+                <button className='print-app' onClick={handlePrintPDF}>
+                  Print as PDF
+                </button>
+              )}
+              <button
+                className='close-app'
+                onClick={() => {
+                  if (application.status !== 'closed') {
+                    closeApplication(application._id);
+                    setTriggerFetchApp(!triggerFetchApp);
                   }
-                }
+                }}
                 disabled={application.status === 'closed'}
-                >{application.status === 'closed' ? 'Closed' : 'Close Application'}</button>
+              >
+                {application.status === 'closed' ? 'Closed' : 'Close Application'}
+              </button>
             </div>
-            </div>
-          ))}
+          </div>
+        ))}
         </div>
       ) : (
         <div className='application-list'>

@@ -105,7 +105,7 @@ const handleDashboard = () => {
 }
 
 return(
-<div className={`body ${showSuccessMessage ? "overlay-visible" : ""}`}>
+    <div className={`body ${showSuccessMessage ? "overlay-visible" : ""}`}>
         <nav className='sidebar'>
             <header className='nav-header'>
                 <div className='image-text'>
