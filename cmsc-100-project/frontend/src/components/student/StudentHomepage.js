@@ -28,6 +28,11 @@ export default function StudentHomepage() {
       if (response.ok) {
         const data = await response.json();
         setUserData(data);
+        if (!data.adviser) {
+          setAdviserName(""); 
+        } else {
+          setAdviserName(data.adviser);
+        }
         return data._id;
       } else {
         console.error("Failed to fetch user data");
