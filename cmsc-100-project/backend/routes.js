@@ -9,7 +9,7 @@ const setUpRoutes = (app) => {
   app.get("/getstudents", getStudents)
   app.get("/getadvisers", getAdvisers)
   app.get("/getapplications", getApplications)
-
+  
   app.post("/signup", signUp);
   app.post("/login", login);
   app.post("/checkifloggedin", checkIfLoggedIn);

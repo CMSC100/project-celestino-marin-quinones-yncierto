@@ -96,7 +96,7 @@ export default function StudentHomepage() {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ appID, githubLink }) // Include githubLink in the request body
+        body: JSON.stringify({ appID, githubLink, status: 'pending' })
       });
   
       if (response.ok) {
