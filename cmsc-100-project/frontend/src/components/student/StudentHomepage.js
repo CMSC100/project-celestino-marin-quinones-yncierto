@@ -80,7 +80,7 @@ export default function StudentHomepage() {
     })
     
     if (result.ok) {
-      setShowSuccessMessage(true);
+      setShowSuccessMessage("closed");
       setTriggerFetchApp(!triggerFetchApp);
       setTimeout(() => {
         setShowSuccessMessage(false);
@@ -101,7 +101,7 @@ export default function StudentHomepage() {
       });
   
       if (response.ok) {
-        setShowSuccessMessage(true);
+        setShowSuccessMessage('submitted');
         setTriggerFetchApp(!triggerFetchApp);
         setGithubLink("");
         setTimeout(() => {
@@ -201,10 +201,18 @@ export default function StudentHomepage() {
         </div>
       )}
       {pdfModalOpen && <PdfModal setpdfModal={setpdfModalOpen}/>}
-      {showSuccessMessage && (
+      {showSuccessMessage === "closed" && (
+      <div className="popup">
+        <div className="popup-content">
+          Successfully closed the application.
+        </div>
+      </div>
+      )}
+
+      {showSuccessMessage === "submitted" && (
         <div className="popup">
           <div className="popup-content">
-            Successfully closed the application.
+            Successfully submitted the application.
           </div>
         </div>
       )}
