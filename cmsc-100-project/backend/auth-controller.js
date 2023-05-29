@@ -14,7 +14,7 @@ const signUp = async (req, res) => {
   }
 
   if (userType === "user") {
-    var { studentNumber, applications, adviser } = req.body
+    var { studentNumber, adviser } = req.body
     var newuser = new User({
       firstName: firstName,
       middleName: middleName,

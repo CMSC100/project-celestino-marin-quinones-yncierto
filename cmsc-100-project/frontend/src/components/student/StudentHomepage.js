@@ -145,7 +145,7 @@ export default function StudentHomepage() {
                   <p><b>Name:</b> {userData.fullName}</p>
                   <p><b>Student Number:</b> {userData.studentNumber}</p>
                   <p><b>Email:</b> {userData.email}</p>
-                  <p><b>Adviser:</b> {userData.adviser || "Not yet assigned"}</p>
+                  <p><b>Adviser:</b> {userData.adviserName || "Not yet assigned"}</p>
                   <label><b>Link to GitHub repository</b></label>
                   <input type="text" placeholder="https://github.com/..."  value={githubLink} onChange={(e) => setGithubLink(e.target.value)}/>
                 </>
@@ -189,7 +189,11 @@ export default function StudentHomepage() {
                 {application.status === 'closed' ? 'Closed' : 'Close Application'}
               </button>
               {application.status === 'open' && application.studentSubmission.length === 0 && (
-                <button className='submit-app' onClick={() => submitApplication(application._id)}>Submit Application</button>
+                <button 
+                className='submit-app' 
+                onClick={() => submitApplication(application._id)}
+                disabled = {!adviserName}
+                >Submit Application</button>
               )}
             </div>
           </div>
