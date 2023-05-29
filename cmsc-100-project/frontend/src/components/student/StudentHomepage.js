@@ -80,7 +80,7 @@ export default function StudentHomepage() {
     })
     
     if (result.ok) {
-      setShowSuccessMessage(true);
+      setShowSuccessMessage("closed");
       setTriggerFetchApp(!triggerFetchApp);
       setTimeout(() => {
         setShowSuccessMessage(false);
@@ -97,11 +97,11 @@ export default function StudentHomepage() {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ appID, githubLink }) // Include githubLink in the request body
+        body: JSON.stringify({ appID, githubLink, status: 'pending' })
       });
   
       if (response.ok) {
-        setShowSuccessMessage(true);
+        setShowSuccessMessage('submitted');
         setTriggerFetchApp(!triggerFetchApp);
         setGithubLink("");
         setTimeout(() => {
@@ -136,7 +136,10 @@ export default function StudentHomepage() {
             key={index}
           >
             <div className='application-info'>
-              <h4>Application {index + 1}</h4>
+              <h4>Application {applications.length - index}</h4>
+              <div className='status-bar'>
+                <span className={`status ${application.status}`}>{application.status}</span>
+              </div>
               {application.status === 'open' && application.studentSubmission.length === 0 ? (
                 <>
                   <p><b>Name:</b> {userData.fullName}</p>
@@ -198,10 +201,18 @@ export default function StudentHomepage() {
         </div>
       )}
       {pdfModalOpen && <PdfModal setpdfModal={setpdfModalOpen}/>}
-      {showSuccessMessage && (
+      {showSuccessMessage === "closed" && (
+      <div className="popup">
+        <div className="popup-content">
+          Successfully closed the application.
+        </div>
+      </div>
+      )}
+
+      {showSuccessMessage === "submitted" && (
         <div className="popup">
           <div className="popup-content">
-            Successfully closed the application.
+            Successfully submitted the application.
           </div>
         </div>
       )}

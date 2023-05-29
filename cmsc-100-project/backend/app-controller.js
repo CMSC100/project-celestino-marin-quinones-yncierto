@@ -106,7 +106,7 @@ const closeApplication = async (req, res) => {
 }
 
 const submitApplication = async (req, res) => {
-  const { appID, githubLink } = req.body;
+  const { appID, githubLink, status } = req.body;
   try {
     const application = await Application.findById(appID);
 
@@ -120,6 +120,8 @@ const submitApplication = async (req, res) => {
       createdAt: new Date(),
       remarks: [],
     });
+
+    application.status = status;
 
     const savedApplication = await application.save();
     res.status(200).json(savedApplication);
