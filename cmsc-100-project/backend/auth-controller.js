@@ -25,7 +25,6 @@ const signUp = async (req, res) => {
       email: email,
       password: password,
       adviser: adviser,
-      applications: []
     });
   } else {
     var newuser = new User({
