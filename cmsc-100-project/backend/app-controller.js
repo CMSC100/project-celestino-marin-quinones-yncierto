@@ -42,46 +42,49 @@ const getApplicationsApprover = async (req, res) => {
     newFilter = {"_id": {$ne: 0}}
   }
 
-  let applications = await Application.aggregate([
-    {
-      $lookup: {
-        from: "users",
-        localField: "studentID",
-        foreignField: "_id",
-        as: "studentData"
+  try {
+    let applications = await Application.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "studentID",
+          foreignField: "_id",
+          as: "studentData"
+        }
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "adviserID",
+          foreignField: "_id",
+          as: "adviserData"
+        }
+      },
+      {
+        $match: {
+          $and: [
+            {step: {$ne: 1}},
+            {adviserID: (userType == "officer" && filter == "adviser")
+              ? new mongoose.Types.ObjectId(filterValue)
+              : (userType == "officer" && filter == "")
+                ? {$ne: 0}
+                : new mongoose.Types.ObjectId(adviserID)
+            },
+            {
+              $or: [
+                {"studentData.0.fullName": {$regex: new RegExp(`${search}`, "gi")}},
+                {"studentData.0.studentNumber": {$regex: new RegExp(`${search}`, "gi")}}
+              ]
+            },
+            {...newFilter}
+          ]
+        }
       }
-    },
-    {
-      $lookup: {
-        from: "users",
-        localField: "adviserID",
-        foreignField: "_id",
-        as: "adviserData"
-      }
-    },
-    {
-      $match: {
-        $and: [
-          {step: {$ne: 1}},
-          {adviserID: (userType == "officer" && filter == "adviser")
-            ? new mongoose.Types.ObjectId(filterValue)
-            : (userType == "officer" && filter == "")
-              ? {$ne: 0}
-              : new mongoose.Types.ObjectId(adviserID)
-          },
-          {
-            $or: [
-              {"studentData.0.fullName": {$regex: new RegExp(`${search}`, "gi")}},
-              {"studentData.0.studentNumber": {$regex: new RegExp(`${search}`, "gi")}}
-            ]
-          },
-          {...newFilter}
-        ]
-      }
-    }
-  ]).collation({locale: "en"}).sort(sort)
-  
-  res.send(applications)
+    ]).collation({locale: "en"}).sort(sort)
+    res.status(200).send(applications)
+  } catch (error) {
+    res.status(500).json(error)
+  }
 }
 
 const getApplications = async (req, res) => {

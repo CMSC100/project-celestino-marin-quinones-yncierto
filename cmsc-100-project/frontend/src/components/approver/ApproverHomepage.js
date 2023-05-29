@@ -16,35 +16,31 @@ export default function ApproverHomepage() {
   const navigate = useNavigate();
 
   // fetch user data based on credentials and set userData state
-  const fetchUserData = async () => {
-    return fetch(`http://localhost:3001/getloggedinuserdata`, {
+  const fetchUserData = () => {
+    fetch(`http://localhost:3001/getloggedinuserdata`, {
       method: "POST",
       credentials: "include"
     })
       .then(response => response.json())
       .then(body => {
         setUserData(body)
-        return { adviserID: body._id, userType: body.userType }
+        setDataLoaded(true)
       })
   }
 
-  const fetchApplications = (adviserID, userType) => {
-    console.log(filterValue)
-    // fetch(`http://localhost:3001/getapplications?adviserID=${adviserID}&search=${search}&filter=${filter}&filterValue=${filterValue}&sort=${sort}&userType=${userType}`)
-    //   .then(response => response.json())
-    //   .then(body => setApplications(body))
+  const fetchApplications = () => {
     fetch(`http://localhost:3001/getapplicationsapprover`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        adviserID: adviserID,
+        adviserID: userData._id,
         search: search,
         filter: filter,
         filterValue: filterValue,
         sort: sort,
-        userType: userType
+        userType: userData.userType
       })
     })
       .then(response => response.json())
@@ -53,21 +49,20 @@ export default function ApproverHomepage() {
 
   useEffect(() => {
     const initialFetch = async () => {
-      let { adviserID, userType } = await fetchUserData()
+      fetchUserData()
 
-      if (adviserID) {
-        fetchApplications(adviserID, userType)
-        setDataLoaded(true)
+      if (dataLoaded) {
+        fetchApplications()
         fetchAdvisers()
       }
     }
 
     initialFetch()
 
-  }, []);
+  }, [dataLoaded]);
 
   useEffect(() => {
-    if (userData._id) fetchApplications(userData._id, userData.userType)
+    if (userData._id) fetchApplications()
   }, [search, triggerRebuild, sort, adviserFilterValue])
 
   const handleSearch = (e) => {
@@ -108,7 +103,7 @@ export default function ApproverHomepage() {
   if (dataLoaded) {
     return (
       <div>
-        <h1>{userData.userType} {userData.fullName}</h1>
+        <h2>Hello, {userData.fullName}! ({userData.userType})</h2>
         <h3>Student Applications</h3>
         <input type="text" id="search-text" onChange={handleSearch} placeholder="Search for Name or Student No." />
         <button type="button" onClick={clearSearch}>Clear Search</button>
@@ -159,7 +154,7 @@ function FilterOptions({ filterBy, advisers, setFilterValue, fetchApplications, 
 
   const onSubmit = (e) => {
     e.preventDefault()
-    fetchApplications(userData._id, userData.userType)
+    fetchApplications()
   }
 
   const filterButton = (
