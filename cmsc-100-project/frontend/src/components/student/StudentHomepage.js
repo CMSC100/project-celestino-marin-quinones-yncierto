@@ -137,6 +137,9 @@ export default function StudentHomepage() {
           >
             <div className='application-info'>
               <h4>Application {applications.length - index}</h4>
+              <div className='status-bar'>
+                <span className={`status ${application.status}`}>{application.status}</span>
+              </div>
               {application.status === 'open' && application.studentSubmission.length === 0 ? (
                 <>
                   <p><b>Name:</b> {userData.fullName}</p>
