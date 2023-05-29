@@ -53,34 +53,22 @@ const signUp = async (req, res) => {
 // get all approver accounts based on search w/ sorting
 const getApproverAccounts = async (req, res) => {
   let { searchName, sort } = req.query
-  let approverAccounts; // store approver accounts
-  if (searchName == "") {
-    // if empty query
-    // collation is for adjusting how the database sorts (makes it case-insensitive)
-    approverAccounts = await User.find({
-      $or: [
-        {userType: "adviser"},
-        {userType: "officer"}
+  let approverAccounts = await User.find(
+    // use conditional operators
+    {
+      $and: [
+        // used regex to filter out names
+        {fullName: {$regex: new RegExp(`${searchName}`, "gi")}},
+        {
+          $or:
+          [
+            {userType: "adviser"},
+            {userType: "officer"}
+          ]
+        }
       ]
-    }).collation({locale: "en"}).sort({fullName: sort});
-  } else {
-    approverAccounts = await User.find(
-      // use conditional operators
-      {
-        $and: [
-          // used regex to filter out names
-          {fullName: {$regex: new RegExp(`${searchName}`, "gi")}},
-          {
-            $or:
-            [
-              {userType: "adviser"},
-              {userType: "officer"}
-            ]
-          }
-        ]
-      }
-    ).collation({locale: "en"}).sort({fullName: sort});
-  }
+    }
+  ).collation({locale: "en"}).sort({fullName: sort});
 
   res.send(approverAccounts)
 }

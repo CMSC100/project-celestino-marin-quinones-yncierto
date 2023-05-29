@@ -11,7 +11,7 @@ const createApplication = async (req, res) => {
         res.send({hasOpen: true})
         return;
       }
-      
+
       const newApplication = new Application({
           status: "open",
           step: 1,
@@ -29,29 +29,39 @@ const createApplication = async (req, res) => {
 }
 
 const getApplications = async (req, res) => {
-  const { studentID, adviserID, search } = req.query;
-  console.log(studentID)
+  const { studentID, adviserID, search, filter, filterValue, sort } = req.query;
+  console.log()
+  let sortBy = (sort === "date") ? {createdAt: -1} : (sort === "nameA") ? {"studentData.0.fullName": 1} : {"studentData.0.fullName": -1}
   try {
     var applications;
     if (studentID) applications = await Application.find({ studentID });
-    else if (adviserID && search == "") {
-      applications = await Application.find(
-        {$and: [
-          {adviserID}, 
-          {$or: [{status: "pending"}, {status: "cleared"}]}
-        ]}
-      )
-      }
-    // } else {
-    //   applications = await Application.find(
-    //     {$and: [
-    //       {adviserID}, 
-    //       {$or: [{status: "pending"}, {status: "cleared"}]}, 
-    //       {$or: [{fullName: `${search}`}, {studentNumber: `${search}`}]}
-    //     ]}
-    //   )
-    // }
-    console.log(applications)
+    else {
+      applications = await Application.aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "studentID",
+            foreignField: "_id",
+            as: "studentData"
+          }
+        },
+        {
+          $match: {
+            $and: [
+              {step: {$ne: 1}},
+              {adviserID: new mongoose.Types.ObjectId(adviserID)},
+              {
+                $or: [
+                  {"studentData.0.fullName": {$regex: new RegExp(`${search}`, "gi")}},
+                  {"studentData.0.studentNumber": {$regex: new RegExp(`${search}`, "gi")}}
+                ]
+              }
+            ]
+
+          }
+        }
+      ]).collation({locale: "en"}).sort(sortBy)
+    }
     res.status(200).json(applications);
   } catch (error) {
     res.status(500).json(error);
@@ -94,5 +104,13 @@ const submitApplication = async (req, res) => {
   }
 };
 
+const approveApplication = async(req, res) => {
+  const {appID} = req.body
+  let update = await Application.updateOne({_id: appID}, {$set: {step: "3"}})
 
-export { createApplication, getApplications, closeApplication, submitApplication }
+  if (update["acknowledged"] && update["modifiedCount"] != 0) res.send({updated: true})
+  else res.send({updated: false})
+}
+
+
+export { createApplication, getApplications, closeApplication, submitApplication, approveApplication }
