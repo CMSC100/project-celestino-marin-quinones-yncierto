@@ -28,40 +28,66 @@ const createApplication = async (req, res) => {
     }
 }
 
-const getApplications = async (req, res) => {
-  const { studentID, adviserID, search, filter, filterValue, sort } = req.query;
-  console.log()
-  let sortBy = (sort === "date") ? {createdAt: -1} : (sort === "nameA") ? {"studentData.0.fullName": 1} : {"studentData.0.fullName": -1}
-  try {
-    var applications;
-    if (studentID) applications = await Application.find({ studentID });
-    else {
-      applications = await Application.aggregate([
-        {
-          $lookup: {
-            from: "users",
-            localField: "studentID",
-            foreignField: "_id",
-            as: "studentData"
-          }
-        },
-        {
-          $match: {
-            $and: [
-              {step: {$ne: 1}},
-              {adviserID: new mongoose.Types.ObjectId(adviserID)},
-              {
-                $or: [
-                  {"studentData.0.fullName": {$regex: new RegExp(`${search}`, "gi")}},
-                  {"studentData.0.studentNumber": {$regex: new RegExp(`${search}`, "gi")}}
-                ]
-              }
-            ]
+const getApplicationsApprover = async (req, res) => {
+  let { adviserID, search, filter, filterValue, sort, userType} = req.body;
+  console.log(filterValue)
+  let newFilter;
+  if (filter == "createdAt")  {
+    newFilter = {"date": new Date(filterValue).toUTCString}
+  } else if (filter == "step") {
+    newFilter = {"step": parseInt(filterValue)}
+  } else if (filter == "status") {
+    newFilter = {"status": `${filterValue}`}
+  } else {
+    newFilter = {"_id": {$ne: 0}}
+  }
 
-          }
-        }
-      ]).collation({locale: "en"}).sort(sortBy)
+  let applications = await Application.aggregate([
+    {
+      $lookup: {
+        from: "users",
+        localField: "studentID",
+        foreignField: "_id",
+        as: "studentData"
+      }
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "adviserID",
+        foreignField: "_id",
+        as: "adviserData"
+      }
+    },
+    {
+      $match: {
+        $and: [
+          {step: {$ne: 1}},
+          {adviserID: (userType == "officer" && filter == "adviser")
+            ? new mongoose.Types.ObjectId(filterValue)
+            : (userType == "officer" && filter == "")
+              ? {$ne: 0}
+              : new mongoose.Types.ObjectId(adviserID)
+          },
+          {
+            $or: [
+              {"studentData.0.fullName": {$regex: new RegExp(`${search}`, "gi")}},
+              {"studentData.0.studentNumber": {$regex: new RegExp(`${search}`, "gi")}}
+            ]
+          },
+          {...newFilter}
+        ]
+      }
     }
+  ]).collation({locale: "en"}).sort(sort)
+  
+  res.send(applications)
+}
+
+const getApplications = async (req, res) => {
+  const { studentID } = req.query;
+  try {
+    let applications = await Application.find({ studentID });
     res.status(200).json(applications);
   } catch (error) {
     res.status(500).json(error);
@@ -103,12 +129,28 @@ const submitApplication = async (req, res) => {
 };
 
 const approveApplication = async(req, res) => {
-  const {appID} = req.body
-  let update = await Application.updateOne({_id: appID}, {$set: {step: "3"}})
+  const {appID, approverType} = req.body
+  if (approverType == "adviser") {
+    var update = await Application.updateOne({_id: appID}, {$set: {step: "3"}})
+  } else {
+    var update = await Application.updateOne({_id: appID}, {$set: {status: "cleared"}})
+  }
+
+  if (update["acknowledged"] && update["modifiedCount"] != 0) res.send({updated: true})
+  else res.send({updated: false})
+}
+
+const returnApplication = async(req, res) => {
+  const {appID, approverType} = req.body
+  if (approverType == "adviser") {
+    var update = await Application.updateOne({_id: appID}, {$set: {step: "1"}})
+  } else {
+    var update = await Application.updateOne({_id: appID}, {$set: {step: "2"}})
+  }
 
   if (update["acknowledged"] && update["modifiedCount"] != 0) res.send({updated: true})
   else res.send({updated: false})
 }
 
 
-export { createApplication, getApplications, closeApplication, submitApplication, approveApplication }
+export { createApplication, getApplications, closeApplication, submitApplication, approveApplication, getApplicationsApprover, returnApplication }

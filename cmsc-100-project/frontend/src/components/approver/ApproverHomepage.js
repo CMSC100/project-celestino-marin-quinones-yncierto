@@ -9,10 +9,10 @@ export default function ApproverHomepage() {
   const [triggerRebuild, setTriggerRebuild] = useState(false)
   const [filter, setFilter] = useState("")
   const [filterValue, setFilterValue] = useState("")
-  const [filterElement, setFilterElement] = useState(<></>)
   const [dataLoaded, setDataLoaded] = useState(false)
   const [advisers, setAdvisers] = useState([])
-  const [sort, setSort] = useState("date")
+  const [sort, setSort] = useState({ date: -1 })
+  const [adviserFilterValue, setAdviserFilterValue] = useState("")
   const navigate = useNavigate();
 
   // fetch user data based on credentials and set userData state
@@ -24,24 +24,41 @@ export default function ApproverHomepage() {
       .then(response => response.json())
       .then(body => {
         setUserData(body)
-        return body._id
+        return { adviserID: body._id, userType: body.userType }
       })
   }
 
-  const fetchApplications = async (adviserID) => {
-    console.log(sort)
-    await fetch(`http://localhost:3001/getapplications?adviserID=${adviserID}&search=${search}&filter=${filter}&filterValue=${filterValue}&sort=${sort}`)
+  const fetchApplications = (adviserID, userType) => {
+    console.log(filterValue)
+    // fetch(`http://localhost:3001/getapplications?adviserID=${adviserID}&search=${search}&filter=${filter}&filterValue=${filterValue}&sort=${sort}&userType=${userType}`)
+    //   .then(response => response.json())
+    //   .then(body => setApplications(body))
+    fetch(`http://localhost:3001/getapplicationsapprover`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        adviserID: adviserID,
+        search: search,
+        filter: filter,
+        filterValue: filterValue,
+        sort: sort,
+        userType: userType
+      })
+    })
       .then(response => response.json())
       .then(body => setApplications(body))
   }
 
-   useEffect(() => {
+  useEffect(() => {
     const initialFetch = async () => {
-      let adviserID = await fetchUserData()
-      
+      let { adviserID, userType } = await fetchUserData()
+
       if (adviserID) {
-        fetchApplications(adviserID)
+        fetchApplications(adviserID, userType)
         setDataLoaded(true)
+        fetchAdvisers()
       }
     }
 
@@ -50,8 +67,8 @@ export default function ApproverHomepage() {
   }, []);
 
   useEffect(() => {
-    if (userData._id) fetchApplications(userData._id)
-  }, [search, triggerRebuild, sort])
+    if (userData._id) fetchApplications(userData._id, userData.userType)
+  }, [search, triggerRebuild, sort, adviserFilterValue])
 
   const handleSearch = (e) => {
     console.log(e.target.value)
@@ -64,7 +81,7 @@ export default function ApproverHomepage() {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({appID: appID})
+      body: JSON.stringify({ appID: appID, approverType: userData.userType })
     })
       .then(response => response.json())
       .then(body => {
@@ -73,81 +90,56 @@ export default function ApproverHomepage() {
       })
   }
 
-  // const displayFilterSelection = (filterBy) => {
-  //   setFilter(filterBy)
+  const changeFilter = (filterBy) => {
+    setFilter(filterBy)
+  }
 
-  //   const onSubmit = (e) => {
-  //     e.preventDefault()
-  //     console.log(filter, filterValue)
+  const fetchAdvisers = () => {
+    fetch(`http://localhost:3001/getapproveraccounts?searchName=${""}&sort=${1}`)
+      .then(response => response.json())
+      .then(body => setAdvisers(body))
+  }
 
-  //     fetchApplications(userData._id)
-  //   }
-
-  //   let filterButton = (
-  //       <button type="submit">Filter</button>
-  //   )
-
-  //   if (filterBy == "createdAt") {
-  //     setFilterElement(
-  //       <form onSubmit={onSubmit}>
-  //         <p>Enter date:</p>
-  //         <input type="date" onChange={(e) => {setFilterValue(e.target.value)}} required/>
-  //         {filterButton}
-  //       </form>
-  //     )
-  //   } else if (filterBy == "adviser") {
-  //     // setFilterElement(
-  //     //   <form onSubmit={onSubmit}>
-  //     //     <p>Choose Adviser</p>
-  //     //     <input type="date" onChange={(e) => setFilterValue(e.target.value)} required/>
-  //     //     {filterButton}
-  //     //   </form>
-  //     // )
-  //   } else if (filterBy == "step") {
-  //     setFilterElement(
-  //       <div>
-  //         {filterButton}
-  //       </div>
-  //     )
-  //   } else {
-  //     setFilterElement(
-  //       <div>
-  //         {filterButton}
-  //       </div>
-  //     )
-  //   }
-  // }
+  const clearSearch = () => {
+    document.getElementById("search-text").value = ""
+    setSearch("")
+  }
 
   if (dataLoaded) {
     return (
       <div>
+        <h1>{userData.userType} {userData.fullName}</h1>
         <h3>Student Applications</h3>
-        <input type="text" onChange={handleSearch} placeholder="Search for Name or Student No."/>
+        <input type="text" id="search-text" onChange={handleSearch} placeholder="Search for Name or Student No." />
+        <button type="button" onClick={clearSearch}>Clear Search</button>
 
-        {/* <h4>Filter applications by:</h4>
-        <div style={{display: "flex", flexDirection: "row", columnGap: 10}}>
-          <div style={{display: "flex", flexDirection: "column", rowGap: 5}}>
-            <button type="button" onClick={() => {displayFilterSelection("createdAt")}}>Date</button>
-            {<button type="button" onClick={() => {displayFilterSelection("adviser")}}>Adviser</button>}
-            <button type="button" onClick={() => {displayFilterSelection("step")}}>Step</button>
-            <button type="button" onClick={() => {displayFilterSelection("status")}}>Status</button>
+        <h4>Filter applications by:</h4>
+        <div style={{ display: "flex", flexDirection: "row", columnGap: 10 }}>
+          <div style={{ display: "flex", flexDirection: "column", rowGap: 5 }}>
+            <button type="button" onClick={() => { changeFilter("createdAt") }}>Date</button>
+            {userData.userType == "officer" && <button type="button" onClick={() => { changeFilter("adviser") }}>Adviser</button>}
+            <button type="button" onClick={() => { changeFilter("step") }}>Step</button>
+            <button type="button" onClick={() => { changeFilter("status") }}>Status</button>
+            <button type="button" onClick={() => { setFilter(""); setTriggerRebuild(!triggerRebuild)}}>Clear Filter</button>
           </div>
-          {filterElement}
-        </div> */}
-
-        <div style={{display: "flex", columnGap: 5, alignItems: "center"}}>
-          <h4>Sort by:</h4>
-          <button type="button" onClick={() => setSort("date")}>Date (Descending)</button>
-          <button type="button" onClick={() => setSort("nameA")}>Name (Ascending)</button>
-          <button type="button" onClick={() => setSort("nameD")}>Name (Descending)</button>
+          <FilterOptions filterBy={filter} advisers={advisers} setFilterValue={setFilterValue} fetchApplications={fetchApplications} userData={userData} setAdviserFilterValue={setAdviserFilterValue}/>
         </div>
-        
-        <div style={{display: "flex", flexDirection: "column", rowGap: 10}}>
+
+        <div style={{ display: "flex", columnGap: 5, alignItems: "center" }}>
+          <h4>Sort by:</h4>
+          <button type="button" onClick={() => setSort({ date: -1 })}>Date (Descending)</button>
+          <button type="button" onClick={() => setSort({ "studentData.0.fullName": 1 })}>Name (Ascending)</button>
+          <button type="button" onClick={() => setSort({ "studentData.0.fullName": -1 })}>Name (Descending)</button>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", rowGap: 10 }}>
           {
             applications.map((application, index) => {
               return (
-                <div key={index} style={{backgroundColor: "lightgray"}}>
-                  {JSON.stringify(application, null, 2)}
+                <div key={index} style={{ backgroundColor: "lightgray" }}>
+                  {application["studentData"][0]["fullName"]} <br />
+                  {application["studentData"][0]["studentNumber"]}<br />
+                  {application["adviserData"][0]["fullName"]} <br />
                   <button type="button" onClick={() => approveApplication(application._id)}>Approve</button>
                   <button type="button">Return with Remarks</button>
                 </div>
@@ -161,3 +153,61 @@ export default function ApproverHomepage() {
     return (<></>)
   }
 }
+
+function FilterOptions({ filterBy, advisers, setFilterValue, fetchApplications, userData, setAdviserFilterValue }) {
+  let element;
+
+  const onSubmit = (e) => {
+    e.preventDefault()
+    fetchApplications(userData._id, userData.userType)
+  }
+
+  const filterButton = (
+    <button type="submit">Filter</button>
+  )
+
+  if (filterBy == "createdAt") {
+    element = (
+      <form onSubmit={onSubmit}>
+        <input type="date" onChange={(e) => setFilterValue(e.target.value)} required />
+        {filterButton}
+      </form>
+    )
+  } else if (filterBy == "adviser") {
+    element = (
+      <div>
+        {advisers.map((adviser, index) => {
+          return (
+            <div key={index}>
+              <p>{adviser.fullName}</p>
+              <button type="button" onClick={() => {
+                setFilterValue(adviser._id)
+                setAdviserFilterValue(adviser._id)
+              }}>Filter</button>
+            </div>
+          )
+        })}
+      </div>
+    )
+  } else if (filterBy == "step") {
+    element = (
+      <form onSubmit={onSubmit}>
+        <input type="number" min={2} max={3} placeholder="2 or 3" onChange={(e) => setFilterValue(e.target.value)} required />
+        {filterButton}
+      </form>
+    )
+  } else if (filterBy == "status") {
+    element = (
+      <form onSubmit={onSubmit}>
+        <input type="radio" id="pending-radio" name="filter-radio" onClick={(e) => setFilterValue("pending")} required />
+        <label htmlFor="pending-radio">Pending</label>
+        <br/>
+        <input type="radio" id="cleared-radio" name="filter-radio" onClick={(e) => setFilterValue("cleared")} />
+        <label htmlFor="cleared-radio">Cleared</label>
+
+        {filterButton}
+      </form>
+    )
+  }
+  return element
+} 

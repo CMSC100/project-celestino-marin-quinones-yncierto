@@ -63,7 +63,7 @@ const getApproverAccounts = async (req, res) => {
           $or:
           [
             {userType: "adviser"},
-            {userType: "officer"}
+            // {userType: "officer"}
           ]
         }
       ]
