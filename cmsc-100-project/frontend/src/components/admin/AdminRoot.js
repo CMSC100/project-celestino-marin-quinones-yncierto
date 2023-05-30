@@ -2,6 +2,7 @@ import Cookies from 'universal-cookie';
 import { useNavigate, Outlet, Link } from 'react-router-dom';
 import { useEffect } from 'react';
 
+
 export default function AdminRoot() {
     const navigate = useNavigate()
     const handleLogout = (e) => {
@@ -33,5 +34,19 @@ export default function AdminRoot() {
             <br/>
             <Outlet />
         </div>
+
+        // comment yung taas para sa pinush ni lawrence tapos uncomment tong baba
+
+        // <ColorModeContext.Provider value={ colorMode }>
+        //     <ThemeProvider theme={theme}>
+        //         <CssBaseline />
+        //         <div className='admin'>
+        //             <SideBar/>
+        //             <main className='content'>
+        //                 <TopBar />
+        //                 </main>
+        //         </div>
+        //     </ThemeProvider>
+        // </ColorModeContext.Provider>
     )
 }

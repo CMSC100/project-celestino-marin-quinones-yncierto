@@ -24,15 +24,29 @@ export default function StudentHomepage() {
         method: "POST",
         credentials: "include",
       });
-
+  
       if (response.ok) {
         const data = await response.json();
         setUserData(data);
+        
+        // Check if user has an adviser
         if (!data.adviser) {
-          setAdviserName(""); 
+          setAdviserName(""); // Set adviserName as empty if no adviser
         } else {
-          setAdviserName(data.adviser);
+          try {
+            // Fetch adviser details based on adviser's _id
+            const adviserResponse = await fetch(`http://localhost:3001/getapproverdetails?docRef=${data.adviser}`);
+            if (adviserResponse.ok) {
+              const adviserData = await adviserResponse.json();
+              setAdviserName(adviserData.fullName); // Set adviserName with adviser's full name
+            } else {
+              console.error("Failed to fetch adviser details:", adviserResponse);
+            }
+          } catch (error) {
+            console.error("Error fetching adviser details:", error);
+          }
         }
+  
         return data._id;
       } else {
         console.error("Failed to fetch user data");
@@ -41,6 +55,7 @@ export default function StudentHomepage() {
       console.log("Error:", error);
     }
   };
+  
 
   const fetchApplications = async (studentID) => {
     try {
@@ -150,7 +165,7 @@ export default function StudentHomepage() {
                   <p><b>Name:</b> {userData.fullName}</p>
                   <p><b>Student Number:</b> {userData.studentNumber}</p>
                   <p><b>Email:</b> {userData.email}</p>
-                  <p><b>Adviser:</b> {userData.adviserName || "Not yet assigned"}</p>
+                  <p><b>Adviser:</b> {adviserName || "Not yet assigned"}</p>
                   <label><b>Link to GitHub repository</b></label>
                   <input type="text" placeholder="https://github.com/..."  value={githubLink} onChange={(e) => setGithubLink(e.target.value)}/>
                 </>
@@ -159,7 +174,7 @@ export default function StudentHomepage() {
                   <p><b>Name:</b> {userData.fullName}</p>
                   <p><b>Student Number:</b> {userData.studentNumber}</p>
                   <p><b>Email:</b> {userData.email}</p>
-                  <p><b>Adviser:</b> {userData.adviser || "Not yet assigned"}</p>
+                  <p><b>Adviser:</b> {adviserName || "Not yet assigned"}</p>
                   <p><b>GitHub Links:</b></p>
                   <ul style={{ listStyleType: 'disc', marginLeft: '3em' }}>
                     {application.studentSubmission.map((submission, index) => (
