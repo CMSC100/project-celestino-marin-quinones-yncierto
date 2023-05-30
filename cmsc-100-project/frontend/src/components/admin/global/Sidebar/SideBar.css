@@ -1,0 +1,49 @@
+.sideBar{
+    display: flex !important; 
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    width: fit-content !important;
+}
+.cardButton{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+    text-align: center;
+    width: inherit;
+}
+
+.indivCards{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.sidebarOptions{
+    display: flex;
+    flex: row;
+    justify-content: space-between;
+    padding: 20px;
+    padding-left: 0px;
+    padding-top: 50px;
+}
+
+.cardIcon{
+    margin-right: 10px;
+}
+
+.menuButton{
+    padding: 0;
+} 
+
+.menuButton:active{
+    color: #5647ff
+}
+
+.menuButton:focus{
+    outline: none;
+}
+
+.logoAndMenuBtn{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

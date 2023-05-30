@@ -10,9 +10,10 @@ import StudentRoot from './components/student/StudentRoot'
 import PdfModal from './components/modal/PdfModal';
 
 import AdminRoot from './components/admin/AdminRoot'
-import ApproverList from './components/admin/ApproverList';
-import StudentApplications from './components/admin/StudentApplications';
+import ApproverList from './components/admin/global/ApproverList';
+import StudentApplications from './components/admin/global/StudentApplications';
 import ApproverHomepage from './components/approver/ApproverHomepage';
+import './index.css';
 
 // Send a POST request to API to check if the user is logged in. Redirect the user to /student-homepage if already logged in
 const checkIfLoggedInOnHome = async () => {
@@ -75,7 +76,7 @@ const checkIfLoggedInAsApprover = async () => {
 
   const { isLoggedIn, userType } = await res.json();
 
-  if (isLoggedIn && userType === "adviser" || userType === "officer") return true;
+  if (isLoggedIn && (userType === "adviser" || userType === "officer")) return true;
   else return redirect("/");
 };
 
