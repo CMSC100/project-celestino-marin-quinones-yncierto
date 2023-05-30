@@ -33,14 +33,16 @@ const getApplicationsApprover = async (req, res) => {
   console.log(filterValue)
   let newFilter;
   if (filter == "createdAt")  {
-    newFilter = {"date": new Date(filterValue).toUTCString}
+    newFilter = {createdAt: new Date(filterValue).toUTCString()}
   } else if (filter == "step") {
-    newFilter = {"step": parseInt(filterValue)}
+    newFilter = {step: parseInt(filterValue)}
   } else if (filter == "status") {
-    newFilter = {"status": `${filterValue}`}
+    newFilter = {status: filterValue}
   } else {
-    newFilter = {"_id": {$ne: 0}}
+    newFilter = {_id: {$ne: 0}}
   }
+
+  console.log(newFilter)
 
   try {
     let applications = await Application.aggregate([
@@ -66,7 +68,7 @@ const getApplicationsApprover = async (req, res) => {
             {step: {$ne: 1}},
             {adviserID: (userType == "officer" && filter == "adviser")
               ? new mongoose.Types.ObjectId(filterValue)
-              : (userType == "officer" && filter == "")
+              : (userType == "officer")
                 ? {$ne: 0}
                 : new mongoose.Types.ObjectId(adviserID)
             },
@@ -76,11 +78,21 @@ const getApplicationsApprover = async (req, res) => {
                 {"studentData.0.studentNumber": {$regex: new RegExp(`${search}`, "gi")}}
               ]
             },
-            {...newFilter}
+            (filter == "createdAt")
+              ? {$expr: {
+                body: function(createdAt) {
+                  console.log("YEAAAA", this.createdAt.toISOString().stubstring(0, 10))
+                  return (createdAt == ISODate(filterValue))
+                },
+                args: ["$createdAt"],
+                lang: "js"
+              }}
+              : newFilter
           ]
         }
       }
     ]).collation({locale: "en"}).sort(sort)
+    console.log(applications)
     res.status(200).send(applications)
   } catch (error) {
     res.status(500).json(error)
