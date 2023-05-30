@@ -135,8 +135,17 @@ export default function ApproverHomepage() {
                   {application["studentData"][0]["fullName"]} <br />
                   {application["studentData"][0]["studentNumber"]}<br />
                   {application["adviserData"][0]["fullName"]} <br />
-                  <button type="button" onClick={() => approveApplication(application._id)}>Approve</button>
-                  <button type="button">Return with Remarks</button>
+                  Status: {application.status} <br/>
+                  Step {application.step} <br />
+                  {
+                    ((userData.userType == "adviser" && application.step == 2) ||
+                    (userData.userType == "officer" && application.step == 3)) &&
+                    <>
+                      <button type="button" onClick={() => approveApplication(application._id)}>Approve</button>
+                      <button type="button">Return with Remarks</button>
+                    </>
+                  }
+                  
                 </div>
               )
             })
