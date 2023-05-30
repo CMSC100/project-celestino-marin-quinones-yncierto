@@ -74,9 +74,18 @@ const getApproverAccounts = async (req, res) => {
 
 // get specific details of approver
 const getApproverDetails = async (req, res) => {
-  let { docRef } = req.query // objectID of specific approver
-  const approver = await User.findOne({_id: docRef});
-  res.send(approver)
+  try {
+    const { docRef } = req.query; // _id of specific approver
+    const approver = await User.findById(docRef);
+    if (approver) {
+      res.send(approver);
+    } else {
+      res.send({ error: "Approver not found" });
+    }
+  } catch (error) {
+    console.error("Error fetching approver details:", error);
+    res.status(500).send({ error: "Internal server error" });
+  }
 }
 
 //edit approver details

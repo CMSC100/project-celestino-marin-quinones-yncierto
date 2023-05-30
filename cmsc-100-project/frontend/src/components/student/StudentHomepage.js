@@ -33,13 +33,17 @@ export default function StudentHomepage() {
         if (!data.adviser) {
           setAdviserName(""); // Set adviserName as empty if no adviser
         } else {
-          // Fetch adviser name based on adviser's _id
-          const adviserResponse = await fetch(`http://localhost:3001/getadvisername?id=${data.adviser}`);
-          if (adviserResponse.ok) {
-            const adviserData = await adviserResponse.json();
-            setAdviserName(adviserData.name); // Set adviserName with adviser's name
-          } else {
-            console.error("Failed to fetch adviser name:", adviserResponse);
+          try {
+            // Fetch adviser details based on adviser's _id
+            const adviserResponse = await fetch(`http://localhost:3001/getapproverdetails?docRef=${data.adviser}`);
+            if (adviserResponse.ok) {
+              const adviserData = await adviserResponse.json();
+              setAdviserName(adviserData.fullName); // Set adviserName with adviser's full name
+            } else {
+              console.error("Failed to fetch adviser details:", adviserResponse);
+            }
+          } catch (error) {
+            console.error("Error fetching adviser details:", error);
           }
         }
   
