@@ -109,7 +109,13 @@ const router = createBrowserRouter([
   },
   {
     path: '/approver',
-    element: <ApproverHomepage/>,
+    element: <ApproverRoot/>,
+    children: [
+      {
+        path: '/approver',
+        element: <ApproverHomepage />
+      }
+    ],
     loader: checkIfLoggedInAsApprover
   },
   {
@@ -122,14 +128,6 @@ const router = createBrowserRouter([
       }
     ],
     loader: checkIfLoggedInAsStudent
-  },
-  {
-    path: '/approver-list',
-    element: <ApproverList />,
-  },
-  {
-    path: '/pdf-modal',
-    element: <PdfModal />
   },
 ]);
 

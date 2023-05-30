@@ -44,6 +44,14 @@ body {
   cursor: pointer;
 }
 
+.form-group.has-error input {
+  border: 1px solid red;
+}
+
+.form-group.has-error .error-message {
+  color: red;
+}
+
 
 input[type=text], 
 input[type=password] {

@@ -1,0 +1,3 @@
+firstName,middleName,lastName,userType,email,password
+Admin,,Admin,admin,admin@up.edu.ph,adminadmin
+Officer,,Officer,officer,officer@up.edu.ph,officerofficer

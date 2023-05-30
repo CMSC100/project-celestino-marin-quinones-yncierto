@@ -1,5 +1,5 @@
 import Cookies from 'universal-cookie';
-import { useNavigate, Outlet, Link } from 'react-router-dom';
+import { useNavigate, Outlet} from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import ApplicationModal from '../modal/ApplicationModal';
 import PdfModal from '../modal/PdfModal';
@@ -15,6 +15,8 @@ export default function ApproverRoot() {
     const [pdfModalOpen, setpdfModalOpen] = useState(false);
     const [userData, setUserData] = useState(true);
     const [profileModal, setProfileModalOpen] = useState(false);
+    const [triggerFetchApp, setTriggerFetchApp] = useState(false);
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     useEffect(() => {
         // Function to fetch user data
@@ -61,6 +63,7 @@ const handleOpenApplication = async () => {
         },
         body: JSON.stringify({
             studentID: userData._id,
+            adviserID: userData.adviser
         })
       });
   
@@ -68,8 +71,16 @@ const handleOpenApplication = async () => {
       if (response.ok) {
         // Application created successfully
         const application = await response.json();
-        console.log('Application created:', application);
-        alert("Successfully created application!")
+        if (application.hasOpen) {
+            alert("You already have an open application.")
+        } else {
+            setTriggerFetchApp(!triggerFetchApp);
+            console.log('Application created:', application);
+            setShowSuccessMessage(true);
+            setTimeout(() => {
+                setShowSuccessMessage(false);
+            }, 1000); 
+        }
       } else {
         // Failed to create the application
         const error = await response.json();
@@ -82,7 +93,7 @@ const handleOpenApplication = async () => {
 }
 
 const handlePrintPDF = () => {
-setpdfModalOpen(true);
+    setpdfModalOpen(true);
 }
 
 const handleProfile = () => {
@@ -94,7 +105,7 @@ const handleDashboard = () => {
 }
 
 return(
-<div className='body'>
+    <div className={`body ${showSuccessMessage ? "overlay-visible" : ""}`}>
         <nav className='sidebar'>
             <header className='nav-header'>
                 <div className='image-text'>
@@ -103,10 +114,8 @@ return(
                     </span>
 
                     <div className='text header-text'>
-                        {/* dapat dito yung name ng nag log in, kahit 1st name lang siguro */}
-                        <span className='name'>Student name</span>
-                        {/* dito yung type ng user */}
-                        <span className='usertype'>usertype</span>
+                        <span className='name'>{userData.fullName}</span>
+                        <span className='usertype'>{userData.userType}</span>
                     </div>
                 </div>
             </header>
@@ -115,7 +124,6 @@ return(
                 <div className='menu'>
                     <li className='nav-link'>
                         <div>
-                            {/* pakigawang active initially yung dashboard ehehehehehehhehe, parang yung ginawa sa admin */}
                             <AiOutlineHome className='icon'/>
                             <button className='text nav-text' onClick={handleDashboard}>Dashboard</button>
                         </div>
@@ -147,9 +155,16 @@ return(
             </div>
         </nav>
         <div className='main-content'>
-            <Outlet/>
+            <Outlet context={[triggerFetchApp, setTriggerFetchApp]}/>
         </div>
-        {profileModal && <StudentProfile setProfileModal={setProfileModalOpen}/>}
+        {profileModal && <StudentProfile setProfileModal={setProfileModalOpen} userData={userData}/>}
+        {showSuccessMessage && (
+        <div className="popup">
+          <div className="popup-content">
+            Successfully opened an application!
+          </div>
+        </div>
+      )}
     </div>
 )
 }

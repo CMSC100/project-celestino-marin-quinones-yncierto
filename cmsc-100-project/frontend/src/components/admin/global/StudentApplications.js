@@ -100,22 +100,29 @@ export default function StudentApplications() {
     }
 
     const assignAdviser = function(adviserIDAssign) {
+        // Check if the student already has an adviser
+        const student = students.find(student => student._id === studentIDAssign);
+        if (student.adviser) {
+          alert("The student already has an adviser.");
+          return;
+        }
+      
         fetch("http://localhost:3001/assignadviser", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({studentIDAssign, adviserIDAssign})
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ studentIDAssign, adviserIDAssign })
         })
-            .then(response => response.json())
-            .then(body => {
-                if (body["success"]) {
-                    alert("Adviser successfully assigned to student.")
-                } else {
-                    alert("Failed adviser assignment.")
-                }
-            })
-    }
+          .then(response => response.json())
+          .then(body => {
+            if (body["success"]) {
+              alert("Adviser successfully assigned to student.")
+            } else {
+              alert("Failed adviser assignment.")
+            }
+          })
+      }
 
     return(
         <div>

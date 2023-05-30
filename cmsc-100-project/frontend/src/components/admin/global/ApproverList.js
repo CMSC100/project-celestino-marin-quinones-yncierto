@@ -39,21 +39,8 @@ export default function Admin(props) {
         setEditingApprover(approverDetails)
     }, [approverDetails])
 
-    useEffect(function() {
-        fetch("http://localhost:3001/createApplication", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({name: "name"})
-        })
-            .then(response => response.json())
-            .then(body => console.log(body["success"]))
-    }, [])
-
     // function for creating an approver
     const signUp = function(e) {
-        console.log(document.getElementById("s-fname").value)
         e.preventDefault()
         // send new data to api
         fetch("http://localhost:3001/signup", {

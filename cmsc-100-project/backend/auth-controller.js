@@ -7,15 +7,14 @@ const User = mongoose.model("User");
 const signUp = async (req, res) => {
   // const { firstName, middleName, lastName, studentNumber, userType, email, password, applications, adviser } = req.body;
   const { firstName, middleName, lastName, userType, email, password } = req.body
-  let user = await User.findOne({email: email})
+  let user = await User.findOne({email})
   console.log(user)
   if (user) {
-    console.log("lmao")
     return res.send({success: false, emailExists: true})
   }
 
   if (userType === "user") {
-    var { studentNumber, applications, adviser } = req.body
+    var { studentNumber, adviser } = req.body
     var newuser = new User({
       firstName: firstName,
       middleName: middleName,
@@ -53,34 +52,22 @@ const signUp = async (req, res) => {
 // get all approver accounts based on search w/ sorting
 const getApproverAccounts = async (req, res) => {
   let { searchName, sort } = req.query
-  let approverAccounts; // store approver accounts
-  if (searchName == "") {
-    // if empty query
-    // collation is for adjusting how the database sorts (makes it case-insensitive)
-    approverAccounts = await User.find({
-      $or: [
-        {userType: "adviser"},
-        {userType: "officer"}
+  let approverAccounts = await User.find(
+    // use conditional operators
+    {
+      $and: [
+        // used regex to filter out names
+        {fullName: {$regex: new RegExp(`${searchName}`, "gi")}},
+        {
+          $or:
+          [
+            {userType: "adviser"},
+            // {userType: "officer"}
+          ]
+        }
       ]
-    }).collation({locale: "en"}).sort({fullName: sort});
-  } else {
-    approverAccounts = await User.find(
-      // use conditional operators
-      {
-        $and: [
-          // used regex to filter out names
-          {fullName: {$regex: new RegExp(`${searchName}`, "gi")}},
-          {
-            $or:
-            [
-              {userType: "adviser"},
-              {userType: "officer"}
-            ]
-          }
-        ]
-      }
-    ).collation({locale: "en"}).sort({fullName: sort});
-  }
+    }
+  ).collation({locale: "en"}).sort({fullName: sort});
 
   res.send(approverAccounts)
 }
@@ -111,6 +98,7 @@ const editApprover = async (req, res) => {
 // delete approver account
 const deleteApprover = async (req, res) => {
   let { docRef } = req.body // approver account document reference
+  await User.updateMany({adviser: new mongoose.Types.ObjectId(docRef)}, {$set: {adviser: null}})
   let del = await User.deleteOne({_id: docRef})
   if (del["deletedCount"] != 0 && del["acknowledged"]) res.send({deleted: true})
   else res.send({deleted: false})
@@ -185,7 +173,7 @@ const login = async (req, res) => {
     const token = jwt.sign(tokenPayload, "THIS_IS_A_SECRET_STRING");
 
     // return the token to the client
-    return res.send({ success: true, token, username: user.name });
+    return res.send({ success: true, token, username: user.name, userData: user });
 
 
   })

@@ -8,6 +8,7 @@ body {
 body {
   position: relative;
   height: 100%;
+  overflow: hidden;
 }
 
 .login-container {
@@ -26,7 +27,6 @@ body {
   padding: 40px;
   box-shadow: 0 15px 35px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.09);
   border-radius: 5px;
-  overflow: auto;
 }
 
 form {
@@ -35,8 +35,8 @@ form {
 
 .error-message {
   color: red;
-  margin-top: 10px;
-  font-size: 14px;
+  margin-top: 0;
+  font-size: 12px;
 }
 
 

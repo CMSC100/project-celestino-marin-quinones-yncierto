@@ -38,7 +38,6 @@ export default function Root() {
     })
       .then((response) => response.json())
       .then((body) => {
-        console.log(body)
         if (body.success) {
           setIsLoggedIn(true);
           const cookies = new Cookies();
@@ -48,6 +47,7 @@ export default function Root() {
             sameSite: false,
           });
           localStorage.setItem('username', body.username);
+          localStorage.setItem('userData', body.userData)
         } else {
           if (body.userExists) {
             setLoginError("Your account has not yet been approved.")
