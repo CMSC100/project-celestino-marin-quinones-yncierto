@@ -135,6 +135,9 @@ export default function StudentHomepage() {
     }
   };
   
+  const viewRemarks = () => {
+
+  }
 
   return (
     <div className={`student-homepage ${showSuccessMessage ? "overlay-visible" : ""}`}>
@@ -225,6 +228,10 @@ export default function StudentHomepage() {
                 disabled = {!adviserName}
                 >Submit Application</button>
               )}
+            </div>
+            <div>
+              <input id="remarks-textbox" type="text"/>
+              <button>Submit Remark</button>
             </div>
           </div>
         ))}
