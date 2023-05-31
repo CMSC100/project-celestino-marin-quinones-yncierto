@@ -5,11 +5,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { tokens } from "../../../../theme";
 import './SideBar.css';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
-import NavigationButton from "./NavigationButton.js";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
+import StudentApplications from "../StudentApplications";
 
 const SideBar = () => {
     const navigate = useNavigate();
@@ -34,7 +34,7 @@ const SideBar = () => {
     ]
 
     return <div>
-        <div className="sideBar" style={{ margin: '20px', borderRadius: '20px'}}>
+        <div className="sideBar">
             <div className="logoAndMenuBtn">
                 {theme.palette.mode === "light" ? (
                     <img alt='Aprub Logo' src= {require("../../../logo.png")} width="100px"></img>
@@ -46,21 +46,30 @@ const SideBar = () => {
             <div className="sidebarOptions">
                 <div className="dashboardBtn">
                     <div className="indivCards">
-                        <IconButton className="cardButton">
+                        <IconButton className="navButton">
                             <DashboardIcon className="cardIcon"/>
                             <Typography>Dashboard</Typography>
                         </IconButton>
-                        
                     </div>
                     <div className="indivCards">
-                        <IconButton className="cardButton">
+                        <Link to="/admin/manage-student-apps">
+                            <IconButton className="navButton" type="button" id='student-button' onClick={() => {
+                                // document.getElementById("student-button").classList.add("active")
+                                // document.getElementById("approver-button").classList.remove("active")
+                            }}>
                             <HowToRegIcon className="cardIcon"/>
-                            <Typography>Manage accounts</Typography>
-                        </IconButton>
-                        
+                            <Typography>Student Account Applications</Typography>
+                            </IconButton> 
+                        </Link>
+                    </div>
+                    <div className="indivCards">
+                        <IconButton className="navButton">
+                            <HowToRegIcon className="cardIcon"/>
+                            <Typography>Manage Approver Accounts</Typography>
+                        </IconButton> 
                     </div>
                     <div className="indivCards" >
-                        <IconButton className="cardButton" type='button'onClick={handleLogout}>
+                        <IconButton className="navButton" type='button'onClick={handleLogout}>
                             <LogoutOutlinedIcon className="cardIcon"/>
                             <Typography>Log out</Typography>
                         </IconButton>

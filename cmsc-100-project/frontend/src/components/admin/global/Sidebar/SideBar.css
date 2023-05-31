@@ -3,6 +3,9 @@
     flex-direction: column !important;
     justify-content: space-between !important;
     width: fit-content !important;
+    margin: 40px;
+    border-radius: 20px
+    
 }
 .cardButton{
     display: flex;
@@ -15,6 +18,20 @@
 .indivCards{
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.navButton{
+    width: 300px;
+    justify-content: start !important;
+}
+
+.navButton:hover{
+    border-radius: 5px;
+   
+}
+
+.navButton:not(:hover){
+    border-radius: 5px;
 }
 
 .sidebarOptions{

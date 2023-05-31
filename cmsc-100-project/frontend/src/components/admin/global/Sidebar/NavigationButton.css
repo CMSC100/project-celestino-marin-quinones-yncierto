@@ -10,4 +10,9 @@ ul{
     margin: 30px;
     background-color: transparent;
     inset:inherit;
+    border-radius: 0px;
+}
+
+button{
+    cursor: pointer;
 }
