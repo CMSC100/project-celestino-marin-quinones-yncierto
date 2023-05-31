@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import fs from "fs";
 import csvParser from "csv-parser";
+import cors from 'cors'
 
 // import UserSchema from "./models/user.js";
 import "./models/user.js";
@@ -27,6 +28,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors())
 
 // allow CORS
 app.use((req, res, next) => {

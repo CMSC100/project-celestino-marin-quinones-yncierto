@@ -1,5 +1,7 @@
-import mongoose from 'mongoose';
+import mongoose, { mongo } from 'mongoose';
 import jwt from 'jsonwebtoken';
+import fs from "fs";
+import { parse } from 'csv-parse';
 
 // get user model registered in Mongoose
 const User = mongoose.model("User");
@@ -15,6 +17,8 @@ const signUp = async (req, res) => {
 
   if (userType === "user") {
     var { studentNumber, adviser } = req.body
+
+
     var newuser = new User({
       firstName: firstName,
       middleName: middleName,
@@ -27,11 +31,19 @@ const signUp = async (req, res) => {
       adviser: adviser,
     });
   } else {
+    let initials = "";
+    firstName.split(" ").forEach(element => {
+      initials += element[0]
+    });
+    initials += (middleName == "") ? "" : middleName[0]
+    initials += lastName.replaceAll(" ", "")
+
     var newuser = new User({
       firstName: firstName,
       middleName: middleName,
       lastName: lastName,
       fullName: `${firstName} ${middleName} ${lastName}`,
+      initials: initials.toUpperCase(),
       email: email,
       password: password,
       userType: userType
@@ -223,5 +235,21 @@ const getLoggedInUserData = async (req, res) => {
   res.send(user)
 }
 
+const uploadCSV = async (req, res) => {
+  const fileString = req.file.buffer.toString().trim()
+  console.log(fileString)
+  try{
+    if (!fileString || fileString == "") return res.status(400).json({success: false})
+    fileString.split("\r\n").forEach(async (pair) => {
+        let split = pair.split(",")
+        let adviser = await User.findOne({initials: split[1]})
+        let update = await User.findOneAndUpdate({"studentNumber": split[0]}, {$set: {"adviser": new mongoose.Types.ObjectId(adviser._id)}})
+        console.log(update)
+    })
+    res.status(200).json({success: true})
+  } catch {
+    res.status(500).json({success: false})
+  }
+}
 
-export { signUp, login, checkIfLoggedIn, editApprover, getApproverDetails, getApproverAccounts, deleteApprover, getLoggedInUserData, getPendingAccounts, approveAccount, rejectAccount, getStudents, getAdvisers, assignAdviser }
+export { signUp, login, checkIfLoggedIn, editApprover, getApproverDetails, getApproverAccounts, deleteApprover, getLoggedInUserData, getPendingAccounts, approveAccount, rejectAccount, getStudents, getAdvisers, assignAdviser, uploadCSV }

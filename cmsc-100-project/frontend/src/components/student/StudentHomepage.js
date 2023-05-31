@@ -13,6 +13,7 @@ export default function StudentHomepage() {
   const [triggerFetchApp, setTriggerFetchApp] = useOutletContext();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [githubLink, setGithubLink] = useState("");
+  const [dataLoaded, setDataLoaded] = useState(false);
   const [adviserName, setAdviserName] = useState("");
 
   const navigate = useNavigate();
@@ -47,7 +48,7 @@ export default function StudentHomepage() {
           }
         }
   
-        return data._id;
+        return true
       } else {
         console.error("Failed to fetch user data");
       }
@@ -57,10 +58,10 @@ export default function StudentHomepage() {
   };
   
 
-  const fetchApplications = async (studentID) => {
+  const fetchApplications = async () => {
     try {
       // Fetch applications based on the user ID
-      const applicationsResponse = await fetch(`http://localhost:3001/getapplications?studentID=${studentID}`);
+      const applicationsResponse = await fetch(`http://localhost:3001/getapplications?studentID=${userData._id}`);
 
       if (applicationsResponse.ok) {
         const applicationsData = await applicationsResponse.json();
@@ -75,15 +76,23 @@ export default function StudentHomepage() {
 
   useEffect(() => {
     const initialFetch = async() => {
-      let studentID = await fetchUserData();
-      fetchApplications(studentID)
+      let result = await fetchUserData();
+      if (result) {
+        setDataLoaded(true)
+      }
     }
 
     initialFetch()
   }, [])
 
   useEffect(() => {
-    if (userData._id) fetchApplications(userData._id)
+    if (dataLoaded) {
+      fetchApplications()
+    }
+  }, [dataLoaded])
+
+  useEffect(() => {
+    if (dataLoaded) fetchApplications(userData._id)
   }, [triggerFetchApp])
 
   const handlePrintPDF = () => {
@@ -139,124 +148,122 @@ export default function StudentHomepage() {
 
   }
 
-  return (
-    <div className={`student-homepage ${showSuccessMessage ? "overlay-visible" : ""}`}>
-      <h1>Hello, {userData.firstName}!</h1>
-      {modalOpen && (
-        <ApplicationModal
-          setOpenModal={setModalOpen}
-          // updateUserData={updateUserData}
-          userData={userData}
-        />
-      )}
-
-      {applications.length > 0 ? (
-        <div className='application-list'>
-          <h3>APPLICATIONS</h3>
-          {applications.map((application, index) => (
-          <div
-            className={`application-card ${application.status === 'closed' ? 'closed' : ''}`}
-            key={index}
-          >
-            <div className='application-info'>
-              {application.status != "open" &&
-                <div>
-                  <button>View Remarks</button>
-                  
+  if (dataLoaded) {
+    return (
+      <div className={`student-homepage ${showSuccessMessage ? "overlay-visible" : ""}`}>
+        <h1>Hello, {userData.firstName}!</h1>
+        {modalOpen && (
+          <ApplicationModal
+            setOpenModal={setModalOpen}
+            // updateUserData={updateUserData}
+            userData={userData}
+          />
+        )}
+  
+        {applications.length > 0 ? (
+          <div className='application-list'>
+            <h3>APPLICATIONS</h3>
+            {applications.map((application, index) => (
+            <div
+              className={`application-card ${application.status === 'closed' ? 'closed' : ''}`}
+              key={index}
+            >
+              <div className='application-info'>
+                {application.status != "open" &&
+                  <div>
+                    <button>View Remarks</button>
+                    
+                  </div>
+                } 
+                <h4>Application {applications.length - index}</h4>
+                <div className='status-bar'>
+                  <span className={`status ${application.status}`}>{application.status}</span>
                 </div>
-              } 
-              <h4>Application {applications.length - index}</h4>
-              <div className='status-bar'>
-                <span className={`status ${application.status}`}>{application.status}</span>
+                {application.status === 'open' && application.studentSubmission.length === 0 ? (
+                  <>
+                    <p><b>Name:</b> {userData.fullName}</p>
+                    <p><b>Student Number:</b> {userData.studentNumber}</p>
+                    <p><b>Email:</b> {userData.email}</p>
+                    <p><b>Adviser:</b> {adviserName || "Not yet assigned"}</p>
+                    {application.step == 1 &&
+                      <>
+                        <label><b>Link to GitHub repository</b></label>
+                        <input type="text" placeholder="https://github.com/..."  value={githubLink} onChange={(e) => setGithubLink(e.target.value)}/>
+                      </>
+                    }
+                  </>
+                ) : application.studentSubmission.length > 0 ? (
+                  <>
+                    <p><b>Name:</b> {userData.fullName}</p>
+                    <p><b>Student Number:</b> {userData.studentNumber}</p>
+                    <p><b>Email:</b> {userData.email}</p>
+                    <p><b>Adviser:</b> {adviserName || "Not yet assigned"}</p>
+                    <p><b>GitHub Links:</b></p>
+                    <ul style={{ listStyleType: 'disc', marginLeft: '3em' }}>
+                      {application.studentSubmission.map((submission, index) => (
+                        <li key={index}>
+                          <a href={submission.githubLink} target="_blank" rel="noopener noreferrer">
+                            {submission.githubLink}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                ) : (
+                  <p>No application submitted yet</p>
+                )}
               </div>
-              {application.status === 'open' && application.studentSubmission.length === 0 ? (
-                <>
-                  <p><b>Name:</b> {userData.fullName}</p>
-                  <p><b>Student Number:</b> {userData.studentNumber}</p>
-                  <p><b>Email:</b> {userData.email}</p>
-                  <p><b>Adviser:</b> {adviserName || "Not yet assigned"}</p>
-                  {application.step == 1 &&
-                    <>
-                      <label><b>Link to GitHub repository</b></label>
-                      <input type="text" placeholder="https://github.com/..."  value={githubLink} onChange={(e) => setGithubLink(e.target.value)}/>
-                    </>
-                  }
-                </>
-              ) : application.studentSubmission.length > 0 ? (
-                <>
-                  <p><b>Name:</b> {userData.fullName}</p>
-                  <p><b>Student Number:</b> {userData.studentNumber}</p>
-                  <p><b>Email:</b> {userData.email}</p>
-                  <p><b>Adviser:</b> {adviserName || "Not yet assigned"}</p>
-                  <p><b>GitHub Links:</b></p>
-                  <ul style={{ listStyleType: 'disc', marginLeft: '3em' }}>
-                    {application.studentSubmission.map((submission, index) => (
-                      <li key={index}>
-                        <a href={submission.githubLink} target="_blank" rel="noopener noreferrer">
-                          {submission.githubLink}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              ) : (
-                <p>No application submitted yet</p>
-              )}
-            </div>
-            <div className='app-card-btns'>
-              {application.status === 'cleared' && (
-                <button className='print-app' onClick={handlePrintPDF}>
-                  Print as PDF
+              <div className='app-card-btns'>
+                {application.status === 'cleared' && (
+                  <button className='print-app' onClick={handlePrintPDF}>
+                    Print as PDF
+                  </button>
+                )}
+                <button
+                  className='close-app'
+                  onClick={() => {
+                    if (application.status !== 'closed') {
+                      closeApplication(application._id);
+                      setTriggerFetchApp(!triggerFetchApp);
+                    }
+                  }}
+                  disabled={application.status === 'closed'}
+                >
+                  {application.status === 'closed' ? 'Closed' : 'Close Application'}
                 </button>
-              )}
-              <button
-                className='close-app'
-                onClick={() => {
-                  if (application.status !== 'closed') {
-                    closeApplication(application._id);
-                    setTriggerFetchApp(!triggerFetchApp);
-                  }
-                }}
-                disabled={application.status === 'closed'}
-              >
-                {application.status === 'closed' ? 'Closed' : 'Close Application'}
-              </button>
-              {application.status === 'open' && application.studentSubmission.length === 0 && (
-                <button 
-                className='submit-app' 
-                onClick={() => submitApplication(application._id)}
-                disabled = {!adviserName}
-                >Submit Application</button>
-              )}
+                {application.status === 'open' && application.studentSubmission.length === 0 && (
+                  <button 
+                  className='submit-app' 
+                  onClick={() => submitApplication(application._id)}
+                  disabled = {!adviserName}
+                  >Submit Application</button>
+                )}
+              </div>
             </div>
-            <div>
-              <input id="remarks-textbox" type="text"/>
-              <button>Submit Remark</button>
-            </div>
+          ))}
           </div>
-        ))}
-        </div>
-      ) : (
-        <div className='application-list'>
-          <p className='no-application'>No applications yet</p>
-        </div>
-      )}
-      {pdfModalOpen && <PdfModal setpdfModal={setpdfModalOpen}/>}
-      {showSuccessMessage === "closed" && (
-      <div className="popup">
-        <div className="popup-content">
-          Successfully closed the application.
-        </div>
-      </div>
-      )}
-
-      {showSuccessMessage === "submitted" && (
+        ) : (
+          <div className='application-list'>
+            <p className='no-application'>No applications yet</p>
+          </div>
+        )}
+        {pdfModalOpen && <PdfModal setpdfModal={setpdfModalOpen}/>}
+        {showSuccessMessage === "closed" && (
         <div className="popup">
           <div className="popup-content">
-            Successfully submitted the application.
+            Successfully closed the application.
           </div>
         </div>
-      )}
-    </div>
-  );
+        )}
+  
+        {showSuccessMessage === "submitted" && (
+          <div className="popup">
+            <div className="popup-content">
+              Successfully submitted the application.
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
 }

@@ -1,5 +1,8 @@
-import { signUp, login, checkIfLoggedIn, editApprover, getApproverDetails, getApproverAccounts, deleteApprover, getLoggedInUserData, getPendingAccounts, approveAccount, rejectAccount, getStudents, getAdvisers, assignAdviser } from "./auth-controller.js";
+import { signUp, login, checkIfLoggedIn, editApprover, getApproverDetails, getApproverAccounts, deleteApprover, getLoggedInUserData, getPendingAccounts, approveAccount, rejectAccount, getStudents, getAdvisers, assignAdviser, uploadCSV } from "./auth-controller.js";
 import { createApplication, getApplications, closeApplication, submitApplication, approveApplication, getApplicationsApprover, returnApplication } from "./app-controller.js"
+import multer from "multer";
+
+const upload = multer()
 
 const setUpRoutes = (app) => {
   app.get("/", (req, res) => { res.send("API Home") });
@@ -25,6 +28,7 @@ const setUpRoutes = (app) => {
   app.post("/approveaccount", approveAccount)
   app.post("/rejectaccount", rejectAccount)
   app.post("/assignadviser", assignAdviser)
+  app.post("/uploadcsv", upload.single("csv-file"), uploadCSV)
 
   app.post("/approveapplication", approveApplication)
   app.post("/returnapplication", returnApplication)

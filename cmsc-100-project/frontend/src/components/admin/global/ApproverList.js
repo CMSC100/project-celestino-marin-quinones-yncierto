@@ -180,8 +180,28 @@ export default function Admin(props) {
         setSort(e.target.value) // set sort to new value
     }
 
+    const uploadCSV = (e) => {
+        const formData = new FormData()
+        formData.append("csv-file", e.target.files[0])   
+
+        fetch("http://localhost:3001/uploadcsv", {
+            method: "POST",
+            body: formData
+        })
+            .then(response => response.json())
+            .then(body => {
+                if (body["success"]) alert("Successfully mapped students to their advisers.")
+                else alert("Failed mapping of students.")
+            })
+    }
+
     return (
         <>
+            <h3>Upload CSV File</h3>
+            {/* <form encType="multipart/form-data" onSubmit={uploadCSV}>  */}
+                <input name="csv-file" type='file' accept='text/csv' onChange={uploadCSV}/><br/>
+                {/* <button type='submit'>Submit CSV</button> */}
+            {/* </form> */}
             <span>Sort Approver List:</span>
             <button type="button" name="sortButton" id="sortAscButton" className='active' onClick={sortApproverList} value={1}>Ascending</button>
             <button type='button' name="sortButton" id='sortDescButton' onClick={sortApproverList} value={-1}>Descending</button>
