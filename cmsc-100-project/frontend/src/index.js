@@ -5,15 +5,15 @@ import { redirect, createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Root from './components/LogIn';
 import SignUp from './components/SignUp';
 
-import StudentHomepage from './components/student/StudentHomepage';
-import StudentRoot from './components/student/StudentRoot'
-import PdfModal from './components/modal/PdfModal';
-
 import AdminRoot from './components/admin/AdminRoot'
 import ApproverList from './components/admin/global/ApproverList';
-import ApproverRoot from './components/student/StudentRoot';
 import StudentApplications from './components/admin/global/StudentApplications';
+
 import ApproverHomepage from './components/approver/ApproverHomepage';
+import ApproverRoot from './components/approver/ApproverRoot';
+
+import StudentHomepage from './components/student/StudentHomepage';
+import StudentRoot from './components/student/StudentRoot'
 import './index.css';
 
 // Send a POST request to API to check if the user is logged in. Redirect the user to /student-homepage if already logged in

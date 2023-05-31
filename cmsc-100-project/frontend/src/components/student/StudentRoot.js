@@ -10,7 +10,7 @@ import {HiOutlineDocumentText} from "react-icons/hi"
 import {CgProfile} from "react-icons/cg"
 import {BiLogOut} from "react-icons/bi"
 
-export default function ApproverRoot() {
+export default function StudentRoot() {
     const navigate = useNavigate()
     const [pdfModalOpen, setpdfModalOpen] = useState(false);
     const [userData, setUserData] = useState(true);

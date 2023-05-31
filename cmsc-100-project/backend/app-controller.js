@@ -33,14 +33,24 @@ const getApplicationsApprover = async (req, res) => {
   console.log(filterValue)
   let newFilter;
   if (filter == "createdAt")  {
-    newFilter = {"date": new Date(filterValue).toUTCString}
+    let tempDate = new Date(filterValue)
+    tempDate.setDate(tempDate.getDate() + parseInt(1));
+    console.log(tempDate.toISOString())
+    newFilter = {
+      $and: [
+        {createdAt: {$gte: new Date(filterValue)}},
+        {createdAt: {$lt: tempDate}}
+      ]
+    }
   } else if (filter == "step") {
-    newFilter = {"step": parseInt(filterValue)}
+    newFilter = {step: parseInt(filterValue)}
   } else if (filter == "status") {
-    newFilter = {"status": `${filterValue}`}
+    newFilter = {status: filterValue}
   } else {
-    newFilter = {"_id": {$ne: 0}}
+    newFilter = {_id: {$ne: 0}}
   }
+
+  console.log(newFilter)
 
   try {
     let applications = await Application.aggregate([
@@ -63,10 +73,15 @@ const getApplicationsApprover = async (req, res) => {
       {
         $match: {
           $and: [
-            {step: {$ne: 1}},
+            {$or: 
+              [
+                {status: "pending"},
+                {status: "cleared"}
+              ]
+            },
             {adviserID: (userType == "officer" && filter == "adviser")
               ? new mongoose.Types.ObjectId(filterValue)
-              : (userType == "officer" && filter == "")
+              : (userType == "officer")
                 ? {$ne: 0}
                 : new mongoose.Types.ObjectId(adviserID)
             },
@@ -76,7 +91,7 @@ const getApplicationsApprover = async (req, res) => {
                 {"studentData.0.studentNumber": {$regex: new RegExp(`${search}`, "gi")}}
               ]
             },
-            {...newFilter}
+            newFilter
           ]
         }
       }
@@ -109,7 +124,7 @@ const closeApplication = async (req, res) => {
 }
 
 const submitApplication = async (req, res) => {
-  const { appID, githubLink, status } = req.body;
+  const { appID, githubLink, status, step } = req.body;
   try {
     const application = await Application.findById(appID);
 
@@ -117,6 +132,8 @@ const submitApplication = async (req, res) => {
       res.status(404).json({ error: "Application not found" });
       return;
     }
+
+    application.step = step;
 
     application.studentSubmission.push({
       githubLink,
