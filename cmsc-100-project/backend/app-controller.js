@@ -33,7 +33,15 @@ const getApplicationsApprover = async (req, res) => {
   console.log(filterValue)
   let newFilter;
   if (filter == "createdAt")  {
-    newFilter = {createdAt: new Date(filterValue).toUTCString()}
+    let tempDate = new Date(filterValue)
+    tempDate.setDate(tempDate.getDate() + parseInt(1));
+    console.log(tempDate.toISOString())
+    newFilter = {
+      $and: [
+        {createdAt: {$gte: new Date(filterValue)}},
+        {createdAt: {$lt: tempDate}}
+      ]
+    }
   } else if (filter == "step") {
     newFilter = {step: parseInt(filterValue)}
   } else if (filter == "status") {
@@ -78,21 +86,11 @@ const getApplicationsApprover = async (req, res) => {
                 {"studentData.0.studentNumber": {$regex: new RegExp(`${search}`, "gi")}}
               ]
             },
-            (filter == "createdAt")
-              ? {$expr: {
-                body: function(createdAt) {
-                  console.log("YEAAAA", this.createdAt.toISOString().stubstring(0, 10))
-                  return (createdAt == ISODate(filterValue))
-                },
-                args: ["$createdAt"],
-                lang: "js"
-              }}
-              : newFilter
+            newFilter
           ]
         }
       }
     ]).collation({locale: "en"}).sort(sort)
-    console.log(applications)
     res.status(200).send(applications)
   } catch (error) {
     res.status(500).json(error)
@@ -129,6 +127,8 @@ const submitApplication = async (req, res) => {
       res.status(404).json({ error: "Application not found" });
       return;
     }
+
+    application.
 
     application.studentSubmission.push({
       githubLink,

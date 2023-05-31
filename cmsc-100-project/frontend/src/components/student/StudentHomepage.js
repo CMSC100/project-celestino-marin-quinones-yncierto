@@ -156,6 +156,12 @@ export default function StudentHomepage() {
             key={index}
           >
             <div className='application-info'>
+              {application.status != "open" &&
+                <div style={{position: "absolute"}}>
+                  <button>View Remarks</button>
+                  
+                </div>
+              } 
               <h4>Application {applications.length - index}</h4>
               <div className='status-bar'>
                 <span className={`status ${application.status}`}>{application.status}</span>
