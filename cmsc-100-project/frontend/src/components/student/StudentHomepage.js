@@ -157,7 +157,7 @@ export default function StudentHomepage() {
           >
             <div className='application-info'>
               {application.status != "open" &&
-                <div style={{position: "absolute"}}>
+                <div>
                   <button>View Remarks</button>
                   
                 </div>

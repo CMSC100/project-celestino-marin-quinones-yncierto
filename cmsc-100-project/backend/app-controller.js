@@ -73,7 +73,12 @@ const getApplicationsApprover = async (req, res) => {
       {
         $match: {
           $and: [
-            {step: {$ne: 1}},
+            {$or: 
+              [
+                {status: "pending"},
+                {status: "cleared"}
+              ]
+            },
             {adviserID: (userType == "officer" && filter == "adviser")
               ? new mongoose.Types.ObjectId(filterValue)
               : (userType == "officer")
