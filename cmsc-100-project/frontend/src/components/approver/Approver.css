@@ -1,0 +1,69 @@
+/* =====Navigation Bar===== */
+.top-nav{
+  position: relative;
+  background-color: #FFF;
+  display: flex;
+  justify-content: space-between;
+  z-index: 1;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3), 0 0 40px rgba(0,0,0,0.1) inset;
+}
+
+.top-nav button{
+  background-color: transparent;
+  color: black;
+}
+
+.logo-type{
+  padding: 10px;
+  display: flex;
+}
+
+.topnav-header .text{
+  margin-left: 10px;
+  padding-top: 5px;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.app-logo {
+  width: 70px;
+  border-radius: 6px;
+}
+
+/* =====Body===== */
+
+.main-content-app{
+  position: relative;
+  overflow: scroll;
+  padding: 20px;
+  height: 100vh;
+  background-color: #E4E9F7;
+}
+
+.app-title{
+  padding-top: 10px;
+}
+
+.search-btn{
+  width: 150px;
+}
+
+.search-bar{
+  display: flex;
+}
+
+.status{
+  display: flex !important;
+  align-content: center;
+}
+
+form .pending,
+form .cleared{
+  display: flex;
+  margin: 5px;
+}
+
+form .pending-text,
+form .cleared-text{
+  margin-left: 5px;
+}

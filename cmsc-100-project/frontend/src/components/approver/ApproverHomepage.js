@@ -103,14 +103,16 @@ export default function ApproverHomepage() {
   if (dataLoaded) {
     return (
       <div>
-        <h2>Hello, {userData.fullName}! ({userData.userType})</h2>
-        <h3>Student Applications</h3>
-        <input type="text" id="search-text" onChange={handleSearch} placeholder="Search for Name or Student No." />
-        <button type="button" onClick={clearSearch}>Clear Search</button>
+        <h2 className="app-greeting">Hello, {userData.fullName}! ({userData.userType})</h2>
+        <h3 className="app-title">Student Applications</h3>
+        <div className="search-bar">
+          <input type="text" id="search-text" onChange={handleSearch} placeholder="Search for Name or Student No." />
+          <button type="button" className="search-btn"   onClick={clearSearch}>Clear Search</button>
+        </div>
 
         <h4>Filter applications by:</h4>
-        <div style={{ display: "flex", flexDirection: "row", columnGap: 10 }}>
-          <div style={{ display: "flex", flexDirection: "column", rowGap: 5 }}>
+        <div style={{ display: "flex", flexDirection: "column", rowGap: 10 }}>
+          <div style={{ display: "flex", flexDirection: "row", columnGap: 5 }}>
             <button type="button" onClick={() => { changeFilter("createdAt") }}>Date</button>
             {userData.userType == "officer" && <button type="button" onClick={() => { changeFilter("adviser") }}>Adviser</button>}
             <button type="button" onClick={() => { changeFilter("step") }}>Step</button>
@@ -202,12 +204,27 @@ function FilterOptions({ filterBy, advisers, setFilterValue, fetchApplications, 
     )
   } else if (filterBy == "status") {
     element = (
-      <form onSubmit={onSubmit}>
-        <input type="radio" id="pending-radio" name="filter-radio" onClick={(e) => setFilterValue("pending")} required />
-        <label htmlFor="pending-radio">Pending</label>
+      <form onSubmit={onSubmit} className="status">
+
+        <div className="pending">
+          <div>
+            <input type="radio" id="pending-radio" name="filter-radio" onClick={(e) => setFilterValue("pending")} required />
+          </div>
+
+          <div className="pending-text">
+            <label htmlFor="pending-radio">Pending</label>
+          </div>
+        </div>
         <br/>
-        <input type="radio" id="cleared-radio" name="filter-radio" onClick={(e) => setFilterValue("cleared")} />
-        <label htmlFor="cleared-radio">Cleared</label>
+        <div className="cleared">
+          <div>
+            <input type="radio" id="cleared-radio" name="filter-radio" onClick={(e) => setFilterValue("cleared")} />
+          </div>
+
+          <div className="cleared-text">
+            <label htmlFor="cleared-radio">Cleared</label>
+          </div>
+        </div>
 
         {filterButton}
       </form>
