@@ -197,7 +197,11 @@ export default function StudentHomepage() {
                   {application.step == 1 &&
                     <>
                       <label><b>Link to GitHub repository</b></label>
-                      <input type="text" placeholder="https://github.com/..."  value={githubLink} onChange={(e) => setGithubLink(e.target.value)}
+                      <input type="text" placeholder="https://github.com/..."  value={githubLink} onChange={(e) => {
+                        setGithubLink(e.target.value);
+                        setGithubLinkError("");
+                      }}
+                      className={githubLinkError ? "input-error" : ""}
                       />
                       {githubLinkError && <p className="error">{githubLinkError}</p>}
                     </>

@@ -4,6 +4,11 @@
   margin-bottom: 10px;
 }
 
+.input-error {
+  border: 1px solid red;
+}
+
+
 .status {
   display: inline-block;
   padding: 4px 8px;
