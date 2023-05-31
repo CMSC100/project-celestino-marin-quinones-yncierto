@@ -11,7 +11,7 @@ import PdfModal from './components/modal/PdfModal';
 
 import AdminRoot from './components/admin/AdminRoot'
 import ApproverList from './components/admin/global/ApproverList';
-import ApproverRoot from './components/student/StudentRoot';
+import ApproverRoot from './components/approver/ApproverRoot';
 import StudentApplications from './components/admin/global/StudentApplications';
 import ApproverHomepage from './components/approver/ApproverHomepage';
 import './index.css';
