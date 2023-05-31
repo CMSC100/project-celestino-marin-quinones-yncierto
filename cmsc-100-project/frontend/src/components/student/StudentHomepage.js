@@ -14,6 +14,8 @@ export default function StudentHomepage() {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [githubLink, setGithubLink] = useState("");
   const [adviserName, setAdviserName] = useState("");
+  const [githubLinkError, setGithubLinkError] = useState("");
+
 
   const navigate = useNavigate();
 
@@ -111,28 +113,45 @@ export default function StudentHomepage() {
   }
 
   const submitApplication = async (appID) => {
-    try {
-      const response = await fetch('http://localhost:3001/submitapplication', {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ appID, githubLink, status: 'pending', step: 2 })
-      });
-  
-      if (response.ok) {
-        setShowSuccessMessage('submitted');
-        setTriggerFetchApp(!triggerFetchApp);
-        setGithubLink("");
-        setTimeout(() => {
-          setShowSuccessMessage(false);
-        }, 1000);
-      } else {
-        alert("Failed to submit application.");
-      }
-    } catch (error) {
-      console.log("Error:", error);
+    // Validate GitHub link
+  if (!githubLink) {
+    setGithubLinkError("GitHub link is required");
+    return;
+  }
+
+  // Regular expression to validate GitHub link format
+  const githubLinkRegex = /^(https?:\/\/)?(www\.)?github\.com\/\S+$/;
+  if (!githubLinkRegex.test(githubLink)) {
+    setGithubLinkError("Invalid GitHub link");
+    return;
+  }
+
+  // Clear the error message if validation passes
+  setGithubLinkError("");
+
+  try {
+    // Submit the application
+    const response = await fetch('http://localhost:3001/submitapplication', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ appID, githubLink, status: 'pending', step: 2 })
+    });
+
+    if (response.ok) {
+      setShowSuccessMessage('submitted');
+      setTriggerFetchApp(!triggerFetchApp);
+      setGithubLink("");
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+      }, 1000);
+    } else {
+      alert("Failed to submit application.");
     }
+  } catch (error) {
+    console.log("Error:", error);
+  }
   };
   
   const viewRemarks = () => {
@@ -178,8 +197,11 @@ export default function StudentHomepage() {
                   {application.step == 1 &&
                     <>
                       <label><b>Link to GitHub repository</b></label>
-                      <input type="text" placeholder="https://github.com/..."  value={githubLink} onChange={(e) => setGithubLink(e.target.value)}/>
+                      <input type="text" placeholder="https://github.com/..."  value={githubLink} onChange={(e) => setGithubLink(e.target.value)}
+                      />
+                      {githubLinkError && <p className="error">{githubLinkError}</p>}
                     </>
+                    
                   }
                 </>
               ) : application.studentSubmission.length > 0 ? (
