@@ -119,7 +119,7 @@ const closeApplication = async (req, res) => {
 }
 
 const submitApplication = async (req, res) => {
-  const { appID, githubLink, status } = req.body;
+  const { appID, githubLink, status, step } = req.body;
   try {
     const application = await Application.findById(appID);
 
@@ -128,7 +128,7 @@ const submitApplication = async (req, res) => {
       return;
     }
 
-    application.
+    application.step = step;
 
     application.studentSubmission.push({
       githubLink,

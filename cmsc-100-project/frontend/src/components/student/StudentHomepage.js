@@ -117,7 +117,7 @@ export default function StudentHomepage() {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ appID, githubLink, status: 'pending' })
+        body: JSON.stringify({ appID, githubLink, status: 'pending', step: 2 })
       });
   
       if (response.ok) {
@@ -172,8 +172,12 @@ export default function StudentHomepage() {
                   <p><b>Student Number:</b> {userData.studentNumber}</p>
                   <p><b>Email:</b> {userData.email}</p>
                   <p><b>Adviser:</b> {adviserName || "Not yet assigned"}</p>
-                  <label><b>Link to GitHub repository</b></label>
-                  <input type="text" placeholder="https://github.com/..."  value={githubLink} onChange={(e) => setGithubLink(e.target.value)}/>
+                  {application.step == 1 &&
+                    <>
+                      <label><b>Link to GitHub repository</b></label>
+                      <input type="text" placeholder="https://github.com/..."  value={githubLink} onChange={(e) => setGithubLink(e.target.value)}/>
+                    </>
+                  }
                 </>
               ) : application.studentSubmission.length > 0 ? (
                 <>
