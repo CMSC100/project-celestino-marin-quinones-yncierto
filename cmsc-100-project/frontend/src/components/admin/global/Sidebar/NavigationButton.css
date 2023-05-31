@@ -1,0 +1,13 @@
+ul{
+    list-style-type: none;
+}
+
+.indivBtn{
+    display: flex;
+    flex-direction: row;
+    justify-content:flex-start;
+    width: 200px;
+    margin: 30px;
+    background-color: transparent;
+    inset:inherit;
+}
