@@ -264,10 +264,6 @@ export default function StudentHomepage() {
                     >Submit Application</button>
                   )}
                 </div>
-                <div>
-                  <input id="remarks-textbox" type="text"/>
-                  <button>Submit Remark</button>
-                </div>
               </div>
             ))}
         </div>
