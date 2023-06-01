@@ -17,7 +17,9 @@ const signUp = async (req, res) => {
 
   if (userType === "user") {
     var { studentNumber, adviser } = req.body
-
+    
+    let student = await User.findOne({studentNumber})
+    if (student) return res.send({success: false, studentNumberExists: true})
 
     var newuser = new User({
       firstName: firstName,

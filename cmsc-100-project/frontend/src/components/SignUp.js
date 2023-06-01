@@ -91,7 +91,9 @@ export default function SignUp() {
         } else {
           if (body.emailExists) {
             alert("Email already taken.")
-          } else {
+          } else if (body.studentNumberExists) {
+            alert("Student number already exists.")
+          } else  {
             alert("Sign up failed.")
           }
         }
