@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from 'universal-cookie';
+import { MdDateRange } from "react-icons/md";
+import {IoIosPodium} from "react-icons/io"
+import {MdPendingActions} from "react-icons/md"
+import {BsFillPersonLinesFill} from "react-icons/bs"
+import {BiLogOut} from "react-icons/bi"
 
 export default function ApproverHomepage() {
   const [userData, setUserData] = useState({});
@@ -14,6 +19,19 @@ export default function ApproverHomepage() {
   const [sort, setSort] = useState({ date: -1 })
   const [adviserFilterValue, setAdviserFilterValue] = useState("")
   const navigate = useNavigate();
+
+  const [sideBar, setSideBar] = useState(false);
+  const showSidebar = () => setSideBar(!sideBar);
+
+  const handleLogout = (e) => {
+    // Clear the authentication token (if applicable)
+    // Example: If you are using cookies, use the following code:
+    const cookies = new Cookies();
+    cookies.remove('authToken');
+
+    // Navigate to the homepage
+    navigate('/');
+}
 
   // fetch user data based on credentials and set userData state
   const fetchUserData = () => {
@@ -103,7 +121,7 @@ export default function ApproverHomepage() {
   if (dataLoaded) {
     return (
       <div>
-        <h2 className="app-greeting">Hello, {userData.fullName}! ({userData.userType})</h2>
+        {/* <h2 className="app-greeting">Hello, {userData.fullName}! ({userData.userType})</h2>
         <h3 className="app-title">Student Applications</h3>
         <div className="search-bar">
           <input type="text" id="search-text" onChange={handleSearch} placeholder="Search for Name or Student No." />
@@ -112,12 +130,22 @@ export default function ApproverHomepage() {
 
         <h4>Filter applications by:</h4>
         <div style={{ display: "flex", flexDirection: "column", rowGap: 10 }}>
-          <div style={{ display: "flex", flexDirection: "row", columnGap: 5 }}>
-            <button type="button" onClick={() => { changeFilter("createdAt") }}>Date</button>
-            {userData.userType == "officer" && <button type="button" onClick={() => { changeFilter("adviser") }}>Adviser</button>}
-            <button type="button" onClick={() => { changeFilter("step") }}>Step</button>
-            <button type="button" onClick={() => { changeFilter("status") }}>Status</button>
-            <button type="button" onClick={() => { setFilter(""); setTriggerRebuild(!triggerRebuild)}}>Clear Filter</button>
+          <div style={{ display: "flex", flexDirection: "column", rowGap: 5 }}>
+            <div>
+              <button type="button" onClick={() => { changeFilter("createdAt") }}>Date</button>
+            </div>
+            <div>
+              {userData.userType == "officer" && <button type="button" onClick={() => { changeFilter("adviser") }}>Adviser</button>}
+            </div>
+            <div>
+              <button type="button" onClick={() => { changeFilter("step") }}>Step</button>
+            </div>
+            <div>
+              <button type="button" onClick={() => { changeFilter("status") }}>Status</button>
+            </div>
+            <div>
+              <button type="button" onClick={() => { setFilter(""); setTriggerRebuild(!triggerRebuild)}}>Clear Filter</button>
+            </div>
           </div>
           <FilterOptions filterBy={filter} advisers={advisers} setFilterValue={setFilterValue} fetchApplications={fetchApplications} userData={userData} setAdviserFilterValue={setAdviserFilterValue}/>
         </div>
@@ -152,7 +180,121 @@ export default function ApproverHomepage() {
               )
             })
           }
+        </div> */}
+
+        <nav className="app-nav">
+          <header className="app-header">
+            <div className="app-image-text">
+              <span className="image">
+                <img src= {require("./aprub.png")} className='app-logo' alt=""/>
+              </span>
+              <div className='text header-text'>
+              <span className='name'>NAME</span>
+                <span className='usertype'>ADVISER</span>
+              </div>
+            </div>
+          </header>
+
+          <div className="filter-bar">
+            <div className="filters">
+              <p className="filter-title">Filters: </p>
+              {/* may condition para sa adviserrrr */}
+              <li className="appnav-btn">
+                <div>
+                  <BsFillPersonLinesFill className="icon"/>
+                  <button className=" text date">Adviser</button>
+                </div>
+              </li>
+
+              <li className="date-btn">
+                <div>
+                  <MdDateRange className="icon"/>
+                  <button className=" text date" onClick={() => { changeFilter("createdAt") }}>Date</button>
+                </div>
+                <div>
+                  <FilterOptions filterBy={filter} advisers={advisers} setFilterValue={setFilterValue} fetchApplications={fetchApplications} userData={userData} setAdviserFilterValue={setAdviserFilterValue}/>
+                </div>
+              </li>
+
+              <li className="step-btn">
+                <div> 
+                  <IoIosPodium className="icon"/>
+                  <button className=" text step" onClick={() => { changeFilter("step") }}>Step</button>
+                </div>
+                <div>
+                  <FilterOptions filterBy={filter} advisers={advisers} setFilterValue={setFilterValue} fetchApplications={fetchApplications} userData={userData} setAdviserFilterValue={setAdviserFilterValue}/>
+                </div>
+              </li>
+
+              <li className="status-btn">
+                <div>
+                  <MdPendingActions className="icon"/>
+                  <button className=" text status" onClick={() => { changeFilter("status") }}>Status</button>
+                </div>
+                <div>
+                  <FilterOptions filterBy={filter} advisers={advisers} setFilterValue={setFilterValue} fetchApplications={fetchApplications} userData={userData} setAdviserFilterValue={setAdviserFilterValue}/>
+                </div>
+              </li>
+
+              <div className="filter-buttons">
+                <button>Apply filter</button>
+                <button onClick={() => { setFilter(""); setTriggerRebuild(!triggerRebuild)}}>Clear filter</button>
+              </div>
+            </div>
+
+            <div className='bottom-content'>
+                <li className=''>
+                    <div>
+                        <BiLogOut className='icon'/>
+                        <button className='text logout' onClick={handleLogout}>Logout</button>
+                    </div>
+                </li>
+            </div>
+
+          </div>
+        </nav>
+
+        <div className="approver-body">
+          <h2 className="app-greeting">Hello, {userData.fullName}! ({userData.userType})</h2>
+          <h3 className="app-title">Student Applications</h3>
+          <div className="search-bar">
+            <input type="text" id="search-text" onChange={handleSearch} placeholder="Search for Name or Student No." />
+            <button type="button" className="search-btn"   onClick={clearSearch}>Clear Search</button>
+          </div>
+
+          <div style={{ display: "flex", columnGap: 5, alignItems: "center" }}>
+          <h4>Sort by:</h4>
+          <button type="button" onClick={() => setSort({ date: -1 })}>Date (Descending)</button>
+          <button type="button" onClick={() => setSort({ "studentData.0.fullName": 1 })}>Name (Ascending)</button>
+          <button type="button" onClick={() => setSort({ "studentData.0.fullName": -1 })}>Name (Descending)</button>
         </div>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", rowGap: 10 }}>
+          {
+            applications.map((application, index) => {
+              return (
+                <div key={index} style={{ backgroundColor: "lightgray" }}>
+                  {application["studentData"][0]["fullName"]} <br />
+                  {application["studentData"][0]["studentNumber"]}<br />
+                  {application["adviserData"][0]["fullName"]} <br />
+                  Status: {application.status} <br/>
+                  Step {application.step} <br />
+                  {
+                    ((userData.userType == "adviser" && application.step == 2) ||
+                    (userData.userType == "officer" && application.step == 3)) &&
+                    <>
+                      <button type="button" onClick={() => approveApplication(application._id)}>Approve</button>
+                      <button type="button">Return with Remarks</button>
+                    </>
+                  }
+                  
+                </div>
+              )
+            })
+          }
+        </div>
+
       </div>
     );
   } else {
@@ -176,7 +318,7 @@ function FilterOptions({ filterBy, advisers, setFilterValue, fetchApplications, 
     element = (
       <form onSubmit={onSubmit}>
         <input type="date" onChange={(e) => setFilterValue(e.target.value)} required />
-        {filterButton}
+        {/* {filterButton}   */}
       </form>
     )
   } else if (filterBy == "adviser") {
@@ -199,7 +341,7 @@ function FilterOptions({ filterBy, advisers, setFilterValue, fetchApplications, 
     element = (
       <form onSubmit={onSubmit}>
         <input type="number" min={2} max={3} placeholder="2 or 3" onChange={(e) => setFilterValue(e.target.value)} required />
-        {filterButton}
+        {/* {filterButton} */}
       </form>
     )
   } else if (filterBy == "status") {
@@ -226,7 +368,7 @@ function FilterOptions({ filterBy, advisers, setFilterValue, fetchApplications, 
           </div>
         </div>
 
-        {filterButton}
+        {/* {filterButton} */}
       </form>
     )
   }

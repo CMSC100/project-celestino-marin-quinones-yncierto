@@ -1,39 +1,8 @@
-/* =====Navigation Bar===== */
-.top-nav{
-  position: relative;
-  background-color: #FFF;
-  display: flex;
-  justify-content: space-between;
-  z-index: 1;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.3), 0 0 40px rgba(0,0,0,0.1) inset;
-}
-
-.top-nav button{
-  background-color: transparent;
-  color: black;
-}
-
-.logo-type{
-  padding: 10px;
-  display: flex;
-}
-
-.topnav-header .text{
-  margin-left: 10px;
-  padding-top: 5px;
-  font-size: 17px;
-  font-weight: 500;
-}
-
-.app-logo {
-  width: 70px;
-  border-radius: 6px;
-}
-
 /* =====Body===== */
 
 .main-content-app{
-  position: relative;
+  /* position: relative; */
+  top: 0;
   overflow: scroll;
   padding: 20px;
   height: 100vh;
@@ -53,7 +22,6 @@
 }
 
 .status{
-  display: flex !important;
   align-content: center;
 }
 
@@ -65,5 +33,148 @@ form .cleared{
 
 form .pending-text,
 form .cleared-text{
-  margin-left: 5px;
+  margin: 0;
+  font-size: small;
 }
+
+/* ===SideBar=== */
+.app-nav{
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 250px;
+  padding: 10px 14px;
+  background-color: #FFF;
+  z-index: 100;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.app-header{
+  margin-top: 5px;
+}
+
+.app-nav .text{
+  padding: 5px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.app-nav .image{
+  min-width: 70px;
+  display: flex;
+  align-items: center;
+  color: #707070;
+}
+
+.app-nav li{
+  height: fit-content;
+  margin-top: 10px;
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+
+.app-nav li div {
+  height: fit-content;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  border-radius: 6px;
+  background-color: transparent;
+  transition: all 0.2s ease;
+}
+
+.app-nav li button{
+  background-color: transparent;
+  margin-left: 0;
+  color: black;
+}
+
+.app-nav li .icon{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+  font-size: 20px;
+}
+
+.app-nav li .icon,
+.app-nav li .text{
+  color: #707070;
+  transition: all 0.3s ease;
+}
+
+.app-nav li:hover .icon,
+.app-nav li:hover .text{
+  color: #695CFE;
+}
+
+.app-nav header{
+  position: relative;
+}
+
+.app-nav .app-image-text img{
+  width: 60px;
+}
+
+.app-nav header .app-image-text{
+  display: flex;
+  align-items: center;
+}
+
+.app-nav .filter-bar .filter-title{
+  padding-top: 15px;
+  font-size: medium;
+  font-weight: 500;
+  /* padding-bottom: 0; */
+}
+
+header .app-image-text .header-text{
+  display: flex;
+  flex-direction: column;
+}
+
+.header-text .name{
+  font-weight: 600;
+}
+
+.header-text .usertype{
+  font-style: italic;
+  color: rgb(94, 93, 93);
+  margin-top: 10px;
+}
+
+.app-nav .filter-bar{
+  /* position: relative; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.date-btn{
+  display: flex;
+  flex-direction: column;
+}
+
+.step-btn{
+  display: flex;
+  flex-direction: column;
+}
+
+.status-btn{
+  display: flex;
+  flex-direction: column;
+}
+
+.approver-body{
+  position: relative;
+  /* overflow: scroll; */
+  top: 0;
+  left: 250px;
+  height: 100vh;
+  width: calc(100% - 250px);
+}
+
+

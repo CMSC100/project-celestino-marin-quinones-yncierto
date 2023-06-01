@@ -338,22 +338,6 @@
     margin-top: 10px;
   }
   
-  .sidebar header .toggle{
-    position: absolute;
-    top: 50%;
-    right: -25px;
-    transform: translateY(-50%);
-    height: 25px;
-    width: 25px;
-    background-color: #695CFE;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    color: #FFF;
-    font-size: 22px;
-  }
-  
   .sidebar .menu-bar{
     height: calc(100% - 50px);
     display: flex;

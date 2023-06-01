@@ -18,7 +18,7 @@ export default function ApproverRoot() {
 
     return(
         <div className='appnav-container'>
-            <div className='topnav-header'>
+            {/* <div className='topnav-header'>
                 <nav className='top-nav'>
                     <div className='logo-type'>
                         <img src= {require("./logo.png")} className='app-logo' alt=""/>
@@ -27,7 +27,10 @@ export default function ApproverRoot() {
 
                     <button onClick={handleLogout} >Logout</button>
                 </nav>
-            </div>
+                <div className='main-content-app'>
+                    <Outlet />
+                </div>
+            </div> */}
 
             <div className='main-content-app'>
                 <Outlet />
