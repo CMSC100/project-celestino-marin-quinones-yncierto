@@ -167,115 +167,123 @@ export default function StudentHomepage() {
 
   }
 
-  return (
-    <div className={`student-homepage ${showSuccessMessage ? "overlay-visible" : ""}`}>
-      <h1>Hello, {userData.firstName}!</h1>
-      {modalOpen && (
-        <ApplicationModal
-          setOpenModal={setModalOpen}
-          // updateUserData={updateUserData}
-          userData={userData}
-        />
-      )}
+  if (dataLoaded) {
+    return (
+      <div className={`student-homepage ${showSuccessMessage ? "overlay-visible" : ""}`}>
+        <h1>Hello, {userData.firstName}!</h1>
+        {modalOpen && (
+          <ApplicationModal
+            setOpenModal={setModalOpen}
+            // updateUserData={updateUserData}
+            userData={userData}
+          />
+        )}
 
-      {applications.length > 0 ? (
-        <div className='application-list'>
-          <h3>APPLICATIONS</h3>
-          {applications.map((application, index) => (
-          <div
-            className={`application-card ${application.status === 'closed' ? 'closed' : ''}`}
-            key={index}
-          >
-            <div className='application-info'>
-              {application.status != "open" &&
-                <div>
-                  <button>View Remarks</button>
-                  
-                </div>
-              } 
-              <h4>Application {applications.length - index}</h4>
-              <div className='status-bar'>
-                <span className={`status ${application.status}`}>{application.status}</span>
-              </div>
-              {application.status === 'open' && application.studentSubmission.length === 0 ? (
-                <>
-                  <p><b>Name:</b> {userData.fullName}</p>
-                  <p><b>Student Number:</b> {userData.studentNumber}</p>
-                  <p><b>Email:</b> {userData.email}</p>
-                  <p><b>Adviser:</b> {adviserName || "Not yet assigned"}</p>
-                  {application.step == 1 &&
-                    <>
-                      <label><b>Link to GitHub repository</b></label>
-                      <input type="text" placeholder="https://github.com/..."  value={githubLink} onChange={(e) => setGithubLink(e.target.value)}/>
-                    </>
-                  }
-                </>
-              ) : application.studentSubmission.length > 0 ? (
-                <>
-                  <p><b>Name:</b> {userData.fullName}</p>
-                  <p><b>Student Number:</b> {userData.studentNumber}</p>
-                  <p><b>Email:</b> {userData.email}</p>
-                  <p><b>Adviser:</b> {adviserName || "Not yet assigned"}</p>
-                  <p><b>GitHub Links:</b></p>
-                  <ul style={{ listStyleType: 'disc', marginLeft: '3em' }}>
-                    {application.studentSubmission.map((submission, index) => (
-                      <li key={index}>
-                        <a href={submission.githubLink} target="_blank" rel="noopener noreferrer">
-                          {submission.githubLink}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              ) : (
-                <p>No application submitted yet</p>
-              )}
-            </div>
-            <div className='app-card-btns'>
-              {application.status === 'cleared' && (
-                <button className='print-app' onClick={handlePrintPDF}>
-                  Print as PDF
-                </button>
-              )}
-              <button
-                className='close-app'
-                onClick={() => {
-                  if (application.status !== 'closed') {
-                    closeApplication(application._id);
-                    setTriggerFetchApp(!triggerFetchApp);
-                  }
-                }}
-                disabled={application.status === 'closed'}
+        {applications.length > 0 ? (
+          <div className='application-list'>
+            <h3>APPLICATIONS</h3>
+
+            {applications.map((application, index) => (
+              <div
+                className={`application-card ${application.status === 'closed' ? 'closed' : ''}`}
+                key={index}
               >
-                {application.status === 'closed' ? 'Closed' : 'Close Application'}
-              </button>
-              {application.status === 'open' && application.studentSubmission.length === 0 && (
-                <button 
-                className='submit-app' 
-                onClick={() => submitApplication(application._id)}
-                disabled = {!adviserName}
-                >Submit Application</button>
-              )}
-            </div>
-            <div>
-              <input id="remarks-textbox" type="text"/>
-              <button>Submit Remark</button>
-            </div>
-            </div>
-          ))}
-          </div>
+                <div className='application-info'>
+                  {application.status != "open" &&
+                    <div>
+                      <button>View Remarks</button>
+                    </div>
+                  } 
+
+                  <h4>Application {applications.length - index}</h4>
+                  <div className='status-bar'>
+                    <span className={`status ${application.status}`}>{application.status}</span>
+                  </div>
+
+                  {application.status === 'open' && application.studentSubmission.length === 0 ? (
+                    <>
+                      <p><b>Name:</b> {userData.fullName}</p>
+                      <p><b>Student Number:</b> {userData.studentNumber}</p>
+                      <p><b>Email:</b> {userData.email}</p>
+                      <p><b>Adviser:</b> {adviserName || "Not yet assigned"}</p>
+                      
+                      {application.step == 1 &&
+                        <>
+                          <label><b>Link to GitHub repository</b></label>
+                          <input type="text" placeholder="https://github.com/..."  value={githubLink} onChange={(e) => setGithubLink(e.target.value)}/>
+                        </>
+                      }
+                    </>
+                  ) : application.studentSubmission.length > 0 ? (
+                    <>
+                      <p><b>Name:</b> {userData.fullName}</p>
+                      <p><b>Student Number:</b> {userData.studentNumber}</p>
+                      <p><b>Email:</b> {userData.email}</p>
+                      <p><b>Adviser:</b> {adviserName || "Not yet assigned"}</p>
+                      <p><b>GitHub Links:</b></p>
+                      <ul style={{ listStyleType: 'disc', marginLeft: '3em' }}>
+                        {application.studentSubmission.map((submission, index) => (
+                          <li key={index}>
+                            <a href={submission.githubLink} target="_blank" rel="noopener noreferrer">
+                              {submission.githubLink}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  ) : (
+                    <p>No application submitted yet</p>
+                  )}
+                </div>
+
+                <div className='app-card-btns'>
+                  {application.status === 'cleared' && (
+                    <button className='print-app' onClick={handlePrintPDF}>
+                      Print as PDF
+                    </button>
+                  )}
+
+                  <button
+                    className='close-app'
+                    onClick={() => {
+                      if (application.status !== 'closed') {
+                        closeApplication(application._id);
+                        setTriggerFetchApp(!triggerFetchApp);
+                      }
+                    }}
+                    disabled={application.status === 'closed'}
+                  >
+                    {application.status === 'closed' ? 'Closed' : 'Close Application'}
+                  </button>
+
+                  {application.status === 'open' && application.studentSubmission.length === 0 && (
+                    <button 
+                    className='submit-app' 
+                    onClick={() => submitApplication(application._id)}
+                    disabled = {!adviserName}
+                    >Submit Application</button>
+                  )}
+                </div>
+                <div>
+                  <input id="remarks-textbox" type="text"/>
+                  <button>Submit Remark</button>
+                </div>
+              </div>
+            ))}
+        </div>
         ) : (
           <div className='application-list'>
             <p className='no-application'>No applications yet</p>
           </div>
         )}
+
         {pdfModalOpen && <PdfModal setpdfModal={setpdfModalOpen}/>}
         {showSuccessMessage === "closed" && (
-        <div className="popup">
-          <div className="popup-content">
-            Successfully closed the application.
+          <div className="popup">
+            <div className="popup-content">
+              Successfully closed the application.
+            </div>
           </div>
-        </div>
         )}
   
         {showSuccessMessage === "submitted" && (
@@ -285,6 +293,8 @@ export default function StudentHomepage() {
             </div>
           </div>
         )}
+
       </div>
-    );
+    )
+  }
 }
