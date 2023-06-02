@@ -7,6 +7,8 @@ import {MdPendingActions} from "react-icons/md"
 import {BsFillPersonLinesFill} from "react-icons/bs"
 import {BiLogOut} from "react-icons/bi"
 
+import './Approver.css'
+
 export default function ApproverHomepage() {
   const [userData, setUserData] = useState({});
   const [applications, setApplications] = useState([])
@@ -14,6 +16,7 @@ export default function ApproverHomepage() {
   const [triggerRebuild, setTriggerRebuild] = useState(false)
   const [filter, setFilter] = useState("")
   const [filterValue, setFilterValue] = useState("")
+  const [currentActiveFilter, setCurrentActiveFilter] = useState("")
   const [dataLoaded, setDataLoaded] = useState(false)
   const [advisers, setAdvisers] = useState([])
   const [sort, setSort] = useState({ date: -1 })
@@ -31,7 +34,29 @@ export default function ApproverHomepage() {
 
     // Navigate to the homepage
     navigate('/');
-}
+  }
+
+  useEffect(() => {
+    const initialFetch = async () => {
+      fetchUserData()
+
+      if (dataLoaded) {
+        fetchApplications()
+        fetchAdvisers()
+      }
+    }
+
+    initialFetch()
+
+  }, [dataLoaded]);
+
+  useEffect(() => {
+    if (userData._id) fetchApplications()
+  }, [search, triggerRebuild, sort, adviserFilterValue, filterValue])
+
+  useEffect(() => {
+    if (currentActiveFilter != "") changeActiveFilter(currentActiveFilter)
+  }, [currentActiveFilter])
 
   // fetch user data based on credentials and set userData state
   const fetchUserData = () => {
@@ -65,24 +90,6 @@ export default function ApproverHomepage() {
       .then(body => setApplications(body))
   }
 
-  useEffect(() => {
-    const initialFetch = async () => {
-      fetchUserData()
-
-      if (dataLoaded) {
-        fetchApplications()
-        fetchAdvisers()
-      }
-    }
-
-    initialFetch()
-
-  }, [dataLoaded]);
-
-  useEffect(() => {
-    if (userData._id) fetchApplications()
-  }, [search, triggerRebuild, sort, adviserFilterValue])
-
   const handleSearch = (e) => {
     console.log(e.target.value)
     setSearch(e.target.value)
@@ -103,20 +110,133 @@ export default function ApproverHomepage() {
       })
   }
 
-  const changeFilter = (filterBy) => {
-    setFilter(filterBy)
-  }
-
   const fetchAdvisers = () => {
     fetch(`http://localhost:3001/getapproveraccounts?searchName=${""}&sort=${1}`)
       .then(response => response.json())
       .then(body => setAdvisers(body))
   }
 
+  const changeSort = (sort, event) => {
+    setSort(sort)
+    changeSortButton(event)
+  }
+
   const clearSearch = () => {
     document.getElementById("search-text").value = ""
     setSearch("")
   }
+
+  const changeSortButton = (event) => {
+    const buttons = document.getElementsByName(event.target.name);
+    console.log(buttons[0].name)
+    for (let i in buttons) {
+      if (buttons[i] == event.target) buttons[i].classList.add("active");
+      else if (buttons[i].classList?.contains("active")) buttons[i].classList.remove("active");      
+    }
+  }
+
+  const changeFilter = (filterBy) => {
+    setFilter(filterBy)
+  }
+
+  const changeActiveFilter = (index) => {
+    const filterButtons = document.getElementsByName("filter-buttons");
+    for (let i in filterButtons) {
+      console.log(filterButtons[i].classList?.contains("active-filter"))
+      if (index == filterButtons[i].value) filterButtons[i].classList.add("active-filter");
+      else if (filterButtons[i].classList?.contains("active-filter")) filterButtons[i].classList.remove("active-filter");
+    }
+  }
+
+  const clearFilter = () => {
+    setFilter("");
+    setFilterValue("");
+    const filterButtons = document.getElementsByName("filter-buttons");
+    for (let i in filterButtons) {
+      filterButtons[i].classList?.remove("active-filter");
+    }
+  }
+
+  const filterButtons = () => {
+    let element;
+    let tempFilterValue;
+    let currentActiveFilter;
+
+    const onSubmit = (e) => {
+      e.preventDefault()
+      setFilterValue(tempFilterValue)
+      setCurrentActiveFilter(currentActiveFilter)
+    }
+
+    const filterButton = (index) => {
+      return (
+        <div className="filter-buttons">
+          <button type="submit" onClick={(e) => currentActiveFilter = index}>Apply filter</button>
+        </div>
+      )
+    }
+
+    if (filter == "adviser") {
+      element = (
+        <div>
+          {advisers.map((adviser, index) => {
+            return (
+              <div key={index}>
+                <p>{adviser.fullName}</p>
+                <button value={0} type="button" onClick={(e) => {
+                  setFilterValue(adviser._id)
+                  setAdviserFilterValue(adviser._id)
+                  currentActiveFilter = index
+                }}>Apply Filter</button>
+              </div>
+            )
+          })}
+        </div>
+      )
+    } else if (filter == "createdAt") {
+      element = (
+        <form onSubmit={onSubmit}>
+          <input type="date" onChange={(e) => {tempFilterValue = e.target.value}} required />
+          {filterButton(1)}  
+        </form>
+      )
+    } else if (filter == "step") {
+      element = (
+        <form onSubmit={onSubmit}>
+          <input type="number" min={2} max={3} placeholder="2 or 3" onChange={(e) => {tempFilterValue = e.target.value}} required />
+          {filterButton(2)}
+        </form>
+      )
+    } else if (filter == "status") {
+      element = (
+        <form onSubmit={onSubmit} className="status">
+
+          <div className="pending">
+            <div>
+              <input type="radio" id="pending-radio" name="filter-radio" onClick={(e) => {tempFilterValue = "pending"}} required />
+            </div>
+
+            <div className="pending-text">
+              <label htmlFor="pending-radio">Pending</label>
+            </div>
+          </div>
+          <br/>
+          <div className="cleared">
+            <div>
+              <input type="radio" id="cleared-radio" name="filter-radio" onClick={(e) => {tempFilterValue = "cleared"}} />
+            </div>
+
+            <div className="cleared-text">
+              <label htmlFor="cleared-radio">Cleared</label>
+            </div>
+          </div>
+
+          {filterButton(3)}
+        </form>
+      )
+    }
+    return element
+  } 
 
   if (dataLoaded) {
     return (
@@ -189,8 +309,8 @@ export default function ApproverHomepage() {
                 <img src= {require("./aprub.png")} className='app-logo' alt=""/>
               </span>
               <div className='text header-text'>
-              <span className='name'>NAME</span>
-                <span className='usertype'>ADVISER</span>
+              <span className='name'>{userData.fullName}</span>
+                <span className='usertype'>{userData.userType.toUpperCase()}</span>
               </div>
             </div>
           </header>
@@ -198,47 +318,45 @@ export default function ApproverHomepage() {
           <div className="filter-bar">
             <div className="filters">
               <p className="filter-title">Filters: </p>
-              {/* may condition para sa adviserrrr */}
-              <li className="appnav-btn">
-                <div>
-                  <BsFillPersonLinesFill className="icon"/>
-                  <button className=" text date">Adviser</button>
-                </div>
-              </li>
 
-              <li className="date-btn">
+              {
+                userData.userType == "officer" &&
+                <li className="appnav-btn" name="filter-buttons" value={0}>
+                  <div className="active-filter">
+                    <BsFillPersonLinesFill className="icon"/>
+                    <button className=" text date">Adviser</button>
+                  </div>
+                </li>
+              }
+
+              <li className="date-btn" value={1} name="filter-buttons">
                 <div>
                   <MdDateRange className="icon"/>
-                  <button className=" text date" onClick={() => { changeFilter("createdAt") }}>Date</button>
+                  <button className=" text date" onClick={(e) => changeFilter("createdAt", e)}>Date</button>
                 </div>
-                <div>
-                  <FilterOptions filterBy={filter} advisers={advisers} setFilterValue={setFilterValue} fetchApplications={fetchApplications} userData={userData} setAdviserFilterValue={setAdviserFilterValue}/>
-                </div>
+                {filter == "createdAt" && filterButtons()}
               </li>
 
-              <li className="step-btn">
-                <div> 
+              <li className="step-btn" value={2} name="filter-buttons">
+                <div name="filter-buttons"> 
                   <IoIosPodium className="icon"/>
-                  <button className=" text step" onClick={() => { changeFilter("step") }}>Step</button>
+                  <button className=" text step" onClick={(e) => changeFilter("step", e)}>Step</button>
                 </div>
-                <div>
-                  <FilterOptions filterBy={filter} advisers={advisers} setFilterValue={setFilterValue} fetchApplications={fetchApplications} userData={userData} setAdviserFilterValue={setAdviserFilterValue}/>
-                </div>
+                {filter == "step" && filterButtons()}
               </li>
 
-              <li className="status-btn">
-                <div>
+              <li className="status-btn" value={3} name="filter-buttons">
+                <div name="filter-buttons">
                   <MdPendingActions className="icon"/>
-                  <button className=" text status" onClick={() => { changeFilter("status") }}>Status</button>
+                  <button className=" text status" onClick={(e) => changeFilter("status", e)}>Status</button>
                 </div>
-                <div>
-                  <FilterOptions filterBy={filter} advisers={advisers} setFilterValue={setFilterValue} fetchApplications={fetchApplications} userData={userData} setAdviserFilterValue={setAdviserFilterValue}/>
-                </div>
+                {filter == "status" && filterButtons()}
               </li>
 
               <div className="filter-buttons">
-                <button>Apply filter</button>
-                <button onClick={() => { setFilter(""); setTriggerRebuild(!triggerRebuild)}}>Clear filter</button>
+                <button onClick={() => {
+                  clearFilter()
+                }}>Clear filter</button>
               </div>
             </div>
 
@@ -264,35 +382,34 @@ export default function ApproverHomepage() {
 
           <div style={{ display: "flex", columnGap: 5, alignItems: "center" }}>
           <h4>Sort by:</h4>
-          <button type="button" onClick={() => setSort({ date: -1 })}>Date (Descending)</button>
-          <button type="button" onClick={() => setSort({ "studentData.0.fullName": 1 })}>Name (Ascending)</button>
-          <button type="button" onClick={() => setSort({ "studentData.0.fullName": -1 })}>Name (Descending)</button>
+          <button type="button" name="sort-buttons" className="active" onClick={(e) => changeSort({ date: -1 }, e)}>Date (Descending)</button>
+          <button type="button" name="sort-buttons" onClick={(e) => changeSort({ "studentData.0.fullName": 1 }, e)}>Name (Ascending)</button>
+          <button type="button" name="sort-buttons" onClick={(e) => changeSort({ "studentData.0.fullName": -1 }, e)}>Name (Descending)</button>
         </div>
-        </div>
-
         <div style={{ display: "flex", flexDirection: "column", rowGap: 10 }}>
           {
             applications.map((application, index) => {
               return (
-                <div key={index} style={{ backgroundColor: "lightgray" }}>
-                  {application["studentData"][0]["fullName"]} <br />
-                  {application["studentData"][0]["studentNumber"]}<br />
-                  {application["adviserData"][0]["fullName"]} <br />
-                  Status: {application.status} <br/>
-                  Step {application.step} <br />
+                <div key={index} style={{ backgroundColor: "lightgray", boxSizing: "border-box", padding: 20}}>
+                  <b>Name:</b> {application["studentData"][0]["fullName"]} <br />
+                  <b>Student Number:</b> {application["studentData"][0]["studentNumber"]}<br />
+                  <b>Adviser:</b> {application["adviserData"][0]["fullName"]} <br />
+                  <b>Status:</b> {application.status} <br/>
+                  <b>Step:</b> {application.step} <br />
                   {
                     ((userData.userType == "adviser" && application.step == 2) ||
                     (userData.userType == "officer" && application.step == 3)) &&
-                    <>
+                    <div style={{marginTop: 10}}>
                       <button type="button" onClick={() => approveApplication(application._id)}>Approve</button>
                       <button type="button">Return with Remarks</button>
-                    </>
+                    </div>
                   }
                   
                 </div>
               )
             })
           }
+        </div>
         </div>
 
       </div>
@@ -302,75 +419,75 @@ export default function ApproverHomepage() {
   }
 }
 
-function FilterOptions({ filterBy, advisers, setFilterValue, fetchApplications, userData, setAdviserFilterValue }) {
-  let element;
+// function FilterOptions({ filterBy, advisers, setFilterValue, fetchApplications, userData, setAdviserFilterValue }) {
+//   let element;
 
-  const onSubmit = (e) => {
-    e.preventDefault()
-    fetchApplications()
-  }
+//   const onSubmit = (e) => {
+//     e.preventDefault()
+//     fetchApplications()
+//   }
 
-  const filterButton = (
-    <button type="submit">Filter</button>
-  )
+//   const filterButton = (
+//     <button type="submit">Filter</button>
+//   )
 
-  if (filterBy == "createdAt") {
-    element = (
-      <form onSubmit={onSubmit}>
-        <input type="date" onChange={(e) => setFilterValue(e.target.value)} required />
-        {/* {filterButton}   */}
-      </form>
-    )
-  } else if (filterBy == "adviser") {
-    element = (
-      <div>
-        {advisers.map((adviser, index) => {
-          return (
-            <div key={index}>
-              <p>{adviser.fullName}</p>
-              <button type="button" onClick={() => {
-                setFilterValue(adviser._id)
-                setAdviserFilterValue(adviser._id)
-              }}>Filter</button>
-            </div>
-          )
-        })}
-      </div>
-    )
-  } else if (filterBy == "step") {
-    element = (
-      <form onSubmit={onSubmit}>
-        <input type="number" min={2} max={3} placeholder="2 or 3" onChange={(e) => setFilterValue(e.target.value)} required />
-        {/* {filterButton} */}
-      </form>
-    )
-  } else if (filterBy == "status") {
-    element = (
-      <form onSubmit={onSubmit} className="status">
+//   if (filterBy == "createdAt") {
+//     element = (
+//       <form onSubmit={onSubmit}>
+//         <input type="date" onChange={(e) => setFilterValue(e.target.value)} required />
+//         {/* {filterButton}   */}
+//       </form>
+//     )
+//   } else if (filterBy == "adviser") {
+//     element = (
+//       <div>
+//         {advisers.map((adviser, index) => {
+//           return (
+//             <div key={index}>
+//               <p>{adviser.fullName}</p>
+//               <button type="button" onClick={() => {
+//                 setFilterValue(adviser._id)
+//                 setAdviserFilterValue(adviser._id)
+//               }}>Filter</button>
+//             </div>
+//           )
+//         })}
+//       </div>
+//     )
+//   } else if (filterBy == "step") {
+//     element = (
+//       <form onSubmit={onSubmit}>
+//         <input type="number" min={2} max={3} placeholder="2 or 3" onChange={(e) => setFilterValue(e.target.value)} required />
+//         {/* {filterButton} */}
+//       </form>
+//     )
+//   } else if (filterBy == "status") {
+//     element = (
+//       <form onSubmit={onSubmit} className="status">
 
-        <div className="pending">
-          <div>
-            <input type="radio" id="pending-radio" name="filter-radio" onClick={(e) => setFilterValue("pending")} required />
-          </div>
+//         <div className="pending">
+//           <div>
+//             <input type="radio" id="pending-radio" name="filter-radio" onClick={(e) => setFilterValue("pending")} required />
+//           </div>
 
-          <div className="pending-text">
-            <label htmlFor="pending-radio">Pending</label>
-          </div>
-        </div>
-        <br/>
-        <div className="cleared">
-          <div>
-            <input type="radio" id="cleared-radio" name="filter-radio" onClick={(e) => setFilterValue("cleared")} />
-          </div>
+//           <div className="pending-text">
+//             <label htmlFor="pending-radio">Pending</label>
+//           </div>
+//         </div>
+//         <br/>
+//         <div className="cleared">
+//           <div>
+//             <input type="radio" id="cleared-radio" name="filter-radio" onClick={(e) => setFilterValue("cleared")} />
+//           </div>
 
-          <div className="cleared-text">
-            <label htmlFor="cleared-radio">Cleared</label>
-          </div>
-        </div>
+//           <div className="cleared-text">
+//             <label htmlFor="cleared-radio">Cleared</label>
+//           </div>
+//         </div>
 
-        {/* {filterButton} */}
-      </form>
-    )
-  }
-  return element
-} 
+//         {/* {filterButton} */}
+//       </form>
+//     )
+//   }
+//   return element
+// } 
