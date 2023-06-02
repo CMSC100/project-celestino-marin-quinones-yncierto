@@ -1,9 +1,14 @@
 /* =====Body===== */
+.active-filter {
+  background-color: #bbb5ff;
+  border: solid 0px transparent;
+  border-radius: 20px;
+}
 
 .main-content-app{
   /* position: relative; */
   top: 0;
-  overflow: scroll;
+  overflow: auto;
   padding: 20px;
   height: 100vh;
   background-color: #E4E9F7;
