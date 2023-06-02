@@ -35,7 +35,6 @@ const getApplicationsApprover = async (req, res) => {
   if (filter == "createdAt")  {
     let tempDate = new Date(filterValue)
     tempDate.setDate(tempDate.getDate() + parseInt(1));
-    console.log(tempDate.toISOString())
     newFilter = {
       $and: [
         {createdAt: {$gte: new Date(filterValue)}},
@@ -96,6 +95,7 @@ const getApplicationsApprover = async (req, res) => {
         }
       }
     ]).collation({locale: "en"}).sort(sort)
+    console.log(applications)
     res.status(200).send(applications)
   } catch (error) {
     res.status(500).json(error)
