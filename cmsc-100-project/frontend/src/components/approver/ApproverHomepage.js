@@ -10,17 +10,16 @@ import {BiLogOut} from "react-icons/bi"
 import './Approver.css'
 
 export default function ApproverHomepage() {
-  const [userData, setUserData] = useState({});
-  const [applications, setApplications] = useState([])
-  const [search, setSearch] = useState("")
-  const [triggerRebuild, setTriggerRebuild] = useState(false)
-  const [filter, setFilter] = useState("")
-  const [filterValue, setFilterValue] = useState("")
-  const [currentActiveFilter, setCurrentActiveFilter] = useState("")
-  const [dataLoaded, setDataLoaded] = useState(false)
-  const [advisers, setAdvisers] = useState([])
-  const [sort, setSort] = useState({ date: -1 })
-  const [adviserFilterValue, setAdviserFilterValue] = useState("")
+  const [userData, setUserData] = useState({}); // current user data
+  const [applications, setApplications] = useState([]) // applications
+  const [search, setSearch] = useState("") // for search input
+  const [triggerRebuild, setTriggerRebuild] = useState(false) // for triggering rebuild
+  const [filter, setFilter] = useState("") // filter mode
+  const [filterValue, setFilterValue] = useState("") // filter value
+  const [currentActiveFilter, setCurrentActiveFilter] = useState("") // for button styling purposes
+  const [dataLoaded, setDataLoaded] = useState(false) // for checking if user data has laoded
+  const [advisers, setAdvisers] = useState([]) // get all advisers for filtering
+  const [sort, setSort] = useState({ date: -1 }) // hold value for sorting
   const navigate = useNavigate();
 
   const [sideBar, setSideBar] = useState(false);
@@ -36,13 +35,13 @@ export default function ApproverHomepage() {
     navigate('/');
   }
 
-  useEffect(() => {
+  useEffect(() => { // fetch once page loads
     const initialFetch = async () => {
-      fetchUserData()
+      fetchUserData() // get user data
 
       if (dataLoaded) {
-        fetchApplications()
-        fetchAdvisers()
+        fetchApplications() // once user data loads, get applications
+        fetchAdvisers() // get all advisers
       }
     }
 
@@ -51,11 +50,11 @@ export default function ApproverHomepage() {
   }, [dataLoaded]);
 
   useEffect(() => {
-    if (userData._id) fetchApplications()
-  }, [search, triggerRebuild, sort, adviserFilterValue, filterValue])
+    if (userData._id) fetchApplications() // fetch applications whenever search, triggerRebuild, sort, and filterValue values change
+  }, [search, triggerRebuild, sort, filterValue])
 
   useEffect(() => {
-    if (currentActiveFilter != "") changeActiveFilter(currentActiveFilter)
+    if (currentActiveFilter != "") changeActiveFilter(currentActiveFilter) // for button styling
   }, [currentActiveFilter])
 
   // fetch user data based on credentials and set userData state
@@ -116,17 +115,17 @@ export default function ApproverHomepage() {
       .then(body => setAdvisers(body))
   }
 
-  const changeSort = (sort, event) => {
+  const changeSort = (sort, event) => { // change sort mode
     setSort(sort)
     changeSortButton(event)
   }
 
-  const clearSearch = () => {
+  const clearSearch = () => { // clear search
     document.getElementById("search-text").value = ""
     setSearch("")
   }
 
-  const changeSortButton = (event) => {
+  const changeSortButton = (event) => { // change css of sort buttons
     const buttons = document.getElementsByName(event.target.name);
     console.log(buttons[0].name)
     for (let i in buttons) {
@@ -135,11 +134,12 @@ export default function ApproverHomepage() {
     }
   }
 
-  const changeFilter = (filterBy) => {
+  const changeFilter = (filterBy) => { // change filter mode
     setFilter(filterBy)
   }
 
-  const changeActiveFilter = (index) => {
+  const changeActiveFilter = (index) => { // change css of filter buttons
+    // uses value attached to div and compare to passed index variable to determine active button
     const filterButtons = document.getElementsByName("filter-buttons");
     for (let i in filterButtons) {
       console.log(filterButtons[i].classList?.contains("active-filter"))
@@ -148,7 +148,7 @@ export default function ApproverHomepage() {
     }
   }
 
-  const clearFilter = () => {
+  const clearFilter = () => { // clear filters
     setFilter("");
     setFilterValue("");
     const filterButtons = document.getElementsByName("filter-buttons");
@@ -158,17 +158,17 @@ export default function ApproverHomepage() {
   }
 
   const filterButtons = () => {
-    let element;
-    let tempFilterValue;
-    let currentActiveFilter;
+    let element; // the JS element to be displayed
+    let tempFilterValue; // temporary variable for filter value
+    let currentActiveFilter; // hold index of current active filter button
 
-    const onSubmit = (e) => {
+    const onSubmit = (e) => { // upon form submission, change filter value and current active filter value
       e.preventDefault()
-      setFilterValue(tempFilterValue)
+      setFilterValue(tempFilterValue) 
       setCurrentActiveFilter(currentActiveFilter)
     }
 
-    const filterButton = (index) => {
+    const filterButton = (index) => { // general button for applying filter
       return (
         <div className="filter-buttons">
           <button type="submit" onClick={(e) => currentActiveFilter = index}>Apply filter</button>
@@ -176,7 +176,7 @@ export default function ApproverHomepage() {
       )
     }
 
-    if (filter == "adviser") {
+    if (filter == "adviser") { // when filter is an adviser
       element = (
         <div>
           {advisers.map((adviser, index) => {
@@ -185,7 +185,6 @@ export default function ApproverHomepage() {
                 <p>{adviser.fullName}</p>
                 <button value={0} type="button" onClick={(e) => {
                   setFilterValue(adviser._id)
-                  setAdviserFilterValue(adviser._id)
                   currentActiveFilter = index
                 }}>Apply Filter</button>
               </div>
@@ -193,21 +192,21 @@ export default function ApproverHomepage() {
           })}
         </div>
       )
-    } else if (filter == "createdAt") {
+    } else if (filter == "createdAt") { // when filter is date
       element = (
         <form onSubmit={onSubmit}>
           <input type="date" onChange={(e) => {tempFilterValue = e.target.value}} required />
-          {filterButton(1)}  
+          {filterButton(1)}
         </form>
       )
-    } else if (filter == "step") {
+    } else if (filter == "step") { // when filter is step
       element = (
         <form onSubmit={onSubmit}>
           <input type="number" min={2} max={3} placeholder="2 or 3" onChange={(e) => {tempFilterValue = e.target.value}} required />
           {filterButton(2)}
         </form>
       )
-    } else if (filter == "status") {
+    } else if (filter == "status") { // when filter is status
       element = (
         <form onSubmit={onSubmit} className="status">
 
@@ -418,76 +417,3 @@ export default function ApproverHomepage() {
     return (<></>)
   }
 }
-
-// function FilterOptions({ filterBy, advisers, setFilterValue, fetchApplications, userData, setAdviserFilterValue }) {
-//   let element;
-
-//   const onSubmit = (e) => {
-//     e.preventDefault()
-//     fetchApplications()
-//   }
-
-//   const filterButton = (
-//     <button type="submit">Filter</button>
-//   )
-
-//   if (filterBy == "createdAt") {
-//     element = (
-//       <form onSubmit={onSubmit}>
-//         <input type="date" onChange={(e) => setFilterValue(e.target.value)} required />
-//         {/* {filterButton}   */}
-//       </form>
-//     )
-//   } else if (filterBy == "adviser") {
-//     element = (
-//       <div>
-//         {advisers.map((adviser, index) => {
-//           return (
-//             <div key={index}>
-//               <p>{adviser.fullName}</p>
-//               <button type="button" onClick={() => {
-//                 setFilterValue(adviser._id)
-//                 setAdviserFilterValue(adviser._id)
-//               }}>Filter</button>
-//             </div>
-//           )
-//         })}
-//       </div>
-//     )
-//   } else if (filterBy == "step") {
-//     element = (
-//       <form onSubmit={onSubmit}>
-//         <input type="number" min={2} max={3} placeholder="2 or 3" onChange={(e) => setFilterValue(e.target.value)} required />
-//         {/* {filterButton} */}
-//       </form>
-//     )
-//   } else if (filterBy == "status") {
-//     element = (
-//       <form onSubmit={onSubmit} className="status">
-
-//         <div className="pending">
-//           <div>
-//             <input type="radio" id="pending-radio" name="filter-radio" onClick={(e) => setFilterValue("pending")} required />
-//           </div>
-
-//           <div className="pending-text">
-//             <label htmlFor="pending-radio">Pending</label>
-//           </div>
-//         </div>
-//         <br/>
-//         <div className="cleared">
-//           <div>
-//             <input type="radio" id="cleared-radio" name="filter-radio" onClick={(e) => setFilterValue("cleared")} />
-//           </div>
-
-//           <div className="cleared-text">
-//             <label htmlFor="cleared-radio">Cleared</label>
-//           </div>
-//         </div>
-
-//         {/* {filterButton} */}
-//       </form>
-//     )
-//   }
-//   return element
-// } 
