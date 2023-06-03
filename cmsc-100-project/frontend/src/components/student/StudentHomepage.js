@@ -64,11 +64,33 @@ export default function StudentHomepage() {
     try {
       // Fetch applications based on the user ID
       const applicationsResponse = await fetch(`http://localhost:3001/getapplications?studentID=${userData._id}`);
-
+  
       if (applicationsResponse.ok) {
         const applicationsData = await applicationsResponse.json();
-        const applicationsWithRemarks = applicationsData.map(app => ({ ...app, showRemarks: false }));
-        setApplications(applicationsData.reverse());
+  
+        // Fetch commenter details for each application remark
+        const updatedApplications = await Promise.all(applicationsData.map(async (app) => {
+          const updatedRemarks = await Promise.all(app.remarks.map(async (remark) => {
+            try {
+              // Fetch commenter details based on commenter's _id
+              const commenterResponse = await fetch(`http://localhost:3001/getapproverdetails?docRef=${remark.commenter}`);
+              if (commenterResponse.ok) {
+                const commenterData = await commenterResponse.json();
+                return { ...remark, commenter: commenterData.fullName };
+              } else {
+                console.error("Failed to fetch commenter details:", commenterResponse);
+                return remark;
+              }
+            } catch (error) {
+              console.error("Error fetching commenter details:", error);
+              return remark;
+            }
+          }));
+  
+          return { ...app, remarks: updatedRemarks };
+        }));
+  
+        setApplications(updatedApplications.reverse());
       } else {
         console.error("Failed to fetch applications:", applicationsResponse);
       }
@@ -76,6 +98,7 @@ export default function StudentHomepage() {
       console.log("Error:", error);
     }
   };
+  
 
   useEffect(() => {
     const initialFetch = async() => {
