@@ -67,6 +67,7 @@ export default function StudentHomepage() {
 
       if (applicationsResponse.ok) {
         const applicationsData = await applicationsResponse.json();
+        const applicationsWithRemarks = applicationsData.map(app => ({ ...app, showRemarks: false }));
         setApplications(applicationsData.reverse());
       } else {
         console.error("Failed to fetch applications:", applicationsResponse);
@@ -164,15 +165,12 @@ export default function StudentHomepage() {
   }
   };
   
-  const viewRemarks = (remarks) => {  
-    // alert(JSON.stringify(remarks))
-    // console.log(JSON.stringify(remarks))
-    remarks.forEach((remark) => {
-      alert("Remark: ", remark.remark);
-      alert("Date: ", remark.date);
-      alert("Commenter: ", remark.commenter);
-    });
-  }
+  const viewRemarks = (appID) => {
+    setApplications(prevApplications => prevApplications.map(app =>
+      app._id === appID ? { ...app, showRemarks: !app.showRemarks } : app
+    ));
+  };
+  
 
   if (dataLoaded) {
     return (
@@ -196,11 +194,13 @@ export default function StudentHomepage() {
                 key={index}
               >
                 <div className='application-info'>
-                  {application.status != "open" && (
-                    <div>
-                      <button onClick={() => viewRemarks(application.remarks)}>View Remarks</button>
-                    </div>
-                  )}
+                {application.status !== 'open' && (
+        <div>
+          <button onClick={() => viewRemarks(application._id)}>
+            {application.showRemarks ? 'Hide Remarks' : 'View Remarks'}
+          </button>
+        </div>
+      )}
 
                   <h4>Application {applications.length - index}</h4>
                   <div className='status-bar'>
@@ -243,19 +243,19 @@ export default function StudentHomepage() {
                     <p>No application submitted yet</p>
                   )
                   }
-                  {application.remarks && application.remarks.length > 0 && (
-                  <div>
-                    <h5>Remarks:</h5>
-                    {application.remarks.map((remark, remarkIndex) => (
-                      <div key={remarkIndex}>
-                        <p><b>Remark:</b> {remark.remark}</p>
-                        <p><b>Date:</b> {remark.date}</p>
-                        <p><b>Commenter:</b> {remark.commenter}</p>
-                        <hr />
-                      </div>
-                    ))}
-                  </div>
-                )}
+                  {application.showRemarks && application.remarks && application.remarks.length > 0 && (
+        <div>
+          <h5>Remarks:</h5>
+          {application.remarks.map((remark, remarkIndex) => (
+            <div key={remarkIndex}>
+              <p><b>Remark:</b> {remark.remark}</p>
+              <p><b>Date:</b> {remark.date}</p>
+              <p><b>Commenter:</b> {remark.commenter}</p>
+              <hr />
+            </div>
+          ))}
+        </div>
+      )}
                   
                 </div>
 
