@@ -28,7 +28,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors()) // wag tanggalin hehe
+app.use(cors()) // wag tanggalin hehe, para maenable yung CORS since iba yung port ng backend at frontend
 
 // allow CORS
 app.use((req, res, next) => {
