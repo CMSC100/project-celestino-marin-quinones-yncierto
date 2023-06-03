@@ -138,17 +138,12 @@ if (!dataLoaded) {
 }
 
 // Extract user data
-const { fullName, studentID, adviser } = userData;
-const nameParts = fullName ? fullName.split(" ") : [];
-const fName = nameParts[0] || "";
-const mName = nameParts[1] || "";
-const lName = nameParts.slice(2).join(" ") || "";
-
+const { fullName, studentNumber, adviser } = userData;
 // Prepare application details
 const applicationDetails = {
-  studName: `${fName} ${mName} ${lName}`,
-  studNo: studentID,
-  acadAdviserName: adviser || "",
+  studName: fullName,
+  studNo: studentNumber,
+  acadAdviserName: adviser,
   clearanceOfficer: "Katherine Tan",
   currDate: new Date().toLocaleDateString()
 };

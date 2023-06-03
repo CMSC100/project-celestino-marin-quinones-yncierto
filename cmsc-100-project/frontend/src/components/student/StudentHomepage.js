@@ -132,6 +132,7 @@ export default function StudentHomepage() {
   const githubLinkRegex = /^(https?:\/\/)?(www\.)?github\.com\/\S+$/;
   if (!githubLinkRegex.test(githubLink)) {
     setGithubLinkError("Invalid GitHub link");
+    alert("Invalid GitHub link")
     return;
   }
 
