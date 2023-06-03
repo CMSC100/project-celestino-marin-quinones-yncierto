@@ -1,36 +1,45 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { Page, Text, View, Document, StyleSheet, PDFViewer, Line, Svg, Font} from '@react-pdf/renderer';
 import './Modal.css'
 
 export default function PdfModal ({ setpdfModal }) {
-  // student details
-  let fName = "Juan"
-  let mName = "Santos"
-  let lName = "Dela Cruz"
-  let applicationDetails = {
-    studName: `${fName} ${mName} ${lName}`,
-    studNo: "2021-07177",
-    acadAdviserName: "Reginald Recario",
-    clearanceOfficer: "Katherine Tan",
-    currDate: `${new Date().toLocaleDateString()}`
-  }
 
-  return (
-    <div className="pdfmodalBackground">
-      <div className="pdfmodalContainer">
-        {pdfViewer(applicationDetails)}
-        <div className="footer">
-          <button onClick={() => { setpdfModal(false); }} id="cancelBtn"> 
-            Cancel 
-          </button>
-        </div>
-      </div>
-    </div>
-  )
-}
+  const [userData, setUserData] = useState(true);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
-// view pdf
-function pdfViewer(applicationDetails) {
+  const fetchUserData = async () => {
+    try {
+      // Fetch user data
+      const response = await fetch("http://localhost:3001/getloggedinuserdata", {
+        method: "POST",
+        credentials: "include",
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        setUserData(data);
+        return true
+      } else {
+        console.error("Failed to fetch user data");
+      }
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
+  useEffect(() => {
+    const initialFetch = async() => {
+      let result = await fetchUserData();
+      if (result) {
+        setDataLoaded(true)
+      }
+    }
+
+    initialFetch()
+  }, [])
+
+  // view pdf
+const pdfViewer = (applicationDetails) => {
   return (
     <PDFViewer className="pdf-file">
       <PDFReactPDF applicationDetails={applicationDetails}/>
@@ -38,8 +47,7 @@ function pdfViewer(applicationDetails) {
   )
 }
 
-// the document itself
-function PDFReactPDF(props) {
+const PDFReactPDF = (props) => {
   Font.register({family: "Times-Roman", src: "source"}) // register font
   // get details from props
   let { studName, studNo, acadAdviserName, clearanceOfficer, currDate } = props.applicationDetails
@@ -122,4 +130,39 @@ function PDFReactPDF(props) {
       </Page>
     </Document>
   )
+}
+
+// Check if user data is loaded
+if (!dataLoaded) {
+  return null;
+}
+
+// Extract user data
+const { fullName, studentID, adviser } = userData;
+const nameParts = fullName ? fullName.split(" ") : [];
+const fName = nameParts[0] || "";
+const mName = nameParts[1] || "";
+const lName = nameParts.slice(2).join(" ") || "";
+
+// Prepare application details
+const applicationDetails = {
+  studName: `${fName} ${mName} ${lName}`,
+  studNo: studentID,
+  acadAdviserName: adviser || "",
+  clearanceOfficer: "Katherine Tan",
+  currDate: new Date().toLocaleDateString()
+};
+
+return (
+  <div className="pdfmodalBackground">
+    <div className="pdfmodalContainer">
+      {pdfViewer(applicationDetails)}
+      <div className="footer">
+        <button onClick={() => { setpdfModal(false); }} id="cancelBtn">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+);
 }
