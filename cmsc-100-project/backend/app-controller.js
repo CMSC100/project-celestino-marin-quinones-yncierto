@@ -190,18 +190,6 @@ const approveApplication = async(req, res) => {
   else res.send({updated: false})
 }
 
-// const returnApplication = async(req, res) => {
-//   const {appID, approverType} = req.body
-//   if (approverType == "adviser") {
-//     var update = await Application.updateOne({_id: appID}, {$set: {step: "1"}})
-//   } else {
-//     var update = await Application.updateOne({_id: appID}, {$set: {step: "2"}})
-//   }
-
-//   if (update["acknowledged"] && update["modifiedCount"] != 0) res.send({updated: true})
-//   else res.send({updated: false})
-// }
-
 const returnApplication = async (req, res) => {
   const { appID, remarks, returnUserID } = req.body;
 
@@ -237,8 +225,5 @@ const returnApplication = async (req, res) => {
     res.status(500).json(error);
   }
 };
-
-
-
 
 export { createApplication, getApplications, closeApplication, submitApplication, approveApplication, getApplicationsApprover, returnApplication }
