@@ -20,6 +20,9 @@ export default function ApproverHomepage() {
   const [dataLoaded, setDataLoaded] = useState(false) // for checking if user data has laoded
   const [advisers, setAdvisers] = useState([]) // get all advisers for filtering
   const [sort, setSort] = useState({ date: -1 }) // hold value for sorting
+  const [remarks, setRemarks] = useState(""); // for storing the remarks
+  const [showRemarks, setShowRemarks] = useState(false); // for toggling the remarks input field visibility
+
   const navigate = useNavigate();
 
   const [sideBar, setSideBar] = useState(false);
@@ -240,67 +243,6 @@ export default function ApproverHomepage() {
   if (dataLoaded) {
     return (
       <div>
-        {/* <h2 className="app-greeting">Hello, {userData.fullName}! ({userData.userType})</h2>
-        <h3 className="app-title">Student Applications</h3>
-        <div className="search-bar">
-          <input type="text" id="search-text" onChange={handleSearch} placeholder="Search for Name or Student No." />
-          <button type="button" className="search-btn"   onClick={clearSearch}>Clear Search</button>
-        </div>
-
-        <h4>Filter applications by:</h4>
-        <div style={{ display: "flex", flexDirection: "column", rowGap: 10 }}>
-          <div style={{ display: "flex", flexDirection: "column", rowGap: 5 }}>
-            <div>
-              <button type="button" onClick={() => { changeFilter("createdAt") }}>Date</button>
-            </div>
-            <div>
-              {userData.userType == "officer" && <button type="button" onClick={() => { changeFilter("adviser") }}>Adviser</button>}
-            </div>
-            <div>
-              <button type="button" onClick={() => { changeFilter("step") }}>Step</button>
-            </div>
-            <div>
-              <button type="button" onClick={() => { changeFilter("status") }}>Status</button>
-            </div>
-            <div>
-              <button type="button" onClick={() => { setFilter(""); setTriggerRebuild(!triggerRebuild)}}>Clear Filter</button>
-            </div>
-          </div>
-          <FilterOptions filterBy={filter} advisers={advisers} setFilterValue={setFilterValue} fetchApplications={fetchApplications} userData={userData} setAdviserFilterValue={setAdviserFilterValue}/>
-        </div>
-
-        <div style={{ display: "flex", columnGap: 5, alignItems: "center" }}>
-          <h4>Sort by:</h4>
-          <button type="button" onClick={() => setSort({ date: -1 })}>Date (Descending)</button>
-          <button type="button" onClick={() => setSort({ "studentData.0.fullName": 1 })}>Name (Ascending)</button>
-          <button type="button" onClick={() => setSort({ "studentData.0.fullName": -1 })}>Name (Descending)</button>
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column", rowGap: 10 }}>
-          {
-            applications.map((application, index) => {
-              return (
-                <div key={index} style={{ backgroundColor: "lightgray" }}>
-                  {application["studentData"][0]["fullName"]} <br />
-                  {application["studentData"][0]["studentNumber"]}<br />
-                  {application["adviserData"][0]["fullName"]} <br />
-                  Status: {application.status} <br/>
-                  Step {application.step} <br />
-                  {
-                    ((userData.userType == "adviser" && application.step == 2) ||
-                    (userData.userType == "officer" && application.step == 3)) &&
-                    <>
-                      <button type="button" onClick={() => approveApplication(application._id)}>Approve</button>
-                      <button type="button">Return with Remarks</button>
-                    </>
-                  }
-                  
-                </div>
-              )
-            })
-          }
-        </div> */}
-
         <nav className="app-nav">
           <header className="app-header">
             <div className="app-image-text">
@@ -386,28 +328,47 @@ export default function ApproverHomepage() {
           <button type="button" name="sort-buttons" onClick={(e) => changeSort({ "studentData.0.fullName": -1 }, e)}>Name (Descending)</button>
         </div>
         <div style={{ display: "flex", flexDirection: "column", rowGap: 10 }}>
-          {
-            applications.map((application, index) => {
-              return (
-                <div key={index} style={{ backgroundColor: "lightgray", boxSizing: "border-box", padding: 20}}>
-                  <b>Name:</b> {application["studentData"][0]["fullName"]} <br />
-                  <b>Student Number:</b> {application["studentData"][0]["studentNumber"]}<br />
-                  <b>Adviser:</b> {application["adviserData"][0]["fullName"]} <br />
-                  <b>Status:</b> {application.status} <br/>
-                  <b>Step:</b> {application.step} <br />
-                  {
-                    ((userData.userType == "adviser" && application.step == 2) ||
-                    (userData.userType == "officer" && application.step == 3)) &&
-                    <div style={{marginTop: 10}}>
-                      <button type="button" onClick={() => approveApplication(application._id)}>Approve</button>
-                      <button type="button">Return with Remarks</button>
-                    </div>
-                  }
-                  
-                </div>
-              )
-            })
-          }
+        {
+          applications.map((application, index) => {
+            return (
+              <div key={index} style={{ backgroundColor: "lightgray", boxSizing: "border-box", padding: 20}}>
+                <b>Name:</b> {application["studentData"][0]["fullName"]} <br />
+                <b>Student Number:</b> {application["studentData"][0]["studentNumber"]}<br />
+                <b>Adviser:</b> {application["adviserData"][0]["fullName"]} <br />
+                <b>Status:</b> {application.status} <br/>
+                <b>Step:</b> {application.step} <br />
+                {
+                  ((userData.userType == "adviser" && application.step == 2) ||
+                  (userData.userType == "officer" && application.step == 3)) &&
+                  <div style={{marginTop: 10}}>
+                    <button type="button" onClick={() => approveApplication(application._id)}>Approve</button>
+                    <button type="button" onClick={() => setShowRemarks(true)}>Return with Remarks</button>
+                  </div>
+                }
+                {showRemarks && (
+                  <div>
+                    <input
+                      type="text"
+                      value={remarks}
+                      onChange={(e) => setRemarks(e.target.value)}
+                      placeholder="Enter remarks"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        // remarks logic
+                        setShowRemarks(false);
+                      }}
+                    >
+                      Return
+                    </button>
+                  </div>
+                )}
+              </div>
+            )
+          })
+        }
+
         </div>
         </div>
 
@@ -417,3 +378,65 @@ export default function ApproverHomepage() {
     return (<></>)
   }
 }
+
+
+        {/* <h2 className="app-greeting">Hello, {userData.fullName}! ({userData.userType})</h2>
+        <h3 className="app-title">Student Applications</h3>
+        <div className="search-bar">
+          <input type="text" id="search-text" onChange={handleSearch} placeholder="Search for Name or Student No." />
+          <button type="button" className="search-btn"   onClick={clearSearch}>Clear Search</button>
+        </div>
+
+        <h4>Filter applications by:</h4>
+        <div style={{ display: "flex", flexDirection: "column", rowGap: 10 }}>
+          <div style={{ display: "flex", flexDirection: "column", rowGap: 5 }}>
+            <div>
+              <button type="button" onClick={() => { changeFilter("createdAt") }}>Date</button>
+            </div>
+            <div>
+              {userData.userType == "officer" && <button type="button" onClick={() => { changeFilter("adviser") }}>Adviser</button>}
+            </div>
+            <div>
+              <button type="button" onClick={() => { changeFilter("step") }}>Step</button>
+            </div>
+            <div>
+              <button type="button" onClick={() => { changeFilter("status") }}>Status</button>
+            </div>
+            <div>
+              <button type="button" onClick={() => { setFilter(""); setTriggerRebuild(!triggerRebuild)}}>Clear Filter</button>
+            </div>
+          </div>
+          <FilterOptions filterBy={filter} advisers={advisers} setFilterValue={setFilterValue} fetchApplications={fetchApplications} userData={userData} setAdviserFilterValue={setAdviserFilterValue}/>
+        </div>
+
+        <div style={{ display: "flex", columnGap: 5, alignItems: "center" }}>
+          <h4>Sort by:</h4>
+          <button type="button" onClick={() => setSort({ date: -1 })}>Date (Descending)</button>
+          <button type="button" onClick={() => setSort({ "studentData.0.fullName": 1 })}>Name (Ascending)</button>
+          <button type="button" onClick={() => setSort({ "studentData.0.fullName": -1 })}>Name (Descending)</button>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", rowGap: 10 }}>
+          {
+            applications.map((application, index) => {
+              return (
+                <div key={index} style={{ backgroundColor: "lightgray" }}>
+                  {application["studentData"][0]["fullName"]} <br />
+                  {application["studentData"][0]["studentNumber"]}<br />
+                  {application["adviserData"][0]["fullName"]} <br />
+                  Status: {application.status} <br/>
+                  Step {application.step} <br />
+                  {
+                    ((userData.userType == "adviser" && application.step == 2) ||
+                    (userData.userType == "officer" && application.step == 3)) &&
+                    <>
+                      <button type="button" onClick={() => approveApplication(application._id)}>Approve</button>
+                      <button type="button">Return with Remarks</button>
+                    </>
+                  }
+                  
+                </div>
+              )
+            })
+          }
+        </div> */}

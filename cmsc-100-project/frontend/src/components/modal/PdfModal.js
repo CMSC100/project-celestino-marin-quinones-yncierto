@@ -57,7 +57,7 @@ const pdfViewer = (applicationDetails) => {
 const PDFReactPDF = (props) => {
   Font.register({family: "Times-Roman", src: "source"}) // register font
   // get details from props
-  let { studName, studNo, acadAdviserName, clearanceOfficer, currDate } = props.applicationDetails
+  const { studName, studNo, acadAdviserName, clearanceOfficer, currDate } = props.applicationDetails
 
   const formattedDate = new Date(currDate).toLocaleDateString('en-US', {
     month: 'long',
