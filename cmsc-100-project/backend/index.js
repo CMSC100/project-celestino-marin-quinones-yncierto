@@ -3,7 +3,6 @@ import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import fs from "fs";
 import csvParser from "csv-parser";
-import cors from 'cors'
 
 // import UserSchema from "./models/user.js";
 import "./models/user.js";
@@ -14,7 +13,7 @@ import User from "./models/user.js";
 import setUpRoutes from "./routes.js";
 import { create } from "domain";
 
-
+// char not necessary pala HAHAHA
 
 // connect to Mongo DB
 await mongoose.connect("mongodb://127.0.0.1:27017/AUTH");
@@ -28,7 +27,6 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors()) // wag tanggalin hehe, para maenable yung CORS since iba yung port ng backend at frontend
 
 // allow CORS
 app.use((req, res, next) => {
