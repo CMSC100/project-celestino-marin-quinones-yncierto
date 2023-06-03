@@ -58,6 +58,12 @@ const PDFReactPDF = (props) => {
   Font.register({family: "Times-Roman", src: "source"}) // register font
   // get details from props
   let { studName, studNo, acadAdviserName, clearanceOfficer, currDate } = props.applicationDetails
+
+  const formattedDate = new Date(currDate).toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric'
+  });
   // stylesheet
   const styles = StyleSheet.create({
     document: {
@@ -120,7 +126,7 @@ const PDFReactPDF = (props) => {
           />
         </Svg>
         <View>
-          <Text style={styles.text}>{currDate}</Text>
+          <Text style={styles.text}>{formattedDate}</Text>
         </View>
         <View>
           <Text style={styles.text}>This document certifies that {studName}, {studNo}, has satisfied the clearance requirements of the institute.</Text>
