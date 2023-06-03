@@ -6,6 +6,7 @@ export default function PdfModal ({ setpdfModal }) {
 
   const [userData, setUserData] = useState(true);
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [adviserName, setAdviserName] = useState("")
 
   const fetchUserData = async () => {
     try {
@@ -36,6 +37,12 @@ export default function PdfModal ({ setpdfModal }) {
     }
 
     initialFetch()
+  }, [])
+
+  useEffect(() => {
+    fetch(`http://localhost:3001/getapproverdetails?docRef=${userData.adviser}`)
+      .then(response => response.json())
+      .then(body => setAdviserName(body.fullName))
   }, [])
 
   // view pdf
@@ -92,10 +99,10 @@ const PDFReactPDF = (props) => {
 
   return(
     <Document style={styles.document}>
-      <Page size="A4" style={styles.page}>
+      <Page size="letter" style={styles.page}>
         <View style={styles.header}>
           <View>
-            <Text style={styles.title}>University of the Philippines</Text>
+            <Text style={styles.title}>University of the Philippines Los Baños</Text>
           </View>
           <View style={{alignItems: "center", rowGap: 5}}>
             <Text style={styles.subtitle}>College of Arts and Sciences</Text>
@@ -143,8 +150,8 @@ const { fullName, studentNumber, adviser } = userData;
 const applicationDetails = {
   studName: fullName,
   studNo: studentNumber,
-  acadAdviserName: adviser,
-  clearanceOfficer: "Katherine Tan",
+  acadAdviserName: adviserName,
+  clearanceOfficer: adviserName,
   currDate: new Date().toLocaleDateString()
 };
 
