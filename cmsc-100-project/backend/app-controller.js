@@ -2,6 +2,32 @@ import mongoose from "mongoose";
 
 const Application = mongoose.model("Application");
 
+// const returnApplication = async (req, res) => {
+//   const { appID, remarks, returnUserID } = req.body;
+
+//   try {
+//     const application = await Application.findById(appID);
+
+//     if (!application) {
+//       res.status(404).json({ error: "Application not found" });
+//       return;
+//     }
+
+//     application.step = "1"; // Set the step to 1 for returning the application
+//     application.remarks.push({
+//       userID: returnUserID,
+//       remark: remarks,
+//       createdAt: new Date()
+//     });
+
+//     const savedApplication = await application.save();
+//     res.status(200).json(savedApplication);
+//   } catch (error) {
+//     res.status(500).json(error);
+//   }
+// };
+
+
 const createApplication = async (req, res) => {
   const {studentID, adviserID} = req.body;
     try {
@@ -27,6 +53,8 @@ const createApplication = async (req, res) => {
         res.status(500).json(error);
     }
 }
+
+
 
 const getApplicationsApprover = async (req, res) => {
   let { adviserID, search, filter, filterValue, sort, userType} = req.body;
@@ -162,17 +190,55 @@ const approveApplication = async(req, res) => {
   else res.send({updated: false})
 }
 
-const returnApplication = async(req, res) => {
-  const {appID, approverType} = req.body
-  if (approverType == "adviser") {
-    var update = await Application.updateOne({_id: appID}, {$set: {step: "1"}})
-  } else {
-    var update = await Application.updateOne({_id: appID}, {$set: {step: "2"}})
-  }
+// const returnApplication = async(req, res) => {
+//   const {appID, approverType} = req.body
+//   if (approverType == "adviser") {
+//     var update = await Application.updateOne({_id: appID}, {$set: {step: "1"}})
+//   } else {
+//     var update = await Application.updateOne({_id: appID}, {$set: {step: "2"}})
+//   }
 
-  if (update["acknowledged"] && update["modifiedCount"] != 0) res.send({updated: true})
-  else res.send({updated: false})
-}
+//   if (update["acknowledged"] && update["modifiedCount"] != 0) res.send({updated: true})
+//   else res.send({updated: false})
+// }
+
+const returnApplication = async (req, res) => {
+  const { appID, remarks, returnUserID } = req.body;
+
+  console.log("Application ID:", appID); 
+  console.log("Remarks:", remarks);
+  console.log("Return User ID:", returnUserID);
+
+
+  try {
+    const application = await Application.findById(appID);
+
+    if (!application) {
+      res.status(404).json({ error: "Application not found" });
+      return;
+    }
+
+    console.log("Existing Application:", application);
+
+    application.step = 1; // Set the step to 1 for returning the application
+    application.remarks.push({
+      remark: remarks,
+      date: new Date(),
+      commenter: new mongoose.Types.ObjectId(returnUserID), // Convert returnUserID to ObjectId
+    });
+
+    const savedApplication = await application.save();
+
+    console.log("Updated Application:", savedApplication);
+
+    res.status(200).json(savedApplication);
+  } catch (error) {
+    console.log("Error:", error);
+    res.status(500).json(error);
+  }
+};
+
+
 
 
 export { createApplication, getApplications, closeApplication, submitApplication, approveApplication, getApplicationsApprover, returnApplication }

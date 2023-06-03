@@ -22,6 +22,7 @@ export default function ApproverHomepage() {
   const [sort, setSort] = useState({ date: -1 }) // hold value for sorting
   const [remarks, setRemarks] = useState(""); // for storing the remarks
   const [showRemarks, setShowRemarks] = useState(false); // for toggling the remarks input field visibility
+  const [returnUserID, setReturnUserID] = useState(""); // hold the ID of the user who made the remarks
 
   const navigate = useNavigate();
 
@@ -37,6 +38,26 @@ export default function ApproverHomepage() {
     // Navigate to the homepage
     navigate('/');
   }
+
+  const returnApplication = (appID) => {
+    fetch("http://localhost:3001/returnapplication", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ appID: appID, remarks: remarks, returnUserID: userData._id }) // Pass userData._id as returnUserID
+    })
+      .then(response => response.json())
+      .then(body => {
+        setTriggerRebuild(!triggerRebuild);
+        alert(JSON.stringify(body));
+        setShowRemarks(false); // Hide the remarks input field
+        setRemarks(""); // Clear the remarks
+        setReturnUserID(""); // Clear the user ID
+      });
+  };
+  
+  
 
   useEffect(() => { // fetch once page loads
     const initialFetch = async () => {
@@ -338,29 +359,29 @@ export default function ApproverHomepage() {
                 <b>Status:</b> {application.status} <br/>
                 <b>Step:</b> {application.step} <br />
                 {
-                  ((userData.userType == "adviser" && application.step == 2) ||
-                  (userData.userType == "officer" && application.step == 3)) &&
-                  <div style={{marginTop: 10}}>
-                    <button type="button" onClick={() => approveApplication(application._id)}>Approve</button>
-                    <button type="button" onClick={() => setShowRemarks(true)}>Return with Remarks</button>
-                  </div>
+                  ((userData.userType === "adviser" && application.step === 2) ||
+                    (userData.userType === "officer" && application.step === 3)) && (
+                    <div style={{ marginTop: 10 }}>
+                      <button type="button" onClick={() => approveApplication(application._id)}>Approve</button>
+                      <button type="button" onClick={() => setShowRemarks(true)}>Return with Remarks</button>
+                    </div>
+                  )
                 }
                 {showRemarks && (
                   <div>
-                    <input
-                      type="text"
+                    <textarea
+                      placeholder="Enter remarks"
                       value={remarks}
                       onChange={(e) => setRemarks(e.target.value)}
-                      placeholder="Enter remarks"
-                    />
+                    ></textarea>
                     <button
                       type="button"
                       onClick={() => {
-                        // remarks logic
-                        setShowRemarks(false);
+                        setReturnUserID(userData._id);
+                        returnApplication(application._id);
                       }}
                     >
-                      Return
+                      Submit Remarks
                     </button>
                   </div>
                 )}
