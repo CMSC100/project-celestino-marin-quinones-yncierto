@@ -214,6 +214,7 @@ const returnApplication = async (req, res) => {
       date: new Date(),
       commenter: new mongoose.Types.ObjectId(returnUserID), // Convert returnUserID to ObjectId
     });
+    application.isReturned = true;
 
     const savedApplication = await application.save();
 
