@@ -349,3 +349,35 @@
     margin-bottom: 20px;
   }
   
+  .remarks-container {
+    margin-top: 1rem;
+  }
+  
+  .remarks-chat {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .remark-message {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    background-color: #f1f0f0;
+    border-radius: 1rem;
+  }
+  
+  .remark-info {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .remark-date {
+    color: #777;
+    font-size: 0.8rem;
+  }
+  
+  .remark-content {
+    margin-top: 0.5rem;
+  }
+  

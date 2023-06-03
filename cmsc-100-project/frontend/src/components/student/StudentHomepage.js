@@ -267,21 +267,24 @@ export default function StudentHomepage() {
                   )
                   }
                   {application.showRemarks && application.remarks && application.remarks.length > 0 && (
-        <div>
-          <h5>Remarks:</h5>
-          {application.remarks.map((remark, remarkIndex) => (
-            <div key={remarkIndex}>
-              <p><b>Remark:</b> {remark.remark}</p>
-              <p><b>Date:</b> {new Date(remark.date).toLocaleString(undefined, {
-                timeStyle: 'short',
-                dateStyle: 'short',
-              })}</p>
-              <p><b>Commenter:</b> {remark.commenter}</p>
-              <hr />
-            </div>
-          ))}
-        </div>
-      )}
+                    <div className="remarks-container">
+                      <h5>Remarks:</h5>
+                      <div className="remarks-chat">
+                        {application.remarks.map((remark, remarkIndex) => (
+                          <div className="remark-message" key={remarkIndex}>
+                            <div className="remark-info">
+                              <p><b>Commenter:</b> {remark.commenter}</p>
+                              <p className="remark-date">{new Date(remark.date).toLocaleString(undefined, {
+                                dateStyle: 'short',
+                                timeStyle: 'short'
+                              })}</p>
+                            </div>
+                            <p className="remark-content">{remark.remark}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                   
                 </div>
 
