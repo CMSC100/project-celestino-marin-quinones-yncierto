@@ -272,7 +272,10 @@ export default function StudentHomepage() {
           {application.remarks.map((remark, remarkIndex) => (
             <div key={remarkIndex}>
               <p><b>Remark:</b> {remark.remark}</p>
-              <p><b>Date:</b> {remark.date}</p>
+              <p><b>Date:</b> {new Date(remark.date).toLocaleString(undefined, {
+                timeStyle: 'short',
+                dateStyle: 'short',
+              })}</p>
               <p><b>Commenter:</b> {remark.commenter}</p>
               <hr />
             </div>
