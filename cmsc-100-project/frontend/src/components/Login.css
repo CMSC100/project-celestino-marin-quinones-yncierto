@@ -39,7 +39,6 @@ form {
   font-size: 12px;
 }
 
-
 label {
   display: block;
   font-weight: bold;
@@ -47,8 +46,8 @@ label {
   color: #333;
 }
 
-input[type=text],
-input[type=password] {
+input[type="text"],
+input[type="password"] {
   width: 100%;
   padding: 12px;
   margin: 8px 0;
@@ -72,13 +71,12 @@ button:hover {
   opacity: 0.8;
 }
 
-
 .login-btn-container {
   text-align: center;
 }
 
 .login-btn {
-  background-color: #695CFE;
+  background-color: #695cfe;
   margin-top: 15px;
   width: 15%;
 }

@@ -1,52 +1,54 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { redirect, createBrowserRouter, RouterProvider } from 'react-router-dom';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import {
+  redirect,
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 
-import Root from './components/LogIn';
-import SignUp from './components/SignUp';
+import Root from "./components/LogIn";
+import SignUp from "./components/SignUp";
 
-import AdminRoot from './components/admin/AdminRoot'
-import ApproverList from './components/admin/global/ApproverList';
-import StudentApplications from './components/admin/global/StudentApplications';
+import AdminRoot from "./components/admin/AdminRoot";
+import ApproverList from "./components/admin/global/ApproverList";
+import StudentApplications from "./components/admin/global/StudentApplications";
 
-import ApproverHomepage from './components/approver/ApproverHomepage';
-import ApproverRoot from './components/approver/ApproverRoot';
+import ApproverHomepage from "./components/approver/ApproverHomepage";
+import ApproverRoot from "./components/approver/ApproverRoot";
 
-import StudentHomepage from './components/student/StudentHomepage';
-import StudentRoot from './components/student/StudentRoot'
-import './index.css';
+import StudentHomepage from "./components/student/StudentHomepage";
+import StudentRoot from "./components/student/StudentRoot";
+import "./index.css";
 
 // Send a POST request to API to check if the user is logged in. Redirect the user to /student-homepage if already logged in
 const checkIfLoggedInOnHome = async () => {
-  const res = await fetch("http://localhost:3001/checkifloggedin", 
-  {
+  const res = await fetch("http://localhost:3001/checkifloggedin", {
     method: "POST",
-    credentials: "include"
+    credentials: "include",
   });
 
   const { isLoggedIn, userType } = await res.json();
-  console.log(userType)
+  console.log(userType);
   // if user is logged in, check for user type and redirect to appropriate page
   if (isLoggedIn) {
-    if (userType === "student") return redirect("/student")
-    else if (userType === "adviser" || userType === "officer") return redirect ("/approver")
-    else if (userType === "admin") return redirect ("/admin/manage-student-apps")
+    if (userType === "student") return redirect("/student");
+    else if (userType === "adviser" || userType === "officer")
+      return redirect("/approver");
+    else if (userType === "admin")
+      return redirect("/admin/manage-student-apps");
     else {
-      alert("Your account has not yet been approved.")
-      return 0
+      alert("Your account has not yet been approved.");
+      return 0;
     }
-  }
-  else return 0;
+  } else return 0;
 };
-
 
 // Send a POST request to API to check if the user is a student, admin, or approver
 // each user type has own function for each type of root routes
 const checkIfLoggedInAsStudent = async () => {
-  const res = await fetch("http://localhost:3001/checkifloggedin", 
-  {
+  const res = await fetch("http://localhost:3001/checkifloggedin", {
     method: "POST",
-    credentials: "include"
+    credentials: "include",
   });
 
   const { isLoggedIn, userType } = await res.json();
@@ -56,10 +58,9 @@ const checkIfLoggedInAsStudent = async () => {
 };
 
 const checkIfLoggedInAsAdmin = async () => {
-  const res = await fetch("http://localhost:3001/checkifloggedin", 
-  {
+  const res = await fetch("http://localhost:3001/checkifloggedin", {
     method: "POST",
-    credentials: "include"
+    credentials: "include",
   });
 
   const { isLoggedIn, userType } = await res.json();
@@ -69,71 +70,71 @@ const checkIfLoggedInAsAdmin = async () => {
 };
 
 const checkIfLoggedInAsApprover = async () => {
-  const res = await fetch("http://localhost:3001/checkifloggedin", 
-  {
+  const res = await fetch("http://localhost:3001/checkifloggedin", {
     method: "POST",
-    credentials: "include"
+    credentials: "include",
   });
 
   const { isLoggedIn, userType } = await res.json();
 
-  if (isLoggedIn && (userType === "adviser" || userType === "officer")) return true;
+  if (isLoggedIn && (userType === "adviser" || userType === "officer"))
+    return true;
   else return redirect("/");
 };
 
 // create a router that has all the routes defined. loader is called before the route is rendered
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <Root />,
-    loader: checkIfLoggedInOnHome
+    loader: checkIfLoggedInOnHome,
   },
   {
-    path: '/sign-up',
+    path: "/sign-up",
     element: <SignUp />,
-    loader: checkIfLoggedInOnHome
+    loader: checkIfLoggedInOnHome,
   },
   {
-    path: '/admin',
+    path: "/admin",
     element: <AdminRoot />,
     children: [
       {
-        path: '/admin/manage-student-apps',
-        element: <StudentApplications />
+        path: "/admin/manage-student-apps",
+        element: <StudentApplications />,
       },
       {
-        path: '/admin/manage-approvers',
-        element: <ApproverList />
-      }
+        path: "/admin/manage-approvers",
+        element: <ApproverList />,
+      },
     ],
-    loader: checkIfLoggedInAsAdmin
+    loader: checkIfLoggedInAsAdmin,
   },
   {
-    path: '/approver',
-    element: <ApproverRoot/>,
+    path: "/approver",
+    element: <ApproverRoot />,
     children: [
       {
-        path: '/approver',
-        element: <ApproverHomepage />
-      }
+        path: "/approver",
+        element: <ApproverHomepage />,
+      },
     ],
-    loader: checkIfLoggedInAsApprover
+    loader: checkIfLoggedInAsApprover,
   },
   {
-    path: '/student',
+    path: "/student",
     element: <StudentRoot />,
     children: [
       {
         path: "/student",
-        element: <StudentHomepage />
-      }
+        element: <StudentHomepage />,
+      },
     ],
-    loader: checkIfLoggedInAsStudent
+    loader: checkIfLoggedInAsStudent,
   },
 ]);
 
 // render the router to the page
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <RouterProvider router={router} />

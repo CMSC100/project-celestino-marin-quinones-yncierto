@@ -1,15 +1,15 @@
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useNavigate, useOutletContext } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import ApplicationModal from "../modal/ApplicationModal";
 import PdfModal from "../modal/PdfModal";
-import Cookies from 'universal-cookie';
-import './StudentHomepage.css';
+import Cookies from "universal-cookie";
+import "./StudentHomepage.css";
 
 export default function StudentHomepage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [pdfModalOpen, setpdfModalOpen] = useState(false);
   const [applications, setApplications] = useState([]);
-  const [userData, setUserData] = useState({})
+  const [userData, setUserData] = useState({});
   const [triggerFetchApp, setTriggerFetchApp] = useOutletContext();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [githubLink, setGithubLink] = useState("");
@@ -17,40 +17,47 @@ export default function StudentHomepage() {
   const [adviserName, setAdviserName] = useState("");
   const [githubLinkError, setGithubLinkError] = useState("");
 
-
   const navigate = useNavigate();
 
   const fetchUserData = async () => {
     try {
       // Fetch user data
-      const response = await fetch("http://localhost:3001/getloggedinuserdata", {
-        method: "POST",
-        credentials: "include",
-      });
-  
+      const response = await fetch(
+        "http://localhost:3001/getloggedinuserdata",
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
+
       if (response.ok) {
         const data = await response.json();
         setUserData(data);
-        
+
         // Check if user has an adviser
         if (!data.adviser) {
           setAdviserName(""); // Set adviserName as empty if no adviser
         } else {
           try {
             // Fetch adviser details based on adviser's _id
-            const adviserResponse = await fetch(`http://localhost:3001/getapproverdetails?docRef=${data.adviser}`);
+            const adviserResponse = await fetch(
+              `http://localhost:3001/getapproverdetails?docRef=${data.adviser}`
+            );
             if (adviserResponse.ok) {
               const adviserData = await adviserResponse.json();
               setAdviserName(adviserData.fullName); // Set adviserName with adviser's full name
             } else {
-              console.error("Failed to fetch adviser details:", adviserResponse);
+              console.error(
+                "Failed to fetch adviser details:",
+                adviserResponse
+              );
             }
           } catch (error) {
             console.error("Error fetching adviser details:", error);
           }
         }
-  
-        return true
+
+        return true;
       } else {
         console.error("Failed to fetch user data");
       }
@@ -58,38 +65,48 @@ export default function StudentHomepage() {
       console.log("Error:", error);
     }
   };
-  
 
   const fetchApplications = async () => {
     try {
       // Fetch applications based on the user ID
-      const applicationsResponse = await fetch(`http://localhost:3001/getapplications?studentID=${userData._id}`);
-  
+      const applicationsResponse = await fetch(
+        `http://localhost:3001/getapplications?studentID=${userData._id}`
+      );
+
       if (applicationsResponse.ok) {
         const applicationsData = await applicationsResponse.json();
-  
+
         // Fetch commenter details for each application remark
-        const updatedApplications = await Promise.all(applicationsData.map(async (app) => {
-          const updatedRemarks = await Promise.all(app.remarks.map(async (remark) => {
-            try {
-              // Fetch commenter details based on commenter's _id
-              const commenterResponse = await fetch(`http://localhost:3001/getapproverdetails?docRef=${remark.commenter}`);
-              if (commenterResponse.ok) {
-                const commenterData = await commenterResponse.json();
-                return { ...remark, commenter: commenterData.fullName };
-              } else {
-                console.error("Failed to fetch commenter details:", commenterResponse);
-                return remark;
-              }
-            } catch (error) {
-              console.error("Error fetching commenter details:", error);
-              return remark;
-            }
-          }));
-  
-          return { ...app, remarks: updatedRemarks };
-        }));
-  
+        const updatedApplications = await Promise.all(
+          applicationsData.map(async (app) => {
+            const updatedRemarks = await Promise.all(
+              app.remarks.map(async (remark) => {
+                try {
+                  // Fetch commenter details based on commenter's _id
+                  const commenterResponse = await fetch(
+                    `http://localhost:3001/getapproverdetails?docRef=${remark.commenter}`
+                  );
+                  if (commenterResponse.ok) {
+                    const commenterData = await commenterResponse.json();
+                    return { ...remark, commenter: commenterData.fullName };
+                  } else {
+                    console.error(
+                      "Failed to fetch commenter details:",
+                      commenterResponse
+                    );
+                    return remark;
+                  }
+                } catch (error) {
+                  console.error("Error fetching commenter details:", error);
+                  return remark;
+                }
+              })
+            );
+
+            return { ...app, remarks: updatedRemarks };
+          })
+        );
+
         setApplications(updatedApplications.reverse());
       } else {
         console.error("Failed to fetch applications:", applicationsResponse);
@@ -98,106 +115,110 @@ export default function StudentHomepage() {
       console.log("Error:", error);
     }
   };
-  
 
   useEffect(() => {
-    const initialFetch = async() => {
+    const initialFetch = async () => {
       let result = await fetchUserData();
       if (result) {
-        setDataLoaded(true)
+        setDataLoaded(true);
       }
-    }
+    };
 
-    initialFetch()
-  }, [])
+    initialFetch();
+  }, []);
 
   useEffect(() => {
     if (dataLoaded) {
-      fetchApplications()
+      fetchApplications();
     }
-  }, [dataLoaded])
+  }, [dataLoaded]);
 
   useEffect(() => {
-    if (dataLoaded) fetchApplications(userData._id)
-  }, [triggerFetchApp])
+    if (dataLoaded) fetchApplications(userData._id);
+  }, [triggerFetchApp]);
 
   const handlePrintPDF = () => {
     setpdfModalOpen(true);
   };
 
   const closeApplication = async (appID) => {
-    let result = await fetch('http://localhost:3001/closeapplication', {
+    let result = await fetch("http://localhost:3001/closeapplication", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({appID})
-    })
-    
+      body: JSON.stringify({ appID }),
+    });
+
     if (result.ok) {
       setShowSuccessMessage("closed");
       setTriggerFetchApp(!triggerFetchApp);
       setTimeout(() => {
         setShowSuccessMessage(false);
-      }, 1000); 
+      }, 1000);
     } else {
-      alert("Failed to close application.")
+      alert("Failed to close application.");
     }
-  }
+  };
 
   const submitApplication = async (appID) => {
     // Validate GitHub link
-  if (!githubLink) {
-    setGithubLinkError("GitHub link is required");
-    return;
-  }
-
-  // Regular expression to validate GitHub link format
-  const githubLinkRegex = /^(https?:\/\/)?(www\.)?github\.com\/\S+$/;
-  if (!githubLinkRegex.test(githubLink)) {
-    setGithubLinkError("Invalid GitHub link");
-    alert("Invalid GitHub link")
-    return;
-  }
-
-  // Clear the error message if validation passes
-  setGithubLinkError("");
-
-  try {
-    // Submit the application
-    const response = await fetch('http://localhost:3001/submitapplication', {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ appID, githubLink, status: 'pending', step: 2 })
-    });
-
-    if (response.ok) {
-      setShowSuccessMessage('submitted');
-      setTriggerFetchApp(!triggerFetchApp);
-      setGithubLink("");
-      setTimeout(() => {
-        setShowSuccessMessage(false);
-      }, 1000);
-    } else {
-      alert("Failed to submit application.");
+    if (!githubLink) {
+      setGithubLinkError("GitHub link is required");
+      return;
     }
-  } catch (error) {
-    console.log("Error:", error);
-  }
+
+    // Regular expression to validate GitHub link format
+    const githubLinkRegex = /^(https?:\/\/)?(www\.)?github\.com\/\S+$/;
+    if (!githubLinkRegex.test(githubLink)) {
+      setGithubLinkError("Invalid GitHub link");
+      alert("Invalid GitHub link");
+      return;
+    }
+
+    // Clear the error message if validation passes
+    setGithubLinkError("");
+
+    try {
+      // Submit the application
+      const response = await fetch("http://localhost:3001/submitapplication", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ appID, githubLink, status: "pending", step: 2 }),
+      });
+
+      if (response.ok) {
+        setShowSuccessMessage("submitted");
+        setTriggerFetchApp(!triggerFetchApp);
+        setGithubLink("");
+        setTimeout(() => {
+          setShowSuccessMessage(false);
+        }, 1000);
+      } else {
+        alert("Failed to submit application.");
+      }
+    } catch (error) {
+      console.log("Error:", error);
+    }
   };
-  
+
   const viewRemarks = (appID) => {
-    setApplications(prevApplications => prevApplications.map(app =>
-      app._id === appID ? { ...app, showRemarks: !app.showRemarks } : app
-    ));
+    setApplications((prevApplications) =>
+      prevApplications.map((app) =>
+        app._id === appID ? { ...app, showRemarks: !app.showRemarks } : app
+      )
+    );
   };
-  
 
   if (dataLoaded) {
     return (
-      <div className={`student-homepage ${showSuccessMessage ? "overlay-visible" : ""}`}>
+      <div
+        className={`student-homepage ${
+          showSuccessMessage ? "overlay-visible" : ""
+        }`}
+      >
         <h1>Hello, {userData.firstName}!</h1>
         {modalOpen && (
           <ApplicationModal
@@ -208,126 +229,176 @@ export default function StudentHomepage() {
         )}
 
         {applications.length > 0 ? (
-          <div className='application-list'>
+          <div className="application-list">
             <h3>APPLICATIONS</h3>
 
             {applications.map((application, index) => (
               <div
-                className={`application-card ${application.status === 'closed' ? 'closed' : ''}`}
+                className={`application-card ${
+                  application.status === "closed" ? "closed" : ""
+                }`}
                 key={index}
               >
-                <div className='application-info'>
-                {application.status !== 'open' && (
-        <div>
-          <button onClick={() => viewRemarks(application._id)}>
-            {application.showRemarks ? 'Hide Remarks' : 'View Remarks'}
-          </button>
-        </div>
-      )}
+                <div className="application-info">
+                  {application.status !== "open" && (
+                    <div>
+                      <button onClick={() => viewRemarks(application._id)}>
+                        {application.showRemarks
+                          ? "Hide Remarks"
+                          : "View Remarks"}
+                      </button>
+                    </div>
+                  )}
 
                   <h4>Application {applications.length - index}</h4>
-                  <div className='status-bar'>
-                    <span className={`status ${application.status}`}>{application.status}</span>
+                  <div className="status-bar">
+                    <span className={`status ${application.status}`}>
+                      {application.status}
+                    </span>
                   </div>
 
-                  {application.status === 'open' && application.studentSubmission.length === 0 ? (
+                  {application.status === "open" &&
+                  application.studentSubmission.length === 0 ? (
                     <>
-                      <p><b>Name:</b> {userData.fullName}</p>
-                      <p><b>Student Number:</b> {userData.studentNumber}</p>
-                      <p><b>Email:</b> {userData.email}</p>
-                      <p><b>Adviser:</b> {adviserName || "Not yet assigned"}</p>
+                      <p>
+                        <b>Name:</b> {userData.fullName}
+                      </p>
+                      <p>
+                        <b>Student Number:</b> {userData.studentNumber}
+                      </p>
+                      <p>
+                        <b>Email:</b> {userData.email}
+                      </p>
+                      <p>
+                        <b>Adviser:</b> {adviserName || "Not yet assigned"}
+                      </p>
 
                       {application.step == 1 && (
                         <>
-                          <label><b>Link to GitHub repository</b></label>
-                          <input type="text" placeholder="https://github.com/..." value={githubLink} onChange={(e) => setGithubLink(e.target.value)} />
-                          {githubLinkError && <p className="error-message">{githubLinkError}</p>}
+                          <label>
+                            <b>Link to GitHub repository</b>
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="https://github.com/..."
+                            value={githubLink}
+                            onChange={(e) => setGithubLink(e.target.value)}
+                          />
+                          {githubLinkError && (
+                            <p className="error-message">{githubLinkError}</p>
+                          )}
                         </>
                       )}
                     </>
                   ) : application.studentSubmission.length > 0 ? (
                     <>
-                      <p><b>Name:</b> {userData.fullName}</p>
-                      <p><b>Student Number:</b> {userData.studentNumber}</p>
-                      <p><b>Email:</b> {userData.email}</p>
-                      <p><b>Adviser:</b> {adviserName || "Not yet assigned"}</p>
-                      <p><b>GitHub Links:</b></p>
-                      <ul style={{ listStyleType: 'disc', marginLeft: '3em' }}>
-                        {application.studentSubmission.map((submission, index) => (
-                          <li key={index}>
-                            <a href={submission.githubLink} target="_blank" rel="noopener noreferrer">
-                              {submission.githubLink}
-                            </a>
-                          </li>
-                        ))}
+                      <p>
+                        <b>Name:</b> {userData.fullName}
+                      </p>
+                      <p>
+                        <b>Student Number:</b> {userData.studentNumber}
+                      </p>
+                      <p>
+                        <b>Email:</b> {userData.email}
+                      </p>
+                      <p>
+                        <b>Adviser:</b> {adviserName || "Not yet assigned"}
+                      </p>
+                      <p>
+                        <b>GitHub Links:</b>
+                      </p>
+                      <ul style={{ listStyleType: "disc", marginLeft: "3em" }}>
+                        {application.studentSubmission.map(
+                          (submission, index) => (
+                            <li key={index}>
+                              <a
+                                href={submission.githubLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {submission.githubLink}
+                              </a>
+                            </li>
+                          )
+                        )}
                       </ul>
                     </>
                   ) : (
                     <p>No application submitted yet</p>
-                  )
-                  }
-                  {application.showRemarks && application.remarks && application.remarks.length > 0 && (
-                    <div className="remarks-container">
-                      <h5>Remarks:</h5>
-                      <div className="remarks-chat">
-                        {application.remarks.map((remark, remarkIndex) => (
-                          <div className="remark-message" key={remarkIndex}>
-                            <div className="remark-info">
-                              <p><b>Commenter:</b> {remark.commenter}</p>
-                              <p className="remark-date">{new Date(remark.date).toLocaleString(undefined, {
-                                dateStyle: 'short',
-                                timeStyle: 'short'
-                              })}</p>
-                            </div>
-                            <p className="remark-content">{remark.remark}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
                   )}
-                  
+                  {application.showRemarks &&
+                    application.remarks &&
+                    application.remarks.length > 0 && (
+                      <div className="remarks-container">
+                        <h5>Remarks:</h5>
+                        <div className="remarks-chat">
+                          {application.remarks.map((remark, remarkIndex) => (
+                            <div className="remark-message" key={remarkIndex}>
+                              <div className="remark-info">
+                                <p>
+                                  <b>Commenter:</b> {remark.commenter}
+                                </p>
+                                <p className="remark-date">
+                                  {new Date(remark.date).toLocaleString(
+                                    undefined,
+                                    {
+                                      dateStyle: "short",
+                                      timeStyle: "short",
+                                    }
+                                  )}
+                                </p>
+                              </div>
+                              <p className="remark-content">{remark.remark}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                 </div>
 
-                <div className='app-card-btns'>
-                  {application.status === 'cleared' && (
-                    <button className='print-app' onClick={handlePrintPDF}>
+                <div className="app-card-btns">
+                  {application.status === "cleared" && (
+                    <button className="print-app" onClick={handlePrintPDF}>
                       Print as PDF
                     </button>
                   )}
 
                   <button
-                    className='close-app'
+                    className="close-app"
                     onClick={() => {
-                      if (application.status !== 'closed') {
+                      if (application.status !== "closed") {
                         closeApplication(application._id);
                         setTriggerFetchApp(!triggerFetchApp);
                       }
                     }}
-                    disabled={application.status === 'closed'}
+                    disabled={application.status === "closed"}
                   >
-                    {application.status === 'closed' ? 'Closed' : 'Close Application'}
+                    {application.status === "closed"
+                      ? "Closed"
+                      : "Close Application"}
                   </button>
 
-                  {application.status === 'open' && application.studentSubmission.length === 0 && (
-                    <button
-                      className='submit-app'
-                      onClick={() => submitApplication(application._id)}
-                      disabled={!adviserName}
-                    >
-                      Submit Application
-                    </button>
-                  )}
+                  {application.status === "open" &&
+                    application.studentSubmission.length === 0 && (
+                      <button
+                        className="submit-app"
+                        onClick={() => submitApplication(application._id)}
+                        disabled={!adviserName}
+                      >
+                        Submit Application
+                      </button>
+                    )}
                 </div>
               </div>
             ))}
-        </div>
+          </div>
         ) : (
-          <div className='application-list'>
-            <p className='no-application'>No applications yet</p>
+          <div className="application-list">
+            <p className="no-application">No applications yet</p>
           </div>
         )}
 
-        {pdfModalOpen && <PdfModal setpdfModal={setpdfModalOpen}/>}
+        {pdfModalOpen && <PdfModal setpdfModal={setpdfModalOpen} />}
         {showSuccessMessage === "closed" && (
           <div className="popup">
             <div className="popup-content">
@@ -335,7 +406,7 @@ export default function StudentHomepage() {
             </div>
           </div>
         )}
-  
+
         {showSuccessMessage === "submitted" && (
           <div className="popup">
             <div className="popup-content">
@@ -343,8 +414,7 @@ export default function StudentHomepage() {
             </div>
           </div>
         )}
-
       </div>
-    )
+    );
   }
 }

@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
-import csvParser from 'csv-parser';
+import mongoose from "mongoose";
+import bcrypt from "bcrypt";
+import csvParser from "csv-parser";
 
 const UserSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
@@ -15,27 +15,31 @@ const UserSchema = new mongoose.Schema({
   adviser: { type: mongoose.Schema.Types.ObjectId },
 });
 
-UserSchema.pre("save", function(next) {
+UserSchema.pre("save", function (next) {
   const user = this;
 
   if (!user.isModified("password")) return next();
 
   return bcrypt.genSalt((saltError, salt) => {
-    if (saltError) { return next(saltError); }
+    if (saltError) {
+      return next(saltError);
+    }
 
     return bcrypt.hash(user.password, salt, (hashError, hash) => {
-      if (hashError) { return next(hashError); }
-      console.log(user.password)
+      if (hashError) {
+        return next(hashError);
+      }
+      console.log(user.password);
       user.password = hash;
-      console.log(user.password)
+      console.log(user.password);
       return next();
     });
   });
 });
 
-UserSchema.methods.comparePassword = function(password, callback) {
+UserSchema.methods.comparePassword = function (password, callback) {
   bcrypt.compare(password, this.password, callback);
-}
+};
 
 const User = mongoose.model("User", UserSchema);
 
