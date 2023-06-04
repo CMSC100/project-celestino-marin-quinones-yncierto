@@ -189,58 +189,36 @@ const returnApplication = async (req, res) => {
   console.log("Return User ID:", returnUserID);
   console.log("User:", userType);
 
-  if (userType == "student") {
-    try {
-      const application = await Application.findById(appID);
+  try {
+    const application = await Application.findById(appID);
 
-      if (!application) {
-        res.status(404).json({ error: "Application not found" });
-        return;
-      }
-
-      console.log("Existing Application:", application);
-
-      application.remarks.push({
-        remark: remarks,
-        date: new Date(),
-        commenter: new mongoose.Types.ObjectId(returnUserID), // Convert returnUserID to ObjectId
-      });
-      application.status = "pending";
-
-      const savedApplication = await application.save();
-      res.status(200).json(savedApplication);
-    } catch (error) {
-      console.log("Error:", error);
-      res.status(500).json(error);
+    if (!application) {
+      res.status(404).json({ error: "Application not found" });
+      return;
     }
-  } else {
-    try {
-      const application = await Application.findById(appID);
 
-      if (!application) {
-        res.status(404).json({ error: "Application not found" });
-        return;
-      }
+    console.log("Existing Application:", application);
 
-      console.log("Existing Application:", application);
+    application.remarks.push({
+      remark: remarks,
+      date: new Date(),
+      commenter: new mongoose.Types.ObjectId(returnUserID), // Convert returnUserID to ObjectId
+    });
+    application.status = "pending";
 
+    if (userType !== "student") {
       application.step = application.step - 1; // Set the step to 1 for returning the application
-      application.remarks.push({
-        remark: remarks,
-        date: new Date(),
-        commenter: new mongoose.Types.ObjectId(returnUserID), // Convert returnUserID to ObjectId
-      });
-      application.status = "pending";
       application.isReturned = true;
-
-      const savedApplication = await application.save();
-      res.status(200).json(savedApplication);
-    } catch (error) {
-      console.log("Error:", error);
-      res.status(500).json(error);
     }
+
+    const savedApplication = await application.save();
+    res.status(200).json(savedApplication);
+  } catch (error) {
+    console.log("Error:", error);
+    res.status(500).json(error);
   }
 };
+
 
 export {
   createApplication,
