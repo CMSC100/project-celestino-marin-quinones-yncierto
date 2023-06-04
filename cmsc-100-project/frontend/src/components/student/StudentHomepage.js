@@ -230,7 +230,8 @@ export default function StudentHomepage() {
     );
   };
 
-  if (dataLoaded) { // If user data is fetched
+  if (dataLoaded) {
+    // If user data is fetched
     return (
       <div
         className={`student-homepage ${
@@ -239,20 +240,17 @@ export default function StudentHomepage() {
       >
         <h1>Hello, {userData.firstName}!</h1>
         {modalOpen && (
-          <ApplicationModal
-            setOpenModal={setModalOpen}
-            userData={userData}
-          />
+          <ApplicationModal setOpenModal={setModalOpen} userData={userData} />
         )}
 
         {applications.length > 0 ? ( // If there are applications
           <div className="application-list">
             <h3>APPLICATIONS</h3>
 
-            {applications.map((application, index) => ( 
+            {applications.map((application, index) => (
               <div
                 className={`application-card ${
-                  application.status === "closed" ? "closed" : "" 
+                  application.status === "closed" ? "closed" : ""
                 }`}
                 key={index}
               >
@@ -372,6 +370,29 @@ export default function StudentHomepage() {
                         </div>
                       </div>
                     )}
+                  {application.isReturned && (
+                    <>
+                      <label>
+                        <b>Resubmit GitHub repository</b>
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="https://github.com/..."
+                        value={githubLink}
+                        onChange={(e) => setGithubLink(e.target.value)}
+                      />
+                      {githubLinkError && (
+                        <p className="error-message">{githubLinkError}</p>
+                      )}
+                      <button
+                        className="submit-app"
+                        onClick={() => submitApplication(application._id)}
+                        disabled={!adviserName}
+                      >
+                        Resubmit Application
+                      </button>
+                    </>
+                  )}
                 </div>
 
                 <div className="app-card-btns">
@@ -384,18 +405,19 @@ export default function StudentHomepage() {
                   <button
                     className="close-app"
                     onClick={() => {
-                      if (application.status !== "closed") { // If application is not closed, close application
+                      if (application.status !== "closed") {
+                        // If application is not closed, close application
                         closeApplication(application._id);
                         setTriggerFetchApp(!triggerFetchApp);
                       }
                     }}
                     disabled={application.status === "closed"}
                   >
-                  {/* If application is closed, show closed button */}
+                    {/* If application is closed, show closed button */}
                     {application.status === "closed"
                       ? "Closed"
-                      : "Close Application"}  
-                  </button> 
+                      : "Close Application"}
+                  </button>
 
                   {application.status === "open" &&
                     application.studentSubmission.length === 0 && ( // If application is open and no submission yet, show submit application button
@@ -418,7 +440,7 @@ export default function StudentHomepage() {
         )}
 
         {/* If pdf modal is open, show pdf modal */}
-        {pdfModalOpen && <PdfModal setpdfModal={setpdfModalOpen} />} 
+        {pdfModalOpen && <PdfModal setpdfModal={setpdfModalOpen} />}
 
         {showSuccessMessage === "closed" && ( // If application is closed, show success message
           <div className="popup">
