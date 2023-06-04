@@ -19,6 +19,8 @@ export default function StudentHomepage() {
 
   const navigate = useNavigate();
 
+  // ===========================================================================
+  // fetch user data
   const fetchUserData = async () => {
     try {
       // Fetch user data
@@ -66,6 +68,8 @@ export default function StudentHomepage() {
     }
   };
 
+  // ===========================================================================
+  // fetch applications of the current user
   const fetchApplications = async () => {
     try {
       // Fetch applications based on the user ID
@@ -116,6 +120,8 @@ export default function StudentHomepage() {
     }
   };
 
+  // ===========================================================================
+  // fetch user data and set dataLoaded when the component is mounted
   useEffect(() => {
     const initialFetch = async () => {
       let result = await fetchUserData();
@@ -127,20 +133,28 @@ export default function StudentHomepage() {
     initialFetch();
   }, []);
 
+  // ===========================================================================
+  // fetch applications when dataLoaded is set to true
   useEffect(() => {
     if (dataLoaded) {
       fetchApplications();
     }
   }, [dataLoaded]);
 
+  // ===========================================================================
+  // fetch applications when triggerFetchApp is set to true
   useEffect(() => {
     if (dataLoaded) fetchApplications(userData._id);
   }, [triggerFetchApp]);
 
+  // ===========================================================================
+  // opens pdf modal
   const handlePrintPDF = () => {
     setpdfModalOpen(true);
   };
 
+  // ===========================================================================
+  // closes an application
   const closeApplication = async (appID) => {
     let result = await fetch("http://localhost:3001/closeapplication", {
       method: "POST",
@@ -161,6 +175,8 @@ export default function StudentHomepage() {
     }
   };
 
+  // ===========================================================================
+  // submits an application
   const submitApplication = async (appID) => {
     // Validate GitHub link
     if (!githubLink) {
@@ -204,6 +220,8 @@ export default function StudentHomepage() {
     }
   };
 
+  // ===========================================================================
+  // view remarks of an application
   const viewRemarks = (appID) => {
     setApplications((prevApplications) =>
       prevApplications.map((app) =>
@@ -212,7 +230,7 @@ export default function StudentHomepage() {
     );
   };
 
-  if (dataLoaded) {
+  if (dataLoaded) { // If user data is fetched
     return (
       <div
         className={`student-homepage ${
@@ -223,19 +241,18 @@ export default function StudentHomepage() {
         {modalOpen && (
           <ApplicationModal
             setOpenModal={setModalOpen}
-            // updateUserData={updateUserData}
             userData={userData}
           />
         )}
 
-        {applications.length > 0 ? (
+        {applications.length > 0 ? ( // If there are applications
           <div className="application-list">
             <h3>APPLICATIONS</h3>
 
-            {applications.map((application, index) => (
+            {applications.map((application, index) => ( 
               <div
                 className={`application-card ${
-                  application.status === "closed" ? "closed" : ""
+                  application.status === "closed" ? "closed" : "" 
                 }`}
                 key={index}
               >
@@ -258,7 +275,7 @@ export default function StudentHomepage() {
                   </div>
 
                   {application.status === "open" &&
-                  application.studentSubmission.length === 0 ? (
+                  application.studentSubmission.length === 0 ? ( // If application is open and no submission yet
                     <>
                       <p>
                         <b>Name:</b> {userData.fullName}
@@ -273,7 +290,7 @@ export default function StudentHomepage() {
                         <b>Adviser:</b> {adviserName || "Not yet assigned"}
                       </p>
 
-                      {application.step == 1 && (
+                      {application.step == 1 && ( // If application is in step 1
                         <>
                           <label>
                             <b>Link to GitHub repository</b>
@@ -290,7 +307,7 @@ export default function StudentHomepage() {
                         </>
                       )}
                     </>
-                  ) : application.studentSubmission.length > 0 ? (
+                  ) : application.studentSubmission.length > 0 ? ( // If application has submission
                     <>
                       <p>
                         <b>Name:</b> {userData.fullName}
@@ -326,9 +343,10 @@ export default function StudentHomepage() {
                   ) : (
                     <p>No application submitted yet</p>
                   )}
+
                   {application.showRemarks &&
                     application.remarks &&
-                    application.remarks.length > 0 && (
+                    application.remarks.length > 0 && ( // If application has remarks
                       <div className="remarks-container">
                         <h5>Remarks:</h5>
                         <div className="remarks-chat">
@@ -357,7 +375,7 @@ export default function StudentHomepage() {
                 </div>
 
                 <div className="app-card-btns">
-                  {application.status === "cleared" && (
+                  {application.status === "cleared" && ( // If application is cleared, show print as PDF button
                     <button className="print-app" onClick={handlePrintPDF}>
                       Print as PDF
                     </button>
@@ -366,20 +384,21 @@ export default function StudentHomepage() {
                   <button
                     className="close-app"
                     onClick={() => {
-                      if (application.status !== "closed") {
+                      if (application.status !== "closed") { // If application is not closed, close application
                         closeApplication(application._id);
                         setTriggerFetchApp(!triggerFetchApp);
                       }
                     }}
                     disabled={application.status === "closed"}
                   >
+                  {/* If application is closed, show closed button */}
                     {application.status === "closed"
                       ? "Closed"
-                      : "Close Application"}
-                  </button>
+                      : "Close Application"}  
+                  </button> 
 
                   {application.status === "open" &&
-                    application.studentSubmission.length === 0 && (
+                    application.studentSubmission.length === 0 && ( // If application is open and no submission yet, show submit application button
                       <button
                         className="submit-app"
                         onClick={() => submitApplication(application._id)}
@@ -398,8 +417,10 @@ export default function StudentHomepage() {
           </div>
         )}
 
-        {pdfModalOpen && <PdfModal setpdfModal={setpdfModalOpen} />}
-        {showSuccessMessage === "closed" && (
+        {/* If pdf modal is open, show pdf modal */}
+        {pdfModalOpen && <PdfModal setpdfModal={setpdfModalOpen} />} 
+
+        {showSuccessMessage === "closed" && ( // If application is closed, show success message
           <div className="popup">
             <div className="popup-content">
               Successfully closed the application.
@@ -407,7 +428,7 @@ export default function StudentHomepage() {
           </div>
         )}
 
-        {showSuccessMessage === "submitted" && (
+        {showSuccessMessage === "submitted" && ( // If application is submitted, show success message
           <div className="popup">
             <div className="popup-content">
               Successfully submitted the application.
