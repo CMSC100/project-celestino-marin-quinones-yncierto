@@ -1,3 +1,11 @@
 .active {
     background-color: gray;
 }
+
+/* para lang maging scrollable yung homepage kasi nag create ako ng mga advisers */
+.approver-homepage{
+    width: 100vw;
+    height: 100vh;
+    padding: 10px;
+    overflow: scroll;
+}

@@ -277,7 +277,7 @@ export default function StudentHomepage() {
           showSuccessMessage ? "overlay-visible" : ""
         }`}
       >
-        <h1>Hello, {userData.firstName}!</h1>
+        <h1>Hello, {userData.fullName}!</h1>
         {modalOpen && (
           <ApplicationModal setOpenModal={setModalOpen} userData={userData} />
         )}
