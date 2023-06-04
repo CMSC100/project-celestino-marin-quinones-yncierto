@@ -9,7 +9,10 @@
   /* position: relative; */
   top: 0;
   overflow: auto;
-  padding: 20px;
+  padding-top: 20px;
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-bottom: 20px;
   height: 100vh;
   background-color: #e4e9f7;
 }
@@ -50,13 +53,59 @@ form .cleared-text {
   width: calc(100% - 250px);
 }
 
+.search-list {
+  background-color: #bdccf9;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
 .officer-student-list {
   /* background-color: #595FB1; */
+  display: flex;
+  justify-content: space-between;
   background-color: #e4e9f7;
   box-sizing: border-box;
   border-radius: 10px;
   padding: 20px;
+  margin-bottom: 10px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.student-list-buttons{
+  display: flex;
+}
+
+.student-list-buttons div {
+  display: flex;
+  flex-direction: column;
+}
+
+.student-list-buttons, .app-button{
+  margin-left: 15px;
+}
+
+.submit-remark{
+  display: flex;
+  width: 55vw;
+}
+
+.submit-remark input{
+  border-radius: 10px;
+}
+
+.submit-remark button{
+  width: 200px;
+}
+
+.divider{
+  position: relative;
+  min-width:1.5px;
+  max-width:1.5px;
+  background-color:#4f4f4f;
+  display:inline-block;
+  margin:0 0.25%;
 }
 
 /* ===SideBar=== */

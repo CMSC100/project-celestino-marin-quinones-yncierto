@@ -328,7 +328,7 @@ export default function ApproverHomepage() {
                 <img src={require("./aprub.png")} className="app-logo" alt="" />
               </span>
               <div className="text header-text">
-                <span className="name">{userData.fullName}</span>
+                <span className="name">{userData.firstName}</span>
                 <span className="usertype">
                   {userData.userType.toUpperCase()}
                 </span>
@@ -417,102 +417,114 @@ export default function ApproverHomepage() {
         </nav>
 
         <div className="approver-body">
-          <h2 className="app-greeting">
+          <h1 className="app-greeting">
             Hello, {userData.fullName}! ({userData.userType})
-          </h2>
-          <h3 className="app-title">Student Applications</h3>
-          <div className="search-bar">
-            <input
-              type="text"
-              id="search-text"
-              onChange={handleSearch}
-              placeholder="Search for Name or Student No."
-            />
-            <button type="button" className="search-btn" onClick={clearSearch}>
-              Clear Search
-            </button>
-          </div>
+          </h1>
 
-          <div style={{ display: "flex", columnGap: 5, alignItems: "center" }}>
-            <h4>Sort by:</h4>
-            <button
-              type="button"
-              name="sort-buttons"
-              className="active"
-              onClick={(e) => changeSort({ date: -1 }, e)}
-            >
-              Date (Descending)
-            </button>
-            <button
-              type="button"
-              name="sort-buttons"
-              onClick={(e) => changeSort({ "studentData.0.fullName": 1 }, e)}
-            >
-              Name (Ascending)
-            </button>
-            <button
-              type="button"
-              name="sort-buttons"
-              onClick={(e) => changeSort({ "studentData.0.fullName": -1 }, e)}
-            >
-              Name (Descending)
-            </button>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", rowGap: 10 }}>
-            {applications.map((application, index) => {
-              return (
-                <div className="officer-student-list"
-                  key={index}
-                >
-                  <b>Name:</b> {application["studentData"][0]["fullName"]}{" "}
-                  <br />
-                  <b>Student Number:</b>{" "}
-                  {application["studentData"][0]["studentNumber"]}
-                  <br />
-                  <b>Adviser:</b> {application["adviserData"][0]["fullName"]}{" "}
-                  <br />
-                  <b>Status:</b> {application.status} <br />
-                  <b>Step:</b> {application.step} <br />
-                  {((userData.userType === "adviser" &&
-                    application.step === 2) ||
-                    (userData.userType === "officer" &&
-                      application.step === 3)) && (
-                    <div style={{ marginTop: 10 }}>
-                      <button
-                        type="button"
-                        onClick={() => approveApplication(application._id)}
-                      >
-                        Approve
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setShowRemarks(true)}
-                      >
-                        Return with Remarks
-                      </button>
-                    </div>
-                  )}
-                  {showRemarks && (
+          <div className="search-list">
+            <h3 className="app-title">Student Applications</h3>
+            <div className="search-bar">
+              <input
+                type="text"
+                id="search-text"
+                onChange={handleSearch}
+                placeholder="Search for Name or Student No."
+              />
+              <button type="button" className="search-btn" onClick={clearSearch}>
+                Clear Search
+              </button>
+            </div>
+
+            <div style={{ display: "flex", columnGap: 5, alignItems: "center" }}>
+              <h4>Sort by:</h4>
+              <button
+                type="button"
+                name="sort-buttons"
+                className="active"
+                onClick={(e) => changeSort({ date: -1 }, e)}
+              >
+                Date (Descending)
+              </button>
+              <button
+                type="button"
+                name="sort-buttons"
+                onClick={(e) => changeSort({ "studentData.0.fullName": 1 }, e)}
+              >
+                Name (Ascending)
+              </button>
+              <button
+                type="button"
+                name="sort-buttons"
+                onClick={(e) => changeSort({ "studentData.0.fullName": -1 }, e)}
+              >
+                Name (Descending)
+              </button>
+            </div>
+            <br/>
+            <div style={{ display: "flex", flexDirection: "column", rowGap: 10 }}>
+              {applications.map((application, index) => {
+                return (
+                  <div className="officer-student-list"
+                    key={index}
+                    >
                     <div>
-                      <textarea
-                        placeholder="Enter remarks"
-                        value={remarks}
-                        onChange={(e) => setRemarks(e.target.value)}
-                      ></textarea>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setReturnUserID(userData._id);
-                          returnApplication(application._id);
-                        }}
-                      >
-                        Submit Remarks
-                      </button>
+                      <b>Name:</b> {application["studentData"][0]["fullName"]}{" "}
+                      <br />
+                      <b>Student Number:</b>{" "}
+                      {application["studentData"][0]["studentNumber"]}
+                      <br />
+                      <b>Adviser:</b> {application["adviserData"][0]["fullName"]}{" "}
+                      <br />
+                      <b>Status:</b> {application.status} <br />
+                      <b>Step:</b> {application.step} <br />
+
+                      {showRemarks && (
+                        <div className="submit-remark">
+                          <input
+                            type="text"
+                            placeholder="Enter remarks"
+                            value={remarks}
+                            onChange={(e) => setRemarks(e.target.value)}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setReturnUserID(userData._id);
+                              returnApplication(application._id);
+                            }}
+                          >
+                            Submit Remarks
+                          </button>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              );
-            })}
+
+                    <div className="student-list-buttons">
+                      <div className="divider"></div>
+                      {((userData.userType === "adviser" &&
+                        application.step === 2) ||
+                        (userData.userType === "officer" &&
+                          application.step === 3)) && (
+                        <div style={{ marginTop: 10 }}>
+                          <button
+                            type="button"
+                            onClick={() => approveApplication(application._id)}
+                          >
+                            Approve
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setShowRemarks(true)}
+                          >
+                            Return with Remarks
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
