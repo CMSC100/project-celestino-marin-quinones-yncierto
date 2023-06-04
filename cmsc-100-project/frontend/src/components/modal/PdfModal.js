@@ -52,6 +52,7 @@ export default function PdfModal({ setpdfModal }) {
   }, []);
 
   useEffect(() => {
+    alert(userData.adviser)
     fetch(`http://localhost:3001/getapproverdetails?docRef=${userData.adviser}`)
       .then((response) => response.json())
       .then((body) => setAdviserName(body.fullName));
