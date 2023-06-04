@@ -2,31 +2,6 @@ import mongoose from "mongoose";
 
 const Application = mongoose.model("Application");
 
-// const returnApplication = async (req, res) => {
-//   const { appID, remarks, returnUserID } = req.body;
-
-//   try {
-//     const application = await Application.findById(appID);
-
-//     if (!application) {
-//       res.status(404).json({ error: "Application not found" });
-//       return;
-//     }
-
-//     application.step = "1"; // Set the step to 1 for returning the application
-//     application.remarks.push({
-//       userID: returnUserID,
-//       remark: remarks,
-//       createdAt: new Date()
-//     });
-
-//     const savedApplication = await application.save();
-//     res.status(200).json(savedApplication);
-//   } catch (error) {
-//     res.status(500).json(error);
-//   }
-// };
-
 const createApplication = async (req, res) => {
   const { studentID, adviserID } = req.body;
   try {
