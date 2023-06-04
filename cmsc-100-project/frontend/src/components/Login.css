@@ -6,6 +6,7 @@ body {
 }
 
 body {
+  background-color: #e1e8fd;
   position: relative;
   height: 100%;
   overflow: hidden;
@@ -25,8 +26,8 @@ body {
   transform: translate(-50%, -50%);
   margin: auto;
   padding: 40px;
-  box-shadow: 0 15px 35px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.09);
-  border-radius: 5px;
+  box-shadow: 0 15px 35px 0 rgba(180, 182, 248, 0.764), 0 4px 10px 0 rgb(0, 0, 0);
+  border-radius: 10px;
 }
 
 form {
