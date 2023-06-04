@@ -7,8 +7,13 @@ import "../../theme.js";
 import TopBar from "./global/TopBar";
 import SideBar from "./global/Sidebar/SideBar.jsx";
 import StudentApplications from "./global/StudentApplications.js";
-import "./AdminRoot.css";
-import "../../index.css";
+
+//uncomment nalang if gagawin na final UI
+// import "./AdminRoot.css";
+// import "../../index.css";
+
+//import css para maging scrollable yung page
+import "../admin/global/ApproverList.css";
 
 export default function AdminRoot() {
   const [theme, colorMode] = useMode();
@@ -24,7 +29,7 @@ export default function AdminRoot() {
   };
 
   return (
-    <div>
+    <div className="approver-homepage">
       <button type="button" onClick={handleLogout}>
         Logout
       </button>
