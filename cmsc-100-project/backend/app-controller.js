@@ -159,7 +159,7 @@ const closeApplication = async (req, res) => {
 };
 
 const submitApplication = async (req, res) => {
-  const { appID, githubLink, status, step } = req.body;
+  const { appID, githubLink, status, step, isReturned } = req.body;
   try {
     const application = await Application.findById(appID);
 
@@ -177,6 +177,8 @@ const submitApplication = async (req, res) => {
     });
 
     application.status = status;
+
+    application.isReturned = isReturned;
 
     const savedApplication = await application.save();
     res.status(200).json(savedApplication);

@@ -177,7 +177,7 @@ export default function StudentHomepage() {
 
   // ===========================================================================
   // submits an application
-  const submitApplication = async (appID) => {
+  const submitApplication = async (application) => {
     // Validate GitHub link
     if (!githubLink) {
       setGithubLinkError("GitHub link is required");
@@ -195,6 +195,8 @@ export default function StudentHomepage() {
     // Clear the error message if validation passes
     setGithubLinkError("");
 
+    alert(application._id)
+
     try {
       // Submit the application
       const response = await fetch("http://localhost:3001/submitapplication", {
@@ -202,10 +204,10 @@ export default function StudentHomepage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ appID, githubLink, status: "pending", step: 2 }),
+        body: JSON.stringify({ appID: application._id, githubLink, status: "pending", step: 2, isReturned: false}),
       });
 
-      if (response.ok) {
+      if (response.ok) {    
         setShowSuccessMessage("submitted");
         setTriggerFetchApp(!triggerFetchApp);
         setGithubLink("");
@@ -219,6 +221,7 @@ export default function StudentHomepage() {
       console.log("Error:", error);
     }
   };
+
 
   // ===========================================================================
   // view remarks of an application
@@ -370,6 +373,7 @@ export default function StudentHomepage() {
                         </div>
                       </div>
                     )}
+
                   {application.isReturned && (
                     <>
                       <label>
@@ -386,7 +390,7 @@ export default function StudentHomepage() {
                       )}
                       <button
                         className="submit-app"
-                        onClick={() => submitApplication(application._id)}
+                        onClick={() => submitApplication(application)}
                         disabled={!adviserName}
                       >
                         Resubmit Application
@@ -423,7 +427,7 @@ export default function StudentHomepage() {
                     application.studentSubmission.length === 0 && ( // If application is open and no submission yet, show submit application button
                       <button
                         className="submit-app"
-                        onClick={() => submitApplication(application._id)}
+                        onClick={() => submitApplication(application)}
                         disabled={!adviserName}
                       >
                         Submit Application
