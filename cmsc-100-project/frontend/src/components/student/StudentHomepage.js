@@ -237,14 +237,15 @@ export default function StudentHomepage() {
   // post remark to an application
   const postRemark = async (application) => {
     try {
-      const response = await fetch("http://localhost:3001/postremark", {
+      const response = await fetch("http://localhost:3001/returnapplication", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          applicationID: application._id,
-          remark: remarkContent,
+          appID: application._id,
+          remarks: remarkContent,
+          returnUserID: userData._id,
         }),
       });
   
