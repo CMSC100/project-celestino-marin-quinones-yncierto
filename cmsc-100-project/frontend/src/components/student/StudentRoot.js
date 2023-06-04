@@ -114,7 +114,7 @@ return(
                     </span>
 
                     <div className='text header-text'>
-                        <span className='name'>{userData.fullName}</span>
+                        <span className='name'>{userData.firstName}</span>
                         <span className='usertype'>{userData.userType}</span>
                     </div>
                 </div>
