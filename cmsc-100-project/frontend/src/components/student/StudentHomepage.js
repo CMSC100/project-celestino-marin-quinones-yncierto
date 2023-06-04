@@ -179,7 +179,7 @@ export default function StudentHomepage() {
 
   // ===========================================================================
   // submits an application
-  const submitApplication = async (application) => {
+  const submitApplication = async (application, bool) => {
     // Validate GitHub link
     if (!githubLink) {
       setGithubLinkError("GitHub link is required");
@@ -208,6 +208,7 @@ export default function StudentHomepage() {
       });
 
       if (response.ok) {    
+        if (bool) postRemark(application);
         setShowSuccessMessage("submitted");
         setTriggerFetchApp(!triggerFetchApp);
         setGithubLink("");
@@ -407,7 +408,6 @@ export default function StudentHomepage() {
                               value={remarkContent}
                               onChange={(e) => setRemarkContent(e.target.value)}
                             ></textarea>
-                            <button onClick={() => postRemark(application)}>Post Remark</button>
                           </div>
                         )}
                       </div>
@@ -429,7 +429,7 @@ export default function StudentHomepage() {
                       )}
                       <button
                         className="submit-app"
-                        onClick={() => submitApplication(application)}
+                        onClick={() => submitApplication(application, true)}
                         disabled={!adviserName}
                       >
                         Resubmit Application
@@ -466,7 +466,7 @@ export default function StudentHomepage() {
                     application.studentSubmission.length === 0 && ( // If application is open and no submission yet, show submit application button
                       <button
                         className="submit-app"
-                        onClick={() => submitApplication(application)}
+                        onClick={() => submitApplication(application, false)}
                         disabled={!adviserName}
                       >
                         Submit Application
