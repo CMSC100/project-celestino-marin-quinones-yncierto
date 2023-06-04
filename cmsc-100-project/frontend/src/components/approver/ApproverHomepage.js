@@ -209,7 +209,7 @@ export default function ApproverHomepage() {
     const filterButton = (index) => {
       // general button for applying filter
       return (
-        <div className="filter-buttons">
+        <div className="apply-buttons">
           <button type="submit" onClick={(e) => (currentActiveFilter = index)}>
             Apply filter
           </button>
@@ -220,12 +220,12 @@ export default function ApproverHomepage() {
     if (filter == "adviser") {
       // when filter is an adviser
       element = (
-        <div>
+        <div className="adviser-list">
           {advisers.map((adviser, index) => {
             return (
-              <div key={index}>
+              <div key={index} className="text-button">
                 <p>{adviser.fullName}</p>
-                <button
+                <button className="apply-buttons"
                   value={0}
                   type="button"
                   onClick={(e) => {
@@ -340,11 +340,15 @@ export default function ApproverHomepage() {
               <p className="filter-title">Filters: </p>
 
               {userData.userType == "officer" && (
-                <li className="appnav-btn" name="filter-buttons" value={0}>
+                <li className="adviser-btn" name="filter-buttons" value={0}>
                   <div className="active-filter">
                     <BsFillPersonLinesFill className="icon" />
-                    <button className=" text date">Adviser</button>
+                    <button className=" text adviser"
+                    onClick={(e) => changeFilter("adviser", e)}
+                    >Adviser
+                    </button>
                   </div>
+                  {filter == "adviser" && filterButtons()}
                 </li>
               )}
 
@@ -456,13 +460,8 @@ export default function ApproverHomepage() {
           <div style={{ display: "flex", flexDirection: "column", rowGap: 10 }}>
             {applications.map((application, index) => {
               return (
-                <div
+                <div className="officer-student-list"
                   key={index}
-                  style={{
-                    backgroundColor: "lightgray",
-                    boxSizing: "border-box",
-                    padding: 20,
-                  }}
                 >
                   <b>Name:</b> {application["studentData"][0]["fullName"]}{" "}
                   <br />

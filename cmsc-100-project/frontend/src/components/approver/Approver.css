@@ -42,6 +42,23 @@ form .cleared-text {
   font-size: small;
 }
 
+.approver-body {
+  position: relative;
+  top: 0;
+  left: 250px;
+  height: 100vh;
+  width: calc(100% - 250px);
+}
+
+.officer-student-list {
+  /* background-color: #595FB1; */
+  background-color: #e4e9f7;
+  box-sizing: border-box;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
 /* ===SideBar=== */
 .app-nav {
   position: fixed;
@@ -122,6 +139,7 @@ form .cleared-text {
 
 .app-nav .app-image-text img {
   width: 60px;
+  border-radius: 5px;
 }
 
 .app-nav header .app-image-text {
@@ -133,7 +151,6 @@ form .cleared-text {
   padding-top: 15px;
   font-size: medium;
   font-weight: 500;
-  /* padding-bottom: 0; */
 }
 
 header .app-image-text .header-text {
@@ -152,10 +169,40 @@ header .app-image-text .header-text {
 }
 
 .app-nav .filter-bar {
-  /* position: relative; */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.adviser-btn{
+  display: flex;
+  flex-direction: column;
+}
+
+.adviser-list{
+  background-color: #d7d4f5 !important;
+  display: flex;
+  flex-direction: column;
+  max-height:100px;
+  max-width:200px;
+  overflow:auto;
+}
+
+.adviser-list, .text-button{
+  justify-content: space-between;
+}
+
+.adviser-list p{
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.adviser-list button{
+  padding: 1px !important;
+  width: 50px !important;
+  background-color: #595FB1 !important;
+  color: white !important;
+  margin-left: 2px;
 }
 
 .date-btn {
@@ -173,11 +220,9 @@ header .app-image-text .header-text {
   flex-direction: column;
 }
 
-.approver-body {
-  position: relative;
-  /* overflow: scroll; */
-  top: 0;
-  left: 250px;
-  height: 100vh;
-  width: calc(100% - 250px);
+.apply-buttons button{
+  padding: 0.5;
+  color: white !important;
+  border-radius: 10px !important;
+  background-color: #595FB1 !important;
 }
