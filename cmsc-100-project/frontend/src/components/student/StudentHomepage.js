@@ -195,8 +195,6 @@ export default function StudentHomepage() {
     // Clear the error message if validation passes
     setGithubLinkError("");
 
-    alert(application._id)
-
     try {
       // Submit the application
       const response = await fetch("http://localhost:3001/submitapplication", {
