@@ -16,6 +16,8 @@ export default function StudentHomepage() {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [adviserName, setAdviserName] = useState("");
   const [githubLinkError, setGithubLinkError] = useState("");
+  const [remarkContent, setRemarkContent] = useState("");
+
 
   const navigate = useNavigate();
 
@@ -92,7 +94,7 @@ export default function StudentHomepage() {
                   );
                   if (commenterResponse.ok) {
                     const commenterData = await commenterResponse.json();
-                    return { ...remark, commenter: commenterData.fullName };
+                    return { ...remark, commenter: commenterData.fullName, userType: commenterData.userType };
                   } else {
                     console.error(
                       "Failed to fetch commenter details:",
@@ -226,10 +228,38 @@ export default function StudentHomepage() {
   const viewRemarks = (appID) => {
     setApplications((prevApplications) =>
       prevApplications.map((app) =>
-        app._id === appID ? { ...app, showRemarks: !app.showRemarks } : app
+        app._id === appID ? { ...app, showRemarks: !app.showRemarks, enableRemarks: true  } : app
       )
     );
   };
+
+  // ===========================================================================
+  // post remark to an application
+  const postRemark = async (application) => {
+    try {
+      const response = await fetch("http://localhost:3001/postremark", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          applicationID: application._id,
+          remark: remarkContent,
+        }),
+      });
+  
+      if (response.ok) {
+        // Remark posted successfully
+        setRemarkContent(""); // Clear remark input
+        setTriggerFetchApp(!triggerFetchApp); // Fetch updated application data
+      } else {
+        console.error("Failed to post remark:", response);
+      }
+    } catch (error) {
+      console.error("Error posting remark:", error);
+    }
+  };
+  
 
   if (dataLoaded) {
     // If user data is fetched
@@ -350,7 +380,7 @@ export default function StudentHomepage() {
                         <h5>Remarks:</h5>
                         <div className="remarks-chat">
                           {application.remarks.map((remark, remarkIndex) => (
-                            <div className="remark-message" key={remarkIndex}>
+                            <div className={`remark-message ${remark.userType}`} key={remarkIndex}>
                               <div className="remark-info">
                                 <p>
                                   <b>Commenter:</b> {remark.commenter}
@@ -369,6 +399,16 @@ export default function StudentHomepage() {
                             </div>
                           ))}
                         </div>
+                        {application.enableRemarks && (
+                          <div className="add-remark">
+                            <textarea
+                              placeholder="Add a remark"
+                              value={remarkContent}
+                              onChange={(e) => setRemarkContent(e.target.value)}
+                            ></textarea>
+                            <button onClick={() => postRemark(application)}>Post Remark</button>
+                          </div>
+                        )}
                       </div>
                     )}
 
