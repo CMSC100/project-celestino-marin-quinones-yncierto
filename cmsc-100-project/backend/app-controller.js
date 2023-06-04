@@ -182,38 +182,63 @@ const approveApplication = async (req, res) => {
 };
 
 const returnApplication = async (req, res) => {
-  const { appID, remarks, returnUserID } = req.body;
+  const { appID, remarks, returnUserID, userType } = req.body;
 
   console.log("Application ID:", appID);
   console.log("Remarks:", remarks);
   console.log("Return User ID:", returnUserID);
+  console.log("User:", userType);
 
-  try {
-    const application = await Application.findById(appID);
+  if (userType == "student") {
+    try {
+      const application = await Application.findById(appID);
 
-    if (!application) {
-      res.status(404).json({ error: "Application not found" });
-      return;
+      if (!application) {
+        res.status(404).json({ error: "Application not found" });
+        return;
+      }
+
+      console.log("Existing Application:", application);
+
+      application.remarks.push({
+        remark: remarks,
+        date: new Date(),
+        commenter: new mongoose.Types.ObjectId(returnUserID), // Convert returnUserID to ObjectId
+      });
+      application.status = "pending";
+
+      const savedApplication = await application.save();
+      res.status(200).json(savedApplication);
+    } catch (error) {
+      console.log("Error:", error);
+      res.status(500).json(error);
     }
+  } else {
+    try {
+      const application = await Application.findById(appID);
 
-    console.log("Existing Application:", application);
+      if (!application) {
+        res.status(404).json({ error: "Application not found" });
+        return;
+      }
 
-    application.step = 1; // Set the step to 1 for returning the application
-    application.remarks.push({
-      remark: remarks,
-      date: new Date(),
-      commenter: new mongoose.Types.ObjectId(returnUserID), // Convert returnUserID to ObjectId
-    });
-    application.isReturned = true;
+      console.log("Existing Application:", application);
 
-    const savedApplication = await application.save();
+      application.step = application.step - 1; // Set the step to 1 for returning the application
+      application.remarks.push({
+        remark: remarks,
+        date: new Date(),
+        commenter: new mongoose.Types.ObjectId(returnUserID), // Convert returnUserID to ObjectId
+      });
+      application.status = "pending";
+      application.isReturned = true;
 
-    console.log("Updated Application:", savedApplication);
-
-    res.status(200).json(savedApplication);
-  } catch (error) {
-    console.log("Error:", error);
-    res.status(500).json(error);
+      const savedApplication = await application.save();
+      res.status(200).json(savedApplication);
+    } catch (error) {
+      console.log("Error:", error);
+      res.status(500).json(error);
+    }
   }
 };
 

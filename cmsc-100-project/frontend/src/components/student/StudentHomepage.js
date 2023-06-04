@@ -178,14 +178,13 @@ export default function StudentHomepage() {
   };
 
   // ===========================================================================
-  // submits an application
-  const submitApplication = async (application, bool) => {
+  const submitApplication = async (application) => {
     // Validate GitHub link
     if (!githubLink) {
       setGithubLinkError("GitHub link is required");
       return;
     }
-
+  
     // Regular expression to validate GitHub link format
     const githubLinkRegex = /^(https?:\/\/)?(www\.)?github\.com\/\S+$/;
     if (!githubLinkRegex.test(githubLink)) {
@@ -193,10 +192,10 @@ export default function StudentHomepage() {
       alert("Invalid GitHub link");
       return;
     }
-
+  
     // Clear the error message if validation passes
     setGithubLinkError("");
-
+  
     try {
       // Submit the application
       const response = await fetch("http://localhost:3001/submitapplication", {
@@ -204,17 +203,23 @@ export default function StudentHomepage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ appID: application._id, githubLink, status: "pending", step: 2, isReturned: false}),
+        body: JSON.stringify({
+          appID: application._id,
+          githubLink,
+          status: "pending",
+          step: "2", // Update the step value
+          isReturned: false, // Update the isReturned value
+        }),
       });
-
-      if (response.ok) {    
-        if (bool) postRemark(application);
+  
+      if (response.ok) {
         setShowSuccessMessage("submitted");
         setTriggerFetchApp(!triggerFetchApp);
         setGithubLink("");
         setTimeout(() => {
           setShowSuccessMessage(false);
-        }, 1000);
+        }, 1000);  
+
       } else {
         alert("Failed to submit application.");
       }
@@ -223,18 +228,7 @@ export default function StudentHomepage() {
     }
   };
 
-
-  // ===========================================================================
-  // view remarks of an application
-  const viewRemarks = (appID) => {
-    setApplications((prevApplications) =>
-      prevApplications.map((app) =>
-        app._id === appID ? { ...app, showRemarks: !app.showRemarks, enableRemarks: true  } : app
-      )
-    );
-  };
-
-  // ===========================================================================
+    // ===========================================================================
   // post remark to an application
   const postRemark = async (application) => {
     try {
@@ -247,6 +241,7 @@ export default function StudentHomepage() {
           appID: application._id,
           remarks: remarkContent,
           returnUserID: userData._id,
+          userType: userData.userType,
         }),
       });
   
@@ -262,6 +257,17 @@ export default function StudentHomepage() {
     }
   };
   
+
+
+  // ===========================================================================
+  // view remarks of an application
+  const viewRemarks = (appID) => {
+    setApplications((prevApplications) =>
+      prevApplications.map((app) =>
+        app._id === appID ? { ...app, showRemarks: !app.showRemarks, enableRemarks: true  } : app
+      )
+    );
+  };
 
   if (dataLoaded) {
     // If user data is fetched
@@ -429,7 +435,15 @@ export default function StudentHomepage() {
                       )}
                       <button
                         className="submit-app"
-                        onClick={() => submitApplication(application, true)}
+                        onClick={async () => {
+                          try {
+                            await submitApplication(application);
+                            postRemark(application);
+                          } catch (error) {
+                            console.error("Error submitting application:", error);
+                          }
+                        }}
+                        
                         disabled={!adviserName}
                       >
                         Resubmit Application
@@ -464,9 +478,10 @@ export default function StudentHomepage() {
 
                   {application.status === "open" &&
                     application.studentSubmission.length === 0 && ( // If application is open and no submission yet, show submit application button
+                      
                       <button
                         className="submit-app"
-                        onClick={() => submitApplication(application, false)}
+                        onClick={() => submitApplication(application)}
                         disabled={!adviserName}
                       >
                         Submit Application

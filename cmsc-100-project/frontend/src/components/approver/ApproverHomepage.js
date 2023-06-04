@@ -49,6 +49,7 @@ export default function ApproverHomepage() {
         appID: appID,
         remarks: remarks,
         returnUserID: userData._id,
+        userType: userData.userType
       }), // Pass userData._id as returnUserID
     })
       .then((response) => response.json())
