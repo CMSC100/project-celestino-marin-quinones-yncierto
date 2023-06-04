@@ -338,13 +338,14 @@ export default function ApproverHomepage() {
 
           <div className="filter-bar">
             <div className="filters">
+              <hr/>
               <p className="filter-title">Filters: </p>
 
               {userData.userType == "officer" && (
                 <li className="adviser-btn" name="filter-buttons" value={0}>
                   <div className="active-filter">
                     <BsFillPersonLinesFill className="icon" />
-                    <button className=" text adviser"
+                    <button className="text adviser"
                     onClick={(e) => changeFilter("adviser", e)}
                     >Adviser
                     </button>
@@ -403,6 +404,7 @@ export default function ApproverHomepage() {
               </div>
             </div>
 
+            <hr/>
             <div className="bottom-content">
               <li className="">
                 <div>
@@ -418,7 +420,7 @@ export default function ApproverHomepage() {
 
         <div className="approver-body">
           <h1 className="app-greeting">
-            Hello, {userData.fullName}! ({userData.userType})
+            Hello, {userData.fullName}! 
           </h1>
 
           <div className="search-list">
