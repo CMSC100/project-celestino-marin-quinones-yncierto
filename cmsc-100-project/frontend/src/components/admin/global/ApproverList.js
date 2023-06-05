@@ -332,7 +332,8 @@ export default function Admin(props) {
                 }
             </div>
         </div>
-
+        
+      <div className='bottom'>
         <div className='add-approver-container' style={{ backgroundColor: theme.palette.mode === 'dark' ? colors.primary[400] : 'white'}}>
             <form onSubmit={signUp} id="create-form">
                 <span style={{fontSize: '20px', fontWeight: 'bold'}}>Add New Approver</span>
@@ -367,15 +368,24 @@ export default function Admin(props) {
                     </div>
                 </form>
         </div>
-        <h3>Upload CSV File</h3>
-        {/* <form encType="multipart/form-data" onSubmit={uploadCSV}>  */}
-        <input
-          name="csv-file"
-          type="file"
-          accept="text/csv"
-          onChange={uploadCSV}
-        />
-        <br />
+        <div className='csv-container' style={{ backgroundColor: theme.palette.mode === 'dark' ? colors.primary[400] : 'white' }}>
+          <div className='csv-content'>
+            <h3>Upload CSV File</h3>
+            <p>The CSV file must contain the student number and the name of the adviser.</p>
+            <p>Follow this format:</p>
+            <br/>
+            {/* <form encType="multipart/form-data" onSubmit={uploadCSV}>  */}
+            <input
+              name="csv-file"
+              type="file"
+              accept="text/csv"
+              onChange={uploadCSV}
+            />
+            <br />
+          </div>
+        </div>
+      </div>
+          
         </div>
   )
 }

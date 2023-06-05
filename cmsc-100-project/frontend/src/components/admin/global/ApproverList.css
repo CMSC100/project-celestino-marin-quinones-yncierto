@@ -250,3 +250,21 @@ ul{
     border-radius: 20px;
     margin-top: 20px;
 }
+
+.csv-container{
+    border-radius: 20px;
+    margin: 20px;
+}
+
+.csv-content{
+    padding: 20px;
+}
+
+p{
+    font-size: 13px;
+}
+
+.bottom{
+    display: flex;
+    flex-direction: row;
+}
