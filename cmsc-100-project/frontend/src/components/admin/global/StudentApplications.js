@@ -21,17 +21,22 @@ export default function StudentApplications() {
     const colorMode = useContext(ColorModeContext);
     const btn = document.getElementById('btn');
     const sbtn = document.getElementById('sbtn');
+    const [showModal, setShowModal] = useState(false);
 
-    // get admin data from DB
-    useEffect(() => {
-        fetch("http://localhost:3001/getloggedinuserdata", {
-            method: "POST",
-            credentials: 'include'
-        })
-            .then(response => response.json())
-            .then(body => setUserData(body))
-        getAdvisers()
-    }, [])
+    const toggleModal = () => {
+        setShowModal(!showModal);
+    };
+
+    // // get admin data from DB
+    // useEffect(() => {
+    //     fetch("http://localhost:3001/getloggedinuserdata", {
+    //         method: "POST",
+    //         credentials: 'include'
+    //     })
+    //         .then(response => response.json())
+    //         .then(body => setUserData(body))
+    //     getAdvisers()
+    // }, [])
 
     // get admin data from DB
     useEffect(() => {
@@ -130,6 +135,23 @@ export default function StudentApplications() {
             alert("The student already has an adviser.");
             return;
         }
+
+        fetch("http://localhost:3001/assignadviser", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ studentIDAssign, adviserIDAssign })
+        })
+          .then(response => response.json())
+          .then(body => {
+            if (body["success"]) {
+                alert("Adviser successfully assigned to student.")
+                toggleModal();
+            } else {
+              alert("Failed adviser assignment.")
+            }
+          })
     }
 
     const approveAccount = function (docRef) {
@@ -265,7 +287,7 @@ export default function StudentApplications() {
                                             <div className='column' id='email'>
                                                 <span style={{ color: 'black' }}>{element.email} </span>
                                                 <button type='button' style={{ backgroundColor: theme.palette.mode === 'dark' ? colors.blueAccent[700] : colors.greenAccent[400] }} onClick={() => {
-                                                    document.getElementById("modal").style.display = "block"
+                                                    toggleModal();
                                                     setStudentIDAssign(element._id)
                                                 }}>Assign Adviser
                                                 </button>
@@ -279,7 +301,7 @@ export default function StudentApplications() {
                             </div>
                         </div>
                     </div>
-                    <div id='modal'>
+                    {showModal && <div id='modal'>
                         <div className='assign-container' style={{ backgroundColor: theme.palette.mode === 'dark' ? colors.primary[400] : 'white' }}>
                             <div className='modal-rows'>
                                 {
@@ -295,13 +317,13 @@ export default function StudentApplications() {
                             </div>
                             <div className='cancelBtn'>
                                 <button type='button' onClick={() => {
-                                    document.getElementById("modal").style.display = "none"
+                                    toggleModal();
                                 }}>
                                     Cancel
                                 </button>
                             </div>
                         </div>
-                    </div>
+                    </div>}
                 </div>
             }
         </div>
