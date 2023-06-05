@@ -4,14 +4,15 @@ import { useEffect } from 'react';
 import { ColorModeContext, useMode } from '../../theme';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import '../../theme.js';
+import { tokens } from '../../theme';
 import TopBar from './global/TopBar';
 import SideBar from './global/Sidebar/SideBar.jsx';
 import './AdminRoot.css';
 import '../../index.css'
 
 
-
 export default function AdminRoot() {
+    const colors = tokens(theme.palette.mode);
     const [theme, colorMode] = useMode();
     const navigate = useNavigate();
 
@@ -21,15 +22,7 @@ export default function AdminRoot() {
                 <CssBaseline />
                 <div className='admin'>
                     <SideBar/>
-                    <main className='content'>
-                        <TopBar />
-                        <Link to="/admin/manage-student-apps">
-                         <button type="button" className='active' id='student-button' onClick={() => {
-                            //  document.getElementById("student-button").classList.add("active")
-                            //  document.getElementById("approver-button").classList.remove("active")
-                         }}>Manage Student Applications</button>
-                        </Link>
-                    </main>
+                    <Outlet/>
                 </div>
             </ThemeProvider>
         </ColorModeContext.Provider>

@@ -1,12 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;700&display=swap');
+
 .sideBar{
     display: flex !important; 
     flex-direction: column !important;
     justify-content: space-between !important;
     width: fit-content !important;
-    margin: 40px;
-    border-radius: 20px
-    
+    padding: 50px;
+    padding-top: 65px;
+    border-radius: 20px;
 }
+
+.whole{
+    transition: width 0.10s ease-in-out; 
+}
+
+.whole.collapsed{
+    width: 140px;
+}
+
+.buttonLabel{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+}
+
 .cardButton{
     display: flex;
     flex-direction: row;
@@ -16,8 +32,8 @@
 }
 
 .indivCards{
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .navButton{
@@ -48,8 +64,17 @@
 }
 
 .menuButton{
-    padding: 0;
+    padding: 8px;
 } 
+
+.menuButton:hover{
+    border-radius: 5px;
+   
+}
+
+.menuButton:not(:hover){
+    border-radius: 5px;
+}
 
 .menuButton:active{
     color: #5647ff

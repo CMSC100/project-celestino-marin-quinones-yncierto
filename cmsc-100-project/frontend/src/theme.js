@@ -130,12 +130,12 @@ export const themeSettings = (mode) => {
                     main: colors.primary[500],
                 },
                 secondary: {
-                    main: colors.blueAccent[500],
+                    main: colors.greenAccent[500],
                 },
                 neutral: {
-                    dark: colors.gray[700],
-                    main: colors.gray[500],
-                    light: colors.gray[100]
+                    dark: colors.primary[700],
+                    main: colors.primary[500],
+                    light: colors.primary[100]
                 },
                 background: {
                     default: colors.primary[500],
@@ -145,15 +145,15 @@ export const themeSettings = (mode) => {
                     main: colors.primary[100],
                 },
                 secondary: {
-                    main: colors.blueAccent[500],
+                    main: colors.greenAccent[500],
                 },
                 neutral: {
-                    dark: colors.gray[700],
-                    main: colors.gray[500],
-                    light: colors.gray[100]
+                    dark: colors.primary[700],
+                    main: colors.primary[500],
+                    light: colors.primary[100]
                 },
                 background: {
-                    default: "#fcfcfc",
+                    default: '#f5f4f7',
                 },
             }),
         },
@@ -165,7 +165,7 @@ export const ColorModeContext = createContext({
 })
 
 export const useMode = () => {
-    const [mode, setMode] = useState("dark");
+    const [mode, setMode] = useState("light");
 
     const colorMode = useMemo(
         () => ({

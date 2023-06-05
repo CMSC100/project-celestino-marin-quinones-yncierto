@@ -1,7 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { useTheme, IconButton } from '@mui/material';
+import { tokens, ColorModeContext } from '../../../theme';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 import './ApproverList.css'
 
 export default function Admin(props) {
+    const theme = useTheme();
+    const colors = tokens(theme.palette.mode);
+    const colorMode = useContext(ColorModeContext);
     // for setting default value of edit text fields
     const [approverDetails, setApproverDetails] = useState({
         firstName: "",
@@ -28,6 +35,7 @@ export default function Admin(props) {
     const [searchName, setSearchName] = useState("")
     // store int (1 or -1) for sorting
     const [sort, setSort] = useState(1)
+    const sbtn = document.getElementById('sbtn');
 
     // reload approver accounts when searching or sort is changed
     useEffect(function() {
@@ -170,95 +178,157 @@ export default function Admin(props) {
 
     // sort list of approver accounts
     const sortApproverList = function(e) {
-        let sortButtons = document.getElementsByName("sortButton")
-        sortButtons.forEach(function(element) {
-            // add "active" class to clicked button, and remove for other buttons
-            if (e.target.value === element.value) element.classList.add("active")
-            else element.classList.remove("active")
-        })
         console.log(e.target.value)
         setSort(e.target.value) // set sort to new value
     }
 
+    const leftClickSort = function () {
+        if (sbtn && sbtn.style) {
+            sbtn.style.left = '0';
+        }
+    }
+
+    const rightClickSort = function () {
+        if (sbtn && sbtn.style) {
+            sbtn.style.left = '125px';
+        }
+    }
+
     return (
-        <>
-            <span>Sort Approver List:</span>
-            <button type="button" name="sortButton" id="sortAscButton" className='active' onClick={sortApproverList} value={1}>Ascending</button>
-            <button type='button' name="sortButton" id='sortDescButton' onClick={sortApproverList} value={-1}>Descending</button>
-            <br/>
-
-            <label htmlFor="searchName">Search for Approver: </label>
-            <input type='text' id="searchName" name="searchName" placeholder='Enter name of approver' onChange={handleSearchNameChange} value={searchName}/>
-            <button type='button' id='clearSearch' onClick={clearSearch}>Display All Approver</button>
-            
-            <ul>
-                {approverAccounts.map((element, index) => {
-                    return (
-                        <li key={index}>
-                            <p>{element.firstName} {element.middleName} {element.lastName}</p>
-                            <button type='button' onClick={function() {
-                                getApproverDetails(element._id)
-                            }}>
-                                Edit
-                            </button>
-                            <button type='button' onClick={function() {
-                                deleteApprover(element._id)
-                            }}>
-                                Delete
-                            </button>
-                        </li>
-                    )
-                })}
-            </ul>
-
-            {isEditing &&
-                <form onSubmit={editApprover}>
-                    <div className="container-form">
-                        <label htmlFor="fname"><b>First Name</b></label>
-                        <input id="s-fname" type="text" placeholder="Enter first name" value={editingApprover.firstName} name="fname" onChange={handleEditChange} required />
-
-                        <label htmlFor="mname"><b>Middle Name</b></label>
-                        <input id="s-mname" type="text" placeholder="Enter middle name" value={editingApprover.middleName} name="mname" onChange={handleEditChange} required />
-
-                        <label htmlFor="lname"><b>Last Name</b></label>
-                        <input id="s-lname" type="text" placeholder="Enter last name" value={editingApprover.lastName} name="lname" onChange={handleEditChange} required />
-                        {/* <label htmlFor="email"><b>Email</b></label>
-                        <input id="s-email" type="text" placeholder="Enter Email" defaultValue={approverDetails.email} name="email" required />
-
-                        <label htmlFor="psw"><b>Password</b></label>
-                        <input id="s-password" type="password" placeholder="Enter Password" defaultValue={approverDetails.password} name="psw" required /> */}
-
-                        <div className="signup-back-btn">
-                            <button className="signup-back-btn" type="submit">Edit</button>
-                            <button type="reset" className="cancelbtn" onClick={() => setIsEditing(false)}>Cancel</button>
+        <div className='approverContent'>
+            <div className='titleAndTable'>
+                <div className='titleAndLightSwitch'>
+                    <span className='contentTitle'>Manage Approver Accounts</span>
+                    <IconButton onClick={colorMode.toggleColorMode}>
+                            {theme.palette.mode === "light" ? (
+                                <LightModeIcon/>
+                            ) : (<DarkModeIcon/>)}
+                    </IconButton>
+                </div>
+                
+                <div className='tableAndEditForm'>
+                    <div className='approverListContainer' style={{ backgroundColor: theme.palette.mode === 'dark' ? colors.primary[400] : 'white'}}>
+                        <div className='sortAndSearch'>
+                            <div className='sortApprover'>
+                                <span className='sortLbl'>Sort Approver List:</span>
+                                <div className='sortBtns' style={{ backgroundColor: theme.palette.mode === 'dark' ? colors.gray[300] : colors.gray[900] }}>
+                                    <div id='sbtn' style={{ backgroundColor: '#f5f4f7' }}></div>
+                                    <button type="button" style={{ color: 'black' }} name="sortButton" id="sortAscButton" className='active' onClick={(e) => { sortApproverList(e); leftClickSort() }} value={1}>Ascending</button>
+                                    <button type='button' style={{ color: 'black' }} name="sortButton" id='sortDescButton' onClick={(e) => { sortApproverList(e); rightClickSort() }} value={-1}>Descending</button>
+                                </div>
+                                <br/>
+                            </div>
+                            <div className='searchBar'>
+                                <input type='text' id="searchName" name="searchName" placeholder="&#61442;" onChange={handleSearchNameChange} value={searchName}/>
+                            </div>
                         </div>
-                    </div>
-                </form>
-            }
+                        
+                        <div className='approverList'>
+                            <div className='rowHeadersApprover' style={{backgroundColor: theme.palette.mode === 'dark' ? colors.primary[500] : colors.gray[900]}}>
+                                    <span className='indivHeaderApprover'>FULL NAME</span>
+                                    <span className='indivHeaderApprover'>EMAIL</span>
+                            </div>
 
-            <form onSubmit={signUp} id="create-form">
-                    <div className="container-form">
-                        <label htmlFor="fname"><b>First Name</b></label>
-                        <input id="s-fname" type="text" placeholder="Enter first name" name="fname" required />
-
-                        <label htmlFor="mname"><b>Middle Name</b></label>
-                        <input id="s-mname" type="text" placeholder="Enter middle name" name="mname" required />
-
-                        <label htmlFor="lname"><b>Last Name</b></label>
-                        <input id="s-lname" type="text" placeholder="Enter last name" name="lname" required />
-
-                        <label htmlFor="email"><b>Email</b></label>
-                        <input id="s-email" type="text" placeholder="Enter Email" name="email" required />
-
-                        <label htmlFor="psw"><b>Password</b></label>
-                        <input id="s-password" type="password" placeholder="Enter Password" name="psw" required />
-
-                        <div className="signup-back-btn">
-                            <button className="signup-back-btn" type="submit">Submit</button>
-                            <button type="reset" className="cancelbtn">Reset</button>
+                            <div className='tableRowsApprover' style={{ backgroundColor: theme.palette.mode === 'dark' ? colors.primary[100]: '#f5f4f7'}}>
+                                {approverAccounts.map((element, index) => {
+                                    return (
+                                        <div className='rows'>
+                                                <div className='column' id='fname'>
+                                                    <span style={{color: 'black'}}>{element.fullName} </span>
+                                                </div>
+                                                <div className='column' id='email'>
+                                                    <span style={{color: 'black'}}>{element.email} </span>
+                                                    {/* <div className='approveReject'>
+                                                        <IconButton id='approve' style={{ backgroundColor: "transparent" }} type='button' onClick={() => {approveAccount(element._id)}}><CheckCircleIcon style={{width: '35px', height: '35px'}}/></IconButton>
+                                                        <IconButton id='reject' style={{ backgroundColor: "transparent" }} type='button' onClick={() => {rejectAccount(element._id)}}><CancelIcon style={{width: '35px', height: '35px'}}/></IconButton>
+                                                    </div> */}
+                                                    <div>
+                                                        <button type='button' onClick={function() {
+                                                            getApproverDetails(element._id)
+                                                            }}>Edit
+                                                        </button>
+                                                        <button type='button' onClick={function() {
+                                                            deleteApprover(element._id)
+                                                            }}>Delete
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            {/* <p>{element.firstName} {element.middleName} {element.lastName}</p> */}
+                                            
+                                        </div> 
+                                    )
+                                })}
+                            </div>
+                            <div className='clearSearchContainer'>
+                                <button type='button' id='clearSearch' onClick={clearSearch}>Display All Approver</button>
+                            </div>
+                            
                         </div>
+                            
                     </div>
-                </form>
-        </>
+
+                    {isEditing &&
+                    <form className='edit-form' style={{ backgroundColor: theme.palette.mode === 'dark' ? colors.primary[400] : 'white'}} onSubmit={editApprover}>
+                        <div className="container-form">
+                            <span style={{fontSize: '20px', fontWeight: 'bold'}}>Edit { editingApprover.firstName }'s Details</span>
+                            <label className="inputLabel" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black', fontSize: '13px'}} htmlFor="fname"><b>First Name</b></label>
+                            <input id="s-fname" type="text" placeholder="Enter first name" value={editingApprover.firstName} name="fname" onChange={handleEditChange} required />
+
+                            <label className="inputLabel" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black', fontSize: '13px'}} htmlFor="mname"><b>Middle Name</b></label>
+                            <input id="s-mname" type="text" placeholder="Enter middle name" value={editingApprover.middleName} name="mname" onChange={handleEditChange} required />
+
+                            <label className="inputLabel" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black', fontSize: '13px'}} htmlFor="lname"><b>Last Name</b></label>
+                            <input id="s-lname" type="text" placeholder="Enter last name" value={editingApprover.lastName} name="lname" onChange={handleEditChange} required />
+                            {/* <label htmlFor="email"><b>Email</b></label>
+                            <input id="s-email" type="text" placeholder="Enter Email" defaultValue={approverDetails.email} name="email" required />
+
+                            <label htmlFor="psw"><b>Password</b></label>
+                            <input id="s-password" type="password" placeholder="Enter Password" defaultValue={approverDetails.password} name="psw" required /> */}
+
+                            <div className="edit-cancel">
+                                <button className="signup-back-btn" type="submit">Edit</button>
+                                <button type="reset" className="cancelbtn" onClick={() => setIsEditing(false)}>Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                    }
+                </div>
+            </div>
+
+            <div className='add-approver-container' style={{ backgroundColor: theme.palette.mode === 'dark' ? colors.primary[400] : 'white'}}>
+                <form onSubmit={signUp} id="create-form">
+                    <span style={{fontSize: '20px', fontWeight: 'bold'}}>Add New Approver</span>
+                        <div className="bottom-container-form">
+                            <div className='formCols'>
+                                <div className='firstCol'>
+                                    <label style={{color: theme.palette.mode === 'dark' ? 'white' : 'black', fontSize: '13px'}} htmlFor="fname"><b>First Name</b></label>
+                                    <input className='field' id="s-fname" type="text" placeholder="Enter first name" name="fname" required />
+
+                                    <label style={{color: theme.palette.mode === 'dark' ? 'white' : 'black', fontSize: '13px'}} htmlFor="mname"><b>Middle Name</b></label>
+                                    <input className='field' id="s-mname" type="text" placeholder="Enter middle name" name="mname" required />
+                                </div>
+
+                                <div className='secondCol'>
+                                    <label style={{color: theme.palette.mode === 'dark' ? 'white' : 'black', fontSize: '13px'}} htmlFor="lname"><b>Last Name</b></label>
+                                    <input className='field' id="s-lname" type="text" placeholder="Enter last name" name="lname" required />
+
+                                    <label style={{color: theme.palette.mode === 'dark' ? 'white' : 'black', fontSize: '13px'}} htmlFor="email"><b>Email</b></label>
+                                    <input className='field' id="s-email" type="text" placeholder="Enter Email" name="email" required />
+                                </div>
+
+                                <div className='thirdCol'>
+                                    <label style={{color: theme.palette.mode === 'dark' ? 'white' : 'black', fontSize: '13px'}} htmlFor="psw"><b>Password</b></label>
+                                    <input className='field' id="s-password" type="password" placeholder="Enter Password" name="psw" required />
+                                </div>
+                            </div>
+
+                            <div className="submit-cancel">
+                                <button className="signup-back-btn" type="submit">Submit</button>
+                                <button type="reset" className="resetbtn">Reset</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
     )
 }

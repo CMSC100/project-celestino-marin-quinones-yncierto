@@ -110,7 +110,7 @@ return(
             <header className='nav-header'>
                 <div className='image-text'>
                     <span className='image'>
-                        <img src= {require("./aprub.png")} alt=""/>
+                        <img src= {require("../logo.png")} alt=""/>
                     </span>
 
                     <div className='text header-text'>
@@ -142,9 +142,6 @@ return(
                             <button className='text nav-text' onClick={handleProfile}>Profile</button>
                         </div>
                     </li>
-                </div>
-
-                <div className='bottom-content'>
                     <li className=''>
                         <div>
                             <BiLogOut className='icon'/>
@@ -152,6 +149,17 @@ return(
                         </div>
                     </li>
                 </div>
+
+                {/* <div className='nav-link'>
+                    <li className=''>
+                        <div>
+                            <BiLogOut className='icon'/>
+                            <button className='text nav-text' onClick={handleLogout}>Logout</button>
+                        </div>
+                    </li>
+                </div> */}
+
+                
             </div>
         </nav>
         <div className='main-content'>

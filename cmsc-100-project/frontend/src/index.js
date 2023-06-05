@@ -6,6 +6,7 @@ import Root from './components/LogIn';
 import SignUp from './components/SignUp';
 
 import AdminRoot from './components/admin/AdminRoot'
+import SideBar from './components/admin/global/Sidebar/SideBar';
 import ApproverList from './components/admin/global/ApproverList';
 import StudentApplications from './components/admin/global/StudentApplications';
 
@@ -15,6 +16,7 @@ import ApproverRoot from './components/approver/ApproverRoot';
 import StudentHomepage from './components/student/StudentHomepage';
 import StudentRoot from './components/student/StudentRoot'
 import './index.css';
+import Dashboard from './components/admin/Dashboard';
 
 // Send a POST request to API to check if the user is logged in. Redirect the user to /student-homepage if already logged in
 const checkIfLoggedInOnHome = async () => {
@@ -97,6 +99,10 @@ const router = createBrowserRouter([
     path: '/admin',
     element: <AdminRoot />,
     children: [
+      {
+        path: '/admin/dashboard',
+        element: <Dashboard />
+      },
       {
         path: '/admin/manage-student-apps',
         element: <StudentApplications />

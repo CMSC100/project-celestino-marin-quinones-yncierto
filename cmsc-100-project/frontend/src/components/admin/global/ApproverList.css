@@ -1,3 +1,252 @@
+@import "//netdna.bootstrapcdn.com/font-awesome/3.0/css/font-awesome.css";
+
 .active {
     background-color: gray;
+}
+
+.titleAndLightSwitch{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    padding-bottom: 20px;
+}
+
+.approverContent{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 50px;
+    margin-top: 30px;
+    
+}
+
+#create-form{
+    /* overflow: auto;
+    padding-right: 20px; */
+    padding: 20px;
+    width: 100%;
+}
+
+.formCols{
+    display: flex;
+    flex-direction: row;
+}
+
+.titleAndTable{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.tableRowsApprover{
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    overflow: auto;
+    max-height: 235px;
+}
+
+.firstCol{
+    padding-right: 10px;
+}
+
+.secondCol{
+    padding-right: 10px;
+}
+
+.thirdCol{
+    padding-right: 10px;
+}
+
+.submit-cancel{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+
+.bottom-container-form{
+    padding-top: 20px;
+}
+
+.rows{
+    font-size: 13px;
+}
+
+.approverListContainer{
+    width: 100%;
+    border-radius: 20px;
+}
+
+.approverList{
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 0px;
+}
+
+.tableAndEditForm{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.edit-form{
+    border-radius: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 40%;
+}
+
+.container-form{
+    padding: 40px;
+}
+
+.rowHeadersApprover{
+    display: flex;
+    flex-direction: row;
+    height: 40px;
+    border-radius: 10px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.edit-cancel{
+    display: flex;
+    flex-direction: row;
+    padding-top: 20px;
+    padding-right: 0px;
+    justify-content: end;
+}
+
+.cancelbtn{
+    margin-right: 0px;
+}
+
+.indivHeaderApprover{
+    display: flex;
+    flex: 1;
+    justify-content: start;
+    font-weight: 500;
+    margin: 10px;
+    align-self: center;
+    font-size: 12px;
+}
+
+.contentTitle{
+    padding: 5px;
+}
+
+#searchName{
+    height: 40px;
+    width: 300px;
+    margin: 0px;
+}
+
+.searchBar{
+    width: fit-content;
+    height: fit-content;
+    margin: 20px;
+}
+
+.sortAndSearch{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    width: 100%;
+    justify-content: space-between;
+    padding: 20px;
+    padding-bottom: 0px;
+}
+
+#clearSearch{
+    margin: 0px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.clearSearchContainer{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: end;
+    padding-right: 0px;
+}
+
+ul{
+    list-style: none;
+}
+
+.sortButton{
+    cursor: pointer;
+    background: transparent;
+    outline: none;
+    position: relative;
+    text-align: center;
+    margin: 0;
+    width: 125px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+#sortAscButton{
+    cursor: pointer;
+    background: transparent;
+    outline: none;
+    position: relative;
+    text-align: center;
+    margin: 0;
+    width: 125px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+#sortDescButton{
+    cursor: pointer;
+    background: transparent;
+    outline: none;
+    position: relative;
+    text-align: center;
+    margin: 0;
+    width: 125px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.sortApprover{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 20px;
+    margin: 0;
+}
+
+#sbtn{
+    width: 125px;
+    height: 100%;
+    border-radius: 20px;
+    position: absolute;
+    transition: .5s;
+}
+
+.sortLbl{
+    padding-right: 10px;
+    font-size: 14px;
+}
+
+#searchName::-webkit-input-placeholder{
+    font-family: FontAwesome;
+    font-weight: normal;
+    overflow: visible;
+    vertical-align: top;
+    display: inline-block !important;
+    padding-left: 5px;
+    padding-top: 2px;
+    color: hsl(9, 40%, 60%);
+}
+
+.add-approver-container{
+    display: flex;
+    flex-direction: row;
+    width: fit-content;
+    border-radius: 20px;
+    margin-top: 20px;
 }

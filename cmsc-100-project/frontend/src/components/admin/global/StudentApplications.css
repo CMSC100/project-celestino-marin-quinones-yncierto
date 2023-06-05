@@ -1,0 +1,228 @@
+.contentFeed{
+    padding: 50px;
+    padding-top: 30px;
+    width: 100%;
+}
+
+.contentTitle{
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.outer-container{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+#modal{
+    width: 50%;
+    margin-left: 20px;
+}
+
+.modal-rows{
+    padding: 20px;
+}
+
+.modal-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.assign-container{
+    border-radius: 20px;
+}
+
+.cancelBtn{
+    display: flex;  
+    padding: 20px;
+    padding-top: 0px;
+    justify-content: center;
+}
+
+.toggleBtns{
+    width: 400px;
+    height: 40px;
+    margin: 35px;
+    border-radius: 20px;
+    position: relative;
+}
+
+.titleAndToggle{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.toggleButton{
+    cursor: pointer;
+    background: transparent;
+    outline: none;
+    position: relative;
+    text-align: center;
+    margin: 0;
+    width: 200px;
+}
+
+#btn{
+    width: 200px;
+    height: 100%;
+    border-radius: 20px;
+    position: absolute;
+    transition: .5s;
+}
+
+.toggleButton:active{
+    background-color: transparent;
+}
+
+.pendingList{
+    margin: 20px;
+}
+
+.pendingContent{
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+}
+
+.sort{
+    display: flex;
+    flex-direction: row;
+    margin: 20px;
+    margin-left: 27px;
+}
+
+.sortBtn{
+    display: flex;
+    flex-direction: rows;
+    justify-items: center;
+    align-items: center;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+
+.iconLabel{
+    font-size: 14px;
+    padding-right: 10px;
+}
+
+.sortBtns{
+    width: 250px;
+    height: 40px;
+    border-radius: 20px;
+    position: relative;
+    align-content: center;
+    justify-content: center;
+}
+
+#sbtn{
+    width: 125px;
+    height: 100%;
+    border-radius: 20px;
+    position: absolute;
+    transition: .5s;
+}
+
+.sortButton{
+    cursor: pointer;
+    background: transparent;
+    outline: none;
+    position: relative;
+    text-align: center;
+    margin: 0;
+    width: 125px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.sortButton:active{
+    background-color: transparent;
+}
+
+.sort{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 20px;
+    margin: 0;
+}
+
+.rows{
+    display: flex;
+    flex-direction: row;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.rowHeaders{
+    display: flex;
+    flex-direction: row;
+    height: 40px;
+    border-radius: 10px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.indivHeader{
+    display: flex;
+    flex: 1;
+    justify-content: start;
+    font-weight: 500;
+    margin: 10px;
+    align-self: center;
+    font-size: 13px;
+}
+
+.column{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin: 10px;
+}
+
+button#approve{
+    color: #2e7c67
+}
+
+button#reject{
+    color: #832f2c;
+}
+
+.approveReject{
+    display: flex;
+    flex-direction: row;
+}
+
+#email{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.tableRows{
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    overflow: auto;
+    max-height: 600px;
+}
+
+.studentListContent{
+    border-radius: 20px;
+    width: 100%;
+}
+
+.studentList{
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
