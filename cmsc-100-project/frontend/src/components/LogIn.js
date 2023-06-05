@@ -8,40 +8,40 @@ import { tokens } from '../theme';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 
-import './Login.css';
+import "./Login.css";
 
 export default function Root() {
   const [theme, colorMode] = useMode();
   const colors = tokens(theme.palette.mode);
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loginError, setLoginError] = useState('');
+  const [loginError, setLoginError] = useState("");
 
   // handle the effect when isLoggedIn state changes
   useEffect(() => {
     if (isLoggedIn) {
       // essentially reloads page if logged in, "domino"-ing to their own appropriate page
-      navigate('/');
+      navigate("/");
     }
   }, [isLoggedIn, navigate]);
 
   // redirect to sign up page
   const handleSignUp = () => {
-    navigate('/sign-up');
+    navigate("/sign-up");
   };
 
   // handle the login form submission. Sends POST request to API with email and password from the form. If successful, set isLoggedIn to true, set the cookie, and set the username in localStorage
   const handleLogin = (e) => {
     e.preventDefault();
 
-    fetch('http://localhost:3001/login', {
-      method: 'POST',
+    fetch("http://localhost:3001/login", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: document.getElementById('email').value,
-        password: document.getElementById('psw').value,
+        email: document.getElementById("email").value,
+        password: document.getElementById("psw").value,
       }),
     })
       .then((response) => response.json())
@@ -49,26 +49,25 @@ export default function Root() {
         if (body.success) {
           setIsLoggedIn(true);
           const cookies = new Cookies();
-          cookies.set('authToken', body.token, {
-            path: 'localhost:3001/',
+          cookies.set("authToken", body.token, {
+            path: "localhost:3001/",
             age: 60 * 60,
             sameSite: false,
           });
-          localStorage.setItem('username', body.username);
-          localStorage.setItem('userData', body.userData)
+          localStorage.setItem("username", body.username);
+          localStorage.setItem("userData", body.userData);
         } else {
           if (body.userExists) {
-            setLoginError("Your account has not yet been approved.")
+            setLoginError("Your account has not yet been approved.");
           } else {
             // make the outline of the input fields red
-            document.getElementById('email').style.borderColor = 'red';
-            document.getElementById('psw').style.borderColor = 'red';
+            document.getElementById("email").style.borderColor = "red";
+            document.getElementById("psw").style.borderColor = "red";
             // make something that says Email or Password is incorrect not alert
-            setLoginError('Email or Password is incorrect.');
+            setLoginError("Email or Password is incorrect.");
             // clear the input fields
-            document.getElementById('email').value = '';
-            document.getElementById('psw').value = '';
-            
+            document.getElementById("email").value = "";
+            document.getElementById("psw").value = "";
           }
         }
       });
@@ -76,9 +75,9 @@ export default function Root() {
 
   // handle input change and clear loginError
   const handleInputChange = () => {
-    setLoginError('');
-    document.getElementById('email').style.borderColor = '#ccc';
-    document.getElementById('psw').style.borderColor = '#ccc';
+    setLoginError("");
+    document.getElementById("email").style.borderColor = "#ccc";
+    document.getElementById("psw").style.borderColor = "#ccc";
   };
 
   return (
@@ -125,4 +124,3 @@ export default function Root() {
     </ColorModeContext.Provider>
   );
 }
-

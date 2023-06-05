@@ -1,8 +1,8 @@
-.admin{
-    display: flex;
-    position: relative;
+.admin {
+  display: flex;
+  position: relative;
 }
 
-.content{
-    flex: 1;
+.content {
+  flex: 1;
 }

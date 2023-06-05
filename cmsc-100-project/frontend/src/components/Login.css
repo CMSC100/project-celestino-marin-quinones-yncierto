@@ -25,6 +25,7 @@ body {
 }
 
 body {
+  background-color: #e1e8fd;
   position: relative;
   height: 100%;
   overflow: hidden;
@@ -44,7 +45,12 @@ body {
   transform: translate(-50%, -50%);
   margin: auto;
   padding: 40px;
+<<<<<<< HEAD
   border-radius: 5px;
+=======
+  box-shadow: 0 15px 35px 0 rgba(180, 182, 248, 0.764), 0 4px 10px 0 rgb(0, 0, 0);
+  border-radius: 10px;
+>>>>>>> 5fc8000ea6614f2a5d9eb17ae332c0deced72d07
 }
 
 form {
@@ -57,7 +63,6 @@ form {
   font-size: 12px;
 }
 
-
 label {
   display: block;
   font-weight: bold;
@@ -65,8 +70,8 @@ label {
   color: #333;
 }
 
-input[type=text],
-input[type=password] {
+input[type="text"],
+input[type="password"] {
   width: 100%;
   padding: 12px;
   margin: 8px 0;
@@ -90,13 +95,12 @@ button:hover {
   opacity: 0.8;
 }
 
-
 .login-btn-container {
   text-align: center;
 }
 
 .login-btn {
-  background-color: #695CFE;
+  background-color: #695cfe;
   margin-top: 15px;
   width: 15%;
 }

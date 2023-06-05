@@ -50,17 +50,17 @@
     border-radius: 5px;
 }
 
-.sidebarOptions{
-    display: flex;
-    flex: row;
-    justify-content: space-between;
-    padding: 20px;
-    padding-left: 0px;
-    padding-top: 50px;
+.sidebarOptions {
+  display: flex;
+  flex: row;
+  justify-content: space-between;
+  padding: 20px;
+  padding-left: 0px;
+  padding-top: 50px;
 }
 
-.cardIcon{
-    margin-right: 10px;
+.cardIcon {
+  margin-right: 10px;
 }
 
 .menuButton{
@@ -84,8 +84,8 @@
     outline: none;
 }
 
-.logoAndMenuBtn{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+.logoAndMenuBtn {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
