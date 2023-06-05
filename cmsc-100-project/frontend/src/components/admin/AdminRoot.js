@@ -10,27 +10,26 @@ import SideBar from './global/Sidebar/SideBar.jsx';
 import './AdminRoot.css';
 import '../../index.css'
 import StudentApplications from "./global/StudentApplications.js";
+import { useTheme } from '@emotion/react';
 
 //uncomment nalang if gagawin na final UI
 // import "./AdminRoot.css";
 // import "../../index.css";
 
 export default function AdminRoot() {
-    const colors = tokens(theme.palette.mode);
-    const [theme, colorMode] = useMode();
-    const navigate = useNavigate();
+  const [theme, colorMode] = useMode();
 
-    return(
-        <ColorModeContext.Provider value={ colorMode }>
-            <ThemeProvider theme={theme}>
-                <CssBaseline />
-                <div className='admin'>
-                    <SideBar/>
-                    <Outlet/>
-                </div>
-            </ThemeProvider>
-        </ColorModeContext.Provider>
-    )
+  return(
+      <ColorModeContext.Provider value={ colorMode }>
+          <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <div className='admin'>
+                  <SideBar/>
+                  <Outlet/>
+              </div>
+          </ThemeProvider>
+      </ColorModeContext.Provider>
+  )
 }
 
                     // <button type="button" onClick={handleLogout}>Logout</button>

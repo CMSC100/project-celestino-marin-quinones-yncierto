@@ -45,12 +45,7 @@ body {
   transform: translate(-50%, -50%);
   margin: auto;
   padding: 40px;
-<<<<<<< HEAD
   border-radius: 5px;
-=======
-  box-shadow: 0 15px 35px 0 rgba(180, 182, 248, 0.764), 0 4px 10px 0 rgb(0, 0, 0);
-  border-radius: 10px;
->>>>>>> 5fc8000ea6614f2a5d9eb17ae332c0deced72d07
 }
 
 form {
