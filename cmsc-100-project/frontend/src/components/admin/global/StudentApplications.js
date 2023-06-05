@@ -133,6 +133,7 @@ export default function StudentApplications() {
         const student = students.find(student => student._id === studentIDAssign);
         if (student.adviser) {
             alert("The student already has an adviser.");
+            toggleModal();
             return;
         }
 
@@ -149,7 +150,8 @@ export default function StudentApplications() {
                 alert("Adviser successfully assigned to student.")
                 toggleModal();
             } else {
-              alert("Failed adviser assignment.")
+                alert("Failed adviser assignment.")
+                toggleModal();
             }
           })
     }
