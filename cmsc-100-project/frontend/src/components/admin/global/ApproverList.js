@@ -3,6 +3,7 @@ import { useTheme, IconButton } from '@mui/material';
 import { tokens, ColorModeContext } from '../../../theme';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
+import UploadRoundedIcon from '@mui/icons-material/UploadRounded';
 import './ApproverList.css'
 
 export default function Admin(props) {
@@ -198,9 +199,9 @@ export default function Admin(props) {
   //   setSort(e.target.value); // set sort to new value
   // };
 
-  const uploadCSV = (e) => {
+  const uploadCSV = (file) => {
     const formData = new FormData();
-    formData.append("csv-file", e.target.files[0]);
+    formData.append("csv-file", file);
 
     fetch("http://localhost:3001/uploadcsv", {
       method: "POST",
@@ -212,6 +213,42 @@ export default function Admin(props) {
           alert("Successfully mapped students to their advisers.");
         else alert("Failed mapping of students.");
       });
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+  
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    // Add a visual cue to indicate the drop zone
+    e.currentTarget.classList.add("drag-over");
+  };
+  
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    // Remove the visual cue when leaving the drop zone
+    e.currentTarget.classList.remove("drag-over");
+  };
+  
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.currentTarget.classList.remove("drag-over");
+  
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      handleFile(file);
+    }
+  };
+
+  const handleFile = (file) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const contents = e.target.result;
+      
+      uploadCSV(file);
+    };
+    reader.readAsText(file);
   };
 
   // sort list of approver accounts
@@ -371,17 +408,26 @@ export default function Admin(props) {
         <div className='csv-container' style={{ backgroundColor: theme.palette.mode === 'dark' ? colors.primary[400] : 'white' }}>
           <div className='csv-content'>
             <h3>Upload CSV File</h3>
-            <p>The CSV file must contain the student number and the name of the adviser.</p>
+            <p style={{wordWrap: 'break-word'}}>Upload a CSV file to automatically map students to their adviser. The CSV file must contain the student number and the name of the adviser.</p>
             <p>Follow this format:</p>
-            <br/>
-            {/* <form encType="multipart/form-data" onSubmit={uploadCSV}>  */}
-            <input
-              name="csv-file"
-              type="file"
-              accept="text/csv"
-              onChange={uploadCSV}
-            />
             <br />
+            <form onClick={() => document.querySelector(".input-field").click()} onDrop={handleDrop} onDragOver={handleDragOver} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} style={{cursor: 'pointer'}}>
+              <div className='graphics'>
+                <UploadRoundedIcon style={{ width: '40px', height: '40px', alignSelf: 'center' }} />
+                <span style={{ fontSize: '15px', fontWeight: 'bold' }}>Click to upload</span>
+                <p>or Drag and Drop to upload your CSV file</p>
+              </div>
+              
+              {/* <form encType="multipart/form-data" onSubmit={uploadCSV}>  */}
+              <input
+                className='input-field'
+                name="csv-file"
+                type="file"
+                accept="text/csv"
+                onChange={handleFile}
+                hidden
+              />
+            </form>
           </div>
         </div>
       </div>
