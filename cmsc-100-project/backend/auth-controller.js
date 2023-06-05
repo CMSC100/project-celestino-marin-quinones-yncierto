@@ -108,6 +108,16 @@ const getApproverDetails = async (req, res) => {
 const editApprover = async (req, res) => {
   // get details
   let { docRef, firstName, middleName, lastName } = req.body;
+  let initials = "";
+
+  firstName.split(" ").forEach((element) => {
+    initials += element[0];
+  });
+  initials += middleName == "" ? "" : middleName[0];
+  initials += lastName.replaceAll(" ", "");
+
+  let fullName = firstName + " " + ((middleName == "") ? "" : middleName + " ") + lastName
+
   if (docRef) {
     let update = await User.updateOne(
       { _id: docRef },
@@ -116,6 +126,8 @@ const editApprover = async (req, res) => {
           firstName: firstName,
           middleName: middleName,
           lastName: lastName,
+          fullName: fullName,
+          initials: initials.toUpperCase()
         },
       }
     );
