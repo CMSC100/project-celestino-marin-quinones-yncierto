@@ -249,15 +249,23 @@ ul{
     width: fit-content;
     border-radius: 20px;
     margin-top: 20px;
+    height:fit-content;
 }
 
 .csv-container{
     border-radius: 20px;
     margin: 20px;
+    height: fit-content;
 }
 
 .csv-content{
+    display: flex;
+    flex-direction: column;
     padding: 20px;
+    justify-content: center;
+    align-content: center;
+    width: 600px;
+    height: 320px;
 }
 
 p{
@@ -267,4 +275,15 @@ p{
 .bottom{
     display: flex;
     flex-direction: row;
+}
+
+.graphics{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    border:4px dashed;
+    border-radius: 20px;
+    height: 150px;
+    padding: 3px;
 }

@@ -1,8 +1,13 @@
+import { IconButton, Typography, useTheme } from '@mui/material';
+import { tokens } from "../../theme"
+import '../../theme.js'
 import React, { useEffect, useState } from "react";
 import "./Modal.css";
 
-export default function StudentProfile({ setProfileModal, userData }) {
+export default function StudentProfile({ setProfileModalOpen, userData }) {
   const [adviserName, setAdviserName] = useState("");
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
 
   useEffect(() => {
     fetch(`http://localhost:3001/getapproverdetails?docRef=${userData.adviser}`)
@@ -12,17 +17,17 @@ export default function StudentProfile({ setProfileModal, userData }) {
 
   return (
     <div className="profile-bg">
-      <div className="profile-container">
+      <div className="profile-container" style={{backgroundColor: theme.palette.mode === 'dark' ? colors.primary[500] : '#f5f4f7'}}>
         <div className="image-text">
           <span className="image">
-            <img src={require("./aprub.png")} alt="" />
+            <img src={theme.palette.mode==='dark' ? require('../logo-white.png') : require('../logo.png')} alt="" />
           </span>
 
           <div className="text header-text">
             {/* dapat dito yung fullname ng nag log in*/}
             <span className="name">{userData.fullName}</span>
             {/* dito yung type ng user */}
-            <span className="usertype">{userData.userType}</span>
+            <span className="usertype" style={{color: theme.palette.mode==='dark'? 'white' : 'black'}}>{userData.userType}</span>
           </div>
         </div>
         <div className="profile-info">
@@ -46,7 +51,7 @@ export default function StudentProfile({ setProfileModal, userData }) {
         </div>
         <button
           onClick={() => {
-            setProfileModal(false);
+            setProfileModalOpen(false);
           }}
           id="cancelBtn"
         >
