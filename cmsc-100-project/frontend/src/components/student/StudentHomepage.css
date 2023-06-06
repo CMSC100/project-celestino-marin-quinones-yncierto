@@ -104,6 +104,10 @@
   display: block;
 }
 
+.application-cards{
+  max-height: 600px;
+}
+
 .popup {
   position: fixed;
   top: 50%;
@@ -221,7 +225,6 @@
   padding-bottom: 20px;
   overflow: auto;
   margin: auto;
-  background-color: #aec2fd;
   border-radius: 10px;
 }
 

@@ -28,6 +28,7 @@ export default function StudentHomepage() {
   const colorMode = useContext(ColorModeContext);
 
   const navigate = useNavigate();
+  
 
   // ===========================================================================
   // fetch user data
@@ -301,213 +302,217 @@ export default function StudentHomepage() {
       </div> 
         
         {applications.length > 0 ? ( // If there are applications
-          <div className="application-list" style={{backgroundColor: theme.palette.mode === 'dark' ? colors.primary[200] : colors.primary[800]}}>
+          <div className="application-list" style={{backgroundColor: theme.palette.mode === 'dark' ? colors.primary[200] : 'white'}}>
             <h3>APPLICATIONS</h3>
-
-            {applications.map((application, index) => (
-              <div
-                className={`application-card ${
-                  application.status === "closed" ? "closed" : ""
-                }`}
-                key={index}
-              >
-                <div className="application-info">
-                  {application.status !== "open" && (
-                    <div>
-                      <button onClick={() => viewRemarks(application._id)}>
-                        {application.showRemarks
-                          ? "Hide Remarks"
-                          : "View Remarks"}
-                      </button>
-                    </div>
-                  )}
-
-                  <h4>Application {applications.length - index}</h4>
-                  <div className="status-bar">
-                    <span className={`status ${application.status}`}>
-                      {application.status}
-                    </span>
-                  </div>
-
-                  {application.status === "open" &&
-                  application.studentSubmission.length === 0 ? ( // If application is open and no submission yet
-                    <>
-                      <p>
-                        <b>Name:</b> {userData.fullName}
-                      </p>
-                      <p>
-                        <b>Student Number:</b> {userData.studentNumber}
-                      </p>
-                      <p>
-                        <b>Email:</b> {userData.email}
-                      </p>
-                      <p>
-                        <b>Adviser:</b> {adviserName || "Not yet assigned"}
-                      </p>
-
-                      {application.step == 1 && ( // If application is in step 1
-                        <>
-                          <label>
-                            <b>Link to GitHub repository</b>
-                          </label>
-                          <input
-                            type="text"
-                            placeholder="https://github.com/..."
-                            value={githubLink}
-                            onChange={(e) => setGithubLink(e.target.value)}
-                          />
-                          {githubLinkError && (
-                            <p className="error-message">{githubLinkError}</p>
-                          )}
-                        </>
-                      )}
-                    </>
-                  ) : application.studentSubmission.length > 0 ? ( // If application has submission
-                    <>
-                      <p>
-                        <b>Name:</b> {userData.fullName}
-                      </p>
-                      <p>
-                        <b>Student Number:</b> {userData.studentNumber}
-                      </p>
-                      <p>
-                        <b>Email:</b> {userData.email}
-                      </p>
-                      <p>
-                        <b>Adviser:</b> {adviserName || "Not yet assigned"}
-                      </p>
-                      <p>
-                        <b>GitHub Links:</b>
-                      </p>
-                      <ul style={{ listStyleType: "disc", marginLeft: "3em" }}>
-                        {application.studentSubmission.map(
-                          (submission, index) => (
-                            <li key={index}>
-                              <a
-                                href={submission.githubLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                {submission.githubLink}
-                              </a>
-                            </li>
-                          )
-                        )}
-                      </ul>
-                    </>
-                  ) : (
-                    <p>No application submitted yet</p>
-                  )}
-
-                  {application.showRemarks &&
-                    application.remarks &&
-                    application.remarks.length > 0 && ( // If application has remarks
-                      <div className="remarks-container">
-                        <h5>Remarks:</h5>
-                        <div className="remarks-chat">
-                          {application.remarks.map((remark, remarkIndex) => (
-                            <div className={`remark-message ${remark.userType}`} key={remarkIndex}>
-                              <div className="remark-info">
-                                <p>
-                                  <b>Commenter:</b> {remark.commenter}
-                                </p>
-                                <p className="remark-date">
-                                  {new Date(remark.date).toLocaleString(
-                                    undefined,
-                                    {
-                                      dateStyle: "short",
-                                      timeStyle: "short",
-                                    }
-                                  )}
-                                </p>
-                              </div>
-                              <p className="remark-content">{remark.remark}</p>
-                            </div>
-                          ))}
-                        </div>
-                        {application.enableRemarks && (
-                          <div className="add-remark">
-                            <textarea
-                              placeholder="Add a remark"
-                              value={remarkContent}
-                              onChange={(e) => setRemarkContent(e.target.value)}
-                            ></textarea>
-                          </div>
-                        )}
+          
+          <div className="application-cards">
+          {applications.map((application, index) => (
+                <div
+                  className={`application-card ${
+                    application.status === "closed" ? "closed" : ""
+                  }`}
+                  key={index}
+                >
+                  <div className="application-info">
+                    {application.status !== "open" && (
+                      <div>
+                        <button onClick={() => viewRemarks(application._id)}>
+                          {application.showRemarks
+                            ? "Hide Remarks"
+                            : "View Remarks"}
+                        </button>
                       </div>
                     )}
 
-                  {application.isReturned && (
-                    <>
-                      <label>
-                        <b>Resubmit GitHub repository</b>
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="https://github.com/..."
-                        value={githubLink}
-                        onChange={(e) => setGithubLink(e.target.value)}
-                      />
-                      {githubLinkError && (
-                        <p className="error-message">{githubLinkError}</p>
+                    <h4>Application {applications.length - index}</h4>
+                    <div className="status-bar">
+                      <span className={`status ${application.status}`}>
+                        {application.status}
+                      </span>
+                    </div>
+
+                    {application.status === "open" &&
+                    application.studentSubmission.length === 0 ? ( // If application is open and no submission yet
+                      <>
+                        <p>
+                          <b>Name:</b> {userData.fullName}
+                        </p>
+                        <p>
+                          <b>Student Number:</b> {userData.studentNumber}
+                        </p>
+                        <p>
+                          <b>Email:</b> {userData.email}
+                        </p>
+                        <p>
+                          <b>Adviser:</b> {adviserName || "Not yet assigned"}
+                        </p>
+
+                        {application.step == 1 && ( // If application is in step 1
+                          <>
+                            <label>
+                              <b>Link to GitHub repository</b>
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="https://github.com/..."
+                              value={githubLink}
+                              onChange={(e) => setGithubLink(e.target.value)}
+                            />
+                            {githubLinkError && (
+                              <p className="error-message">{githubLinkError}</p>
+                            )}
+                          </>
+                        )}
+                      </>
+                    ) : application.studentSubmission.length > 0 ? ( // If application has submission
+                      <>
+                        <p>
+                          <b>Name:</b> {userData.fullName}
+                        </p>
+                        <p>
+                          <b>Student Number:</b> {userData.studentNumber}
+                        </p>
+                        <p>
+                          <b>Email:</b> {userData.email}
+                        </p>
+                        <p>
+                          <b>Adviser:</b> {adviserName || "Not yet assigned"}
+                        </p>
+                        <p>
+                          <b>GitHub Links:</b>
+                        </p>
+                        <ul style={{ listStyleType: "disc", marginLeft: "3em" }}>
+                          {application.studentSubmission.map(
+                            (submission, index) => (
+                              <li key={index}>
+                                <a
+                                  href={submission.githubLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  {submission.githubLink}
+                                </a>
+                              </li>
+                            )
+                          )}
+                        </ul>
+                      </>
+                    ) : (
+                      <p>No application submitted yet</p>
+                    )}
+
+                    {application.showRemarks &&
+                      application.remarks &&
+                      application.remarks.length > 0 && ( // If application has remarks
+                        <div className="remarks-container">
+                          <h5>Remarks:</h5>
+                          <div className="remarks-chat">
+                            {application.remarks.map((remark, remarkIndex) => (
+                              <div className={`remark-message ${remark.userType}`} key={remarkIndex}>
+                                <div className="remark-info">
+                                  <p>
+                                    <b>Commenter:</b> {remark.commenter}
+                                  </p>
+                                  <p className="remark-date">
+                                    {new Date(remark.date).toLocaleString(
+                                      undefined,
+                                      {
+                                        dateStyle: "short",
+                                        timeStyle: "short",
+                                      }
+                                    )}
+                                  </p>
+                                </div>
+                                <p className="remark-content">{remark.remark}</p>
+                              </div>
+                            ))}
+                          </div>
+                          {application.enableRemarks && (
+                            <div className="add-remark">
+                              <textarea
+                                placeholder="Add a remark"
+                                value={remarkContent}
+                                onChange={(e) => setRemarkContent(e.target.value)}
+                              ></textarea>
+                            </div>
+                          )}
+                        </div>
                       )}
-                      <button
-                        className="submit-app"
-                        onClick={async () => {
-                          try {
-                            await submitApplication(application);
-                            postRemark(application);
-                          } catch (error) {
-                            console.error("Error submitting application:", error);
-                          }
-                        }}
-                        
-                        disabled={!adviserName}
-                      >
-                        Resubmit Application
-                      </button>
-                    </>
-                  )}
-                </div>
 
-                <div className="app-card-btns">
-                  {application.status === "cleared" && ( // If application is cleared, show print as PDF button
-                    <button className="print-app" onClick={handlePrintPDF}>
-                      Print as PDF
-                    </button>
-                  )}
+                    {application.isReturned && (
+                      <>
+                        <label>
+                          <b>Resubmit GitHub repository</b>
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="https://github.com/..."
+                          value={githubLink}
+                          onChange={(e) => setGithubLink(e.target.value)}
+                        />
+                        {githubLinkError && (
+                          <p className="error-message">{githubLinkError}</p>
+                        )}
+                        <button
+                          className="submit-app"
+                          onClick={async () => {
+                            try {
+                              await submitApplication(application);
+                              postRemark(application);
+                            } catch (error) {
+                              console.error("Error submitting application:", error);
+                            }
+                          }}
+                          
+                          disabled={!adviserName}
+                        >
+                          Resubmit Application
+                        </button>
+                      </>
+                    )}
+                  </div>
 
-                  <button
-                    className="close-app"
-                    onClick={() => {
-                      if (application.status !== "closed") {
-                        // If application is not closed, close application
-                        closeApplication(application._id);
-                        setTriggerFetchApp(!triggerFetchApp);
-                      }
-                    }}
-                    disabled={application.status === "closed"}
-                  >
-                    {/* If application is closed, show closed button */}
-                    {application.status === "closed"
-                      ? "Closed"
-                      : "Close Application"}
-                  </button>
-
-                  {application.status === "open" &&
-                    application.studentSubmission.length === 0 && ( // If application is open and no submission yet, show submit application button
-                      
-                      <button
-                        className="submit-app"
-                        onClick={() => submitApplication(application)}
-                        disabled={!adviserName}
-                      >
-                        Submit Application
+                  <div className="app-card-btns">
+                    {application.status === "cleared" && ( // If application is cleared, show print as PDF button
+                      <button className="print-app" onClick={handlePrintPDF}>
+                        Print as PDF
                       </button>
                     )}
+
+                    <button
+                      className="close-app"
+                      onClick={() => {
+                        if (application.status !== "closed") {
+                          // If application is not closed, close application
+                          closeApplication(application._id);
+                          setTriggerFetchApp(!triggerFetchApp);
+                        }
+                      }}
+                      disabled={application.status === "closed"}
+                    >
+                      {/* If application is closed, show closed button */}
+                      {application.status === "closed"
+                        ? "Closed"
+                        : "Close Application"}
+                    </button>
+
+                    {application.status === "open" &&
+                      application.studentSubmission.length === 0 && ( // If application is open and no submission yet, show submit application button
+                        
+                        <button
+                          className="submit-app"
+                          onClick={() => submitApplication(application)}
+                          disabled={!adviserName}
+                        >
+                          Submit Application
+                        </button>
+                      )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+          </div>
+
+            
           </div>
         ) : (
           <div className="application-list" style={{backgroundColor: theme.palette.mode === 'dark' ? colors.primary[200] : 'white'}}>

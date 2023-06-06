@@ -13,7 +13,7 @@ import Person3Icon from '@mui/icons-material/Person3';
 import LogoutIcon from '@mui/icons-material/Logout';
 // import StudentProfile from '../../modal/StudentProfile';
 
-export default function StudentSideBar({setProfileModalOpen}) {
+export default function StudentSideBar(setProfileModalOpen) {
     const navigate = useNavigate();
     const handleLogout = (e) => {
         // Clear the authentication token (if applicable)
@@ -62,6 +62,10 @@ export default function StudentSideBar({setProfileModalOpen}) {
         setProfileModalOpen(true);
     };
 
+    const handleOpenApplicationClick = () => {
+        handleOpenApplication();
+    }
+
     const handleOpenApplication = async () => {
 
         try {
@@ -88,6 +92,7 @@ export default function StudentSideBar({setProfileModalOpen}) {
             } else {
                 setTriggerFetchApp(!triggerFetchApp);
                 console.log('Application created:', application);
+                alert("Successfully opened an applciation! Reload the page to see.")
                 setShowSuccessMessage(true);
                 setTimeout(() => {
                     setShowSuccessMessage(false);
@@ -134,7 +139,7 @@ export default function StudentSideBar({setProfileModalOpen}) {
                             </div>
                             <div className="indivCards">
                                 
-                                    <IconButton className="navButton" style={{width: '40px'}} type="button" id='approver-button' onClick={handleOpenApplication}>
+                                    <IconButton className="navButton" style={{width: '40px'}} type="button" id='approver-button' onClick={handleOpenApplicationClick}>
                                         <ApprovalRoundedIcon className="cardIcon" />
                                     </IconButton>
                                
@@ -174,7 +179,7 @@ export default function StudentSideBar({setProfileModalOpen}) {
                             </div>
                             <div className="indivCards">
                                 
-                                    <IconButton className="navButton" style={{width: '40px'}} type="button" id='approver-button' onClick={handleOpenApplication}>
+                                    <IconButton className="navButton" style={{width: '40px'}} type="button" id='approver-button' onClick={handleOpenApplicationClick}>
                                         <ApprovalRoundedIcon className="cardIcon" style={{ color: 'black' }}/>
                                     </IconButton>
                                 
@@ -220,7 +225,7 @@ export default function StudentSideBar({setProfileModalOpen}) {
                             </div>
                             <div className="indivCards">
                                 
-                                    <IconButton className="navButton" type="button" id='approver-button' onClick={handleOpenApplication}>
+                                    <IconButton className="navButton" type="button" id='approver-button' onClick={handleOpenApplicationClick}>
                                         <ApprovalRoundedIcon className="cardIcon" />
                                         <h1 className="buttonLabel">Open an Application</h1>
                                     </IconButton>
@@ -266,7 +271,7 @@ export default function StudentSideBar({setProfileModalOpen}) {
                             </div>
                             <div className="indivCards">
                                 
-                                    <IconButton className="navButton" type="button" id='approver-button' onClick={handleOpenApplication}>
+                                    <IconButton className="navButton" type="button" id='approver-button' onClick={handleOpenApplicationClick}>
                                         <ApprovalRoundedIcon style={{ color: 'black' }} className="cardIcon" />
                                         <h1 style={{ color: 'black' }} className="buttonLabel">Open an Application</h1>
                                     </IconButton>

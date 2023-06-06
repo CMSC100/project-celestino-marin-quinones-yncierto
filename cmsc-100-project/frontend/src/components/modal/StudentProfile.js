@@ -20,14 +20,14 @@ export default function StudentProfile({ setProfileModalOpen, userData }) {
       <div className="profile-container" style={{backgroundColor: theme.palette.mode === 'dark' ? colors.primary[500] : '#f5f4f7'}}>
         <div className="image-text">
           <span className="image">
-            <img src={require("./aprub.png")} alt="" />
+            <img src={theme.palette.mode==='dark' ? require('../logo-white.png') : require('../logo.png')} alt="" />
           </span>
 
           <div className="text header-text">
             {/* dapat dito yung fullname ng nag log in*/}
             <span className="name">{userData.fullName}</span>
             {/* dito yung type ng user */}
-            <span className="usertype">{userData.userType}</span>
+            <span className="usertype" style={{color: theme.palette.mode==='dark'? 'white' : 'black'}}>{userData.userType}</span>
           </div>
         </div>
         <div className="profile-info">
