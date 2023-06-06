@@ -78,7 +78,7 @@ export default function StudentRoot() {
                     theme.palette.mode === "dark" ? colors.primary[500] : "#f5f4f7",
                 }}
             >
-                <StudentSideBar setProfileModalOpen={setProfileModalOpen} />
+                <StudentSideBar setProfileModalOpen={setProfileModalOpen} setTriggerFetchApp={setTriggerFetchApp} triggerFetchApp={triggerFetchApp} />
                 <Outlet context={[triggerFetchApp, setTriggerFetchApp]} />
             </div>
             {profileModalOpen && (

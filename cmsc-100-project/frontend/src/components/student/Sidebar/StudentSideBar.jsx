@@ -13,7 +13,7 @@ import Person3Icon from '@mui/icons-material/Person3';
 import LogoutIcon from '@mui/icons-material/Logout';
 // import StudentProfile from '../../modal/StudentProfile';
 
-export default function StudentSideBar(setProfileModalOpen) {
+export default function StudentSideBar({setProfileModalOpen, setTriggerFetchApp, triggerFetchApp}) {
     const navigate = useNavigate();
     const handleLogout = (e) => {
         // Clear the authentication token (if applicable)
@@ -28,7 +28,6 @@ export default function StudentSideBar(setProfileModalOpen) {
     const colors = tokens(theme.palette.mode);
     const [isCollapsed, setIsCollapsed] = useState(true);
     const [userData, setUserData] = useState(true);
-    const [triggerFetchApp, setTriggerFetchApp] = useState(false);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     useEffect(() => {
@@ -92,7 +91,6 @@ export default function StudentSideBar(setProfileModalOpen) {
             } else {
                 setTriggerFetchApp(!triggerFetchApp);
                 console.log('Application created:', application);
-                alert("Successfully opened an applciation! Reload the page to see.")
                 setShowSuccessMessage(true);
                 setTimeout(() => {
                     setShowSuccessMessage(false);
