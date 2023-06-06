@@ -479,22 +479,25 @@ export default function StudentHomepage() {
                       </button>
                     )}
 
-                    <button
-                      className="close-app"
-                      onClick={() => {
-                        if (application.status !== "closed") {
-                          // If application is not closed, close application
-                          closeApplication(application._id);
-                          setTriggerFetchApp(!triggerFetchApp);
-                        }
-                      }}
-                      disabled={application.status === "closed"}
-                    >
-                      {/* If application is closed, show closed button */}
-                      {application.status === "closed"
-                        ? "Closed"
-                        : "Close Application"}
-                    </button>
+                    {
+                      application.status !== "cleared" &&
+                      <button
+                        className="close-app"
+                        onClick={() => {
+                          if (application.status !== "closed") {
+                            // If application is not closed, close application
+                            closeApplication(application._id);
+                            setTriggerFetchApp(!triggerFetchApp);
+                          }
+                        }}
+                        disabled={application.status === "closed"}
+                      >
+                        {/* If application is closed, show closed button */}
+                        {application.status === "closed"
+                          ? "Closed"
+                          : "Close Application"}
+                      </button>
+                    }
 
                     {application.status === "open" &&
                       application.studentSubmission.length === 0 && ( // If application is open and no submission yet, show submit application button
