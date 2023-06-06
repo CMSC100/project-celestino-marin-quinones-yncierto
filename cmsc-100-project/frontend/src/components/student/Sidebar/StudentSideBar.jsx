@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Cookies from "universal-cookie";
 import { IconButton, Typography, useTheme } from '@mui/material';
 import { Link, useNavigate } from "react-router-dom";
@@ -31,6 +31,29 @@ export default function StudentSideBar({setProfileModalOpen}) {
     const [triggerFetchApp, setTriggerFetchApp] = useState(false);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
+    useEffect(() => {
+        // Function to fetch user data
+        const fetchUserData = async () => {
+        try {
+            const response = await fetch('http://localhost:3001/getloggedinuserdata', {
+            method: 'POST',
+            credentials: 'include',
+            });
+
+            if (response.ok) {
+            const data = await response.json();
+            setUserData(data);
+            } else {
+            console.error('Failed to fetch user data');
+            }
+        } catch (error) {
+            console.error('Error occurred while fetching user data:', error);
+        }
+        };
+
+        fetchUserData();
+    }, []);
+
     const handleCollapse = function() {
         setIsCollapsed(!isCollapsed);
     }
@@ -40,6 +63,7 @@ export default function StudentSideBar({setProfileModalOpen}) {
     };
 
     const handleOpenApplication = async () => {
+
         try {
             
             // Send a POST request to create the application
