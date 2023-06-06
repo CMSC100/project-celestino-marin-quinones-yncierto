@@ -1,8 +1,13 @@
+import { IconButton, Typography, useTheme } from '@mui/material';
+import { tokens } from "../../theme"
+import '../../theme.js'
 import React, { useEffect, useState } from "react";
 import "./Modal.css";
 
-export default function StudentProfile({ setProfileModal, userData }) {
+export default function StudentProfile({ setProfileModalOpen, userData }) {
   const [adviserName, setAdviserName] = useState("");
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
 
   useEffect(() => {
     fetch(`http://localhost:3001/getapproverdetails?docRef=${userData.adviser}`)
@@ -12,7 +17,7 @@ export default function StudentProfile({ setProfileModal, userData }) {
 
   return (
     <div className="profile-bg">
-      <div className="profile-container">
+      <div className="profile-container" style={{backgroundColor: theme.palette.mode === 'dark' ? colors.primary[500] : '#f5f4f7'}}>
         <div className="image-text">
           <span className="image">
             <img src={require("./aprub.png")} alt="" />
@@ -46,7 +51,7 @@ export default function StudentProfile({ setProfileModal, userData }) {
         </div>
         <button
           onClick={() => {
-            setProfileModal(false);
+            setProfileModalOpen(false);
           }}
           id="cancelBtn"
         >

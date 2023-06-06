@@ -1,9 +1,15 @@
 import { useNavigate, useOutletContext } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import ApplicationModal from "../modal/ApplicationModal";
 import PdfModal from "../modal/PdfModal";
 import Cookies from "universal-cookie";
 import "./StudentHomepage.css";
+import { ColorModeContext, useMode } from '../../theme';
+import { CssBaseline, ThemeProvider, IconButton, useTheme } from '@mui/material';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import '../../theme.js';
+import { tokens } from '../../theme';
 
 export default function StudentHomepage() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -17,7 +23,9 @@ export default function StudentHomepage() {
   const [adviserName, setAdviserName] = useState("");
   const [githubLinkError, setGithubLinkError] = useState("");
   const [remarkContent, setRemarkContent] = useState("");
-
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  const colorMode = useContext(ColorModeContext);
 
   const navigate = useNavigate();
 
@@ -277,13 +285,23 @@ export default function StudentHomepage() {
           showSuccessMessage ? "overlay-visible" : ""
         }`}
       >
-        <h1>Hello, {userData.fullName}!</h1>
+      <div className="topBar">
+        <h1 className="greeting">Hello, {userData.fullName}!</h1>
         {modalOpen && (
           <ApplicationModal setOpenModal={setModalOpen} userData={userData} />
         )}
-
+      
+        <div className='lightSwitch'>
+          <IconButton onClick={colorMode.toggleColorMode}>
+            {theme.palette.mode === "light" ? (
+                <LightModeIcon />
+            ) : (<DarkModeIcon />)}
+          </IconButton>
+        </div>
+      </div> 
+        
         {applications.length > 0 ? ( // If there are applications
-          <div className="application-list">
+          <div className="application-list" style={{backgroundColor: theme.palette.mode === 'dark' ? colors.primary[200] : colors.primary[800]}}>
             <h3>APPLICATIONS</h3>
 
             {applications.map((application, index) => (
@@ -492,7 +510,7 @@ export default function StudentHomepage() {
             ))}
           </div>
         ) : (
-          <div className="application-list">
+          <div className="application-list" style={{backgroundColor: theme.palette.mode === 'dark' ? colors.primary[200] : 'white'}}>
             <p className="no-application">No applications yet</p>
           </div>
         )}

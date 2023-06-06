@@ -4,6 +4,10 @@
   margin-bottom: 10px;
 }
 
+.greeting{
+  padding: 20px;
+}
+
 .error-message {
   color: red;
 }
@@ -65,6 +69,7 @@
 
 .student-homepage {
   position: relative;
+  width: 100%;
 }
 
 .student-homepage::before {
@@ -178,13 +183,30 @@
   margin-bottom: 30px;
 }
 
+.lightSwitch{
+  display: flex;
+  justify-content: center;
+  width: 100px;
+  height: 100px;
+  padding: 20px;
+  padding-right: 30px;
+}
+
+.topBar{
+  padding-top: 35px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
 /* ===Main content=== */
 .main-content {
   position: relative;
-  overflow: scroll;
-  left: 250px;
-  height: 100vh;
-  width: calc(100% - 250px);
+  /* overflow: scroll; */
+  /* left: 250px; */
+  height: 100%;
+  width: 100%
 }
 
 .student-homepage h1 {
@@ -193,13 +215,14 @@
 
 .application-list {
   width: 85%;
-  height: fit-content;
+  height: fit-content 30px;
   padding: 10px;
+  padding-top: 20px;
+  padding-bottom: 20px;
   overflow: auto;
   margin: auto;
   background-color: #aec2fd;
   border-radius: 10px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .no-application {
@@ -225,15 +248,31 @@
   top: 0;
   left: 0;
   height: 100%;
-  width: 250px;
-  padding: 10px 14px;
+  width: fit-content;
+  padding: 50px;
+  padding-top: 60px;
   background-color: #fff;
   z-index: 100;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.nav-buttons{
+  display: flex;
+  flex-direction: row;
+  margin: 0px;
 }
 
 .nav-header {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
   margin-top: 5px;
+  justify-content: space-between;
+  
+}
+
+span.logoImage{
+  width: 50px;
+  height: 50px;
 }
 
 /* ===Reusable CSS=== */
@@ -244,7 +283,8 @@
 }
 
 .sidebar .image {
-  min-width: 70px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   color: #707070;
@@ -309,7 +349,7 @@
 }
 
 .sidebar .image-text img {
-  width: 60px;
+  width: 100%;
   border-radius: 6px;
 }
 
@@ -318,7 +358,7 @@
   align-items: center;
 }
 
-header .image-text .header-text {
+header .image-text {
   display: flex;
   flex-direction: column;
 }
@@ -333,13 +373,21 @@ header .image-text .header-text {
   margin-top: 10px;
 }
 
+.menu{
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
 .sidebar .menu-bar {
   height: calc(100% - 50px);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-}
+  margin: 20px;
 
+  margin-top: 40px;
+}
 .sidebar .menu-bar .bottom-content {
   margin-bottom: 40px;
 }
