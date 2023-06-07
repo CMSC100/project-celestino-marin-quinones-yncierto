@@ -14,6 +14,7 @@ import {
   getAdvisers,
   assignAdviser,
   uploadCSV,
+  getOfficerDetails, 
 } from "./auth-controller.js";
 import {
   createApplication,
@@ -38,6 +39,9 @@ const setUpRoutes = (app) => {
   app.get("/getstudents", getStudents);
   app.get("/getadvisers", getAdvisers);
   app.get("/getapplications", getApplications);
+  app.get("/getofficerdetails", getOfficerDetails)
+
+
   app.post("/getapplicationsapprover", getApplicationsApprover);
 
   app.post("/signup", signUp);

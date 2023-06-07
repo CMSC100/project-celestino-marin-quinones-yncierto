@@ -16,6 +16,7 @@ export default function PdfModal({ setpdfModal }) {
   const [userData, setUserData] = useState(true);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [adviserName, setAdviserName] = useState("");
+  const [clearanceOfficer, setClearanceOfficer] = useState([]);
 
   const fetchUserData = async () => {
     try {
@@ -31,6 +32,7 @@ export default function PdfModal({ setpdfModal }) {
       if (response.ok) {
         const data = await response.json();
         setUserData(data);
+        fetchOfficerClient();
         return true;
       } else {
         console.error("Failed to fetch user data");
@@ -39,6 +41,27 @@ export default function PdfModal({ setpdfModal }) {
       console.log("Error:", error);
     }
   };
+
+  const fetchOfficerClient = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/getofficerdetails", {
+        method: "GET",
+        credentials: "include",
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        // Update the clearanceOfficer state with officer details
+        setClearanceOfficer(data);
+      } else {
+        console.error("Failed to fetch officer client data");
+      }
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+  
+  
 
   const fetchApproverDetails = async () => {
     try {
@@ -197,7 +220,7 @@ export default function PdfModal({ setpdfModal }) {
     studName: fullName,
     studNo: studentNumber,
     acadAdviserName: adviserName,
-    clearanceOfficer: adviserName,
+    clearanceOfficer: clearanceOfficer,
     currDate: new Date().toLocaleDateString(),
   };
 

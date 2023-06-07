@@ -278,7 +278,7 @@ const getLoggedInUserData = async (req, res) => {
     "THIS_IS_A_SECRET_STRING"
   );
   const user = await User.findById(tokenPayload._id);
-    
+
   res.send(user);
 };
 
@@ -303,6 +303,22 @@ const uploadCSV = async (req, res) => {
   }
 };
 
+const getOfficerDetails = async (req, res) => {
+  try {
+    // Get the details of the users who have "officer" as their userType
+    const officerUsers = await User.find({ userType: "officer" });
+
+    // Extract the fullName from the officerUsers
+    const officerDetails = officerUsers.map((user) => user.fullName);
+
+    res.send(officerDetails);
+  } catch (error) {
+    console.error("Error fetching officer details:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+}
+
+
 export {
   signUp,
   login,
@@ -319,4 +335,5 @@ export {
   getAdvisers,
   assignAdviser,
   uploadCSV,
+  getOfficerDetails,
 };
