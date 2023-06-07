@@ -60,11 +60,13 @@ form .cleared-text {
 }
 
 .search-list {
+  overflow: auto;
   background-color: #bdccf9;
   border-radius: 10px;
   padding: 20px;
   margin-top: 20px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  max-height: 80vh;
 }
 
 .officer-student-list {

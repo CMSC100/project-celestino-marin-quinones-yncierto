@@ -283,6 +283,7 @@ h4 .app-num{
   overflow: auto;
   margin: auto;
   border-radius: 10px;
+  max-height: 75vh;
 }
 
 .no-application {

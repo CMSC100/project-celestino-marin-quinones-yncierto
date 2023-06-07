@@ -29,7 +29,7 @@ export default function ApproverHomepage() {
   const [advisers, setAdvisers] = useState([]); // get all advisers for filtering
   const [sort, setSort] = useState({ date: -1 }); // hold value for sorting
   const [remarks, setRemarks] = useState(""); // for storing the remarks
-  const [showRemarks, setShowRemarks] = useState(false); // for toggling the remarks input field visibility
+  const [showRemarks, setShowRemarks] = useState(true); // for toggling the remarks input field visibility
   const [returnUserID, setReturnUserID] = useState(""); // hold the ID of the user who made the remarks
   const [isCollapsed, setIsCollapsed] = useState(true);
   const theme = useTheme();
@@ -591,7 +591,7 @@ export default function ApproverHomepage() {
                   return (
                     <div className="officer-student-list"
                       key={index}
-                      style={{backgroundColor: theme.palette.mode === 'dark' ? colors.primary[500] : colors.gray[900], overflow: 'auto', maxHeight: '500px'}}
+                      style={{backgroundColor: theme.palette.mode === 'dark' ? colors.primary[500] : colors.gray[900], overflow: 'auto', maxHeight: '500px',}}
                       >
                       <div>
                         <b>Name:</b> {application["studentData"][0]["fullName"]}{" "}
@@ -605,7 +605,7 @@ export default function ApproverHomepage() {
                         <b>Step:</b> {application.step} <br />
 
                         {showRemarks && (
-                          <div className="submit-remark">
+                          <div name={`app-${index}`} style={{display: "none"}} className="submit-remark">
                             <input
                               type="text"
                               placeholder="Enter remarks"
@@ -617,6 +617,7 @@ export default function ApproverHomepage() {
                               onClick={() => {
                                 setReturnUserID(userData._id);
                                 returnApplication(application._id);
+                                setShowRemarks(false);
                               }}
                             >
                               Submit Remarks
@@ -634,13 +635,18 @@ export default function ApproverHomepage() {
                           <div style={{ marginTop: 10 }}>
                             <button
                               type="button"
-                              onClick={() => approveApplication(application._id)}
+                              onClick={() => {
+                                approveApplication(application._id)
+                                setShowRemarks(false);
+                              }}
                             >
                               Approve
                             </button>
                             <button
                               type="button"
-                              onClick={() => setShowRemarks(true)}
+                              onClick={() => {
+                                document.getElementsByName(`app-${index}`)[0].style.display = "flex";
+                              }}
                             >
                               Return with Remarks
                             </button>
