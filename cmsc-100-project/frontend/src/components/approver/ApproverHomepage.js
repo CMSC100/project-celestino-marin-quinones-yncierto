@@ -734,21 +734,22 @@ export default function ApproverHomepage() {
                         </div>
                       </div>
 
-                      <div className="student-list-buttons">
+                      <div className="student-list-buttons" style={{display: 'flex', alignItems: 'center'}}>
                         <div className="divider"></div>
                         <button
                               className="common-btn view-remarks"
                               style={{
                                 backgroundColor:
                                   theme.palette.mode === "dark"
-                                    ? colors.blueAccent[500]
-                                    : "#f5f47",
+                                    ? colors.blueAccent[700]
+                                    : "#f5f4f7",
+                                height:'fit-content'
                               }}
                               onClick={() => viewRemarks(application._id)}
                             >
-                              {application.showRemarks
+                              <span style={{color: theme.palette.mode === 'dark' ? 'white':'black', fontWeight:"bold"}}>{application.showRemarks
                                 ? "Hide Remarks"
-                                : "View Remarks"}
+                                : "View Remarks"}</span>
                             </button>
                         {((userData.userType === "adviser" &&
                           application.step === 2) ||
