@@ -228,7 +228,7 @@ export default function PdfModal({ setpdfModal }) {
     <div className="pdfmodalBackground">
       <div className="pdfmodalContainer">
         {pdfViewer(applicationDetails)}
-        <div className="footer">
+        <div className="footer" style={{display: 'flex', justifyContent: 'end'}}>
           <button
             onClick={() => {
               setpdfModal(false);

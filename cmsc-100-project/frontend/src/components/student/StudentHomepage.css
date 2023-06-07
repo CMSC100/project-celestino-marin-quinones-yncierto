@@ -1,7 +1,7 @@
 .status-bar {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  padding-right: 5px;
 }
 
 .greeting{
@@ -23,8 +23,11 @@
 .status {
   display: inline-block;
   padding: 4px 8px;
-  border-radius: 4px;
+  margin-bottom: 5px;
+  border-radius: 10px;
   font-weight: bold;
+  font-size: 11px;
+  text-transform:uppercase;
 }
 
 .status.open {
@@ -40,6 +43,18 @@
 .status.closed {
   background-color: #dc3545;
   color: #fff;
+}
+
+.add-remark-content{
+  display: flex;
+  flex-direction: row;
+
+}
+
+.logoAndLabel{
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 5px;
 }
 
 .status.cleared {
@@ -64,7 +79,6 @@
   padding: 20px;
   margin: 30px;
   background-color: #e4e9f7;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .student-homepage {
@@ -134,17 +148,60 @@
   cursor: not-allowed;
 }
 
+.application-text-info{
+  padding: 2px;
+  border-radius: 10px;
+}
+
+.info-and-link{
+  display: flex;
+  flex-direction: row;
+}
+
+.github-list{
+  border-radius: 20px;
+  margin-top: 10px;
+}
+
+.github-link-container{
+  margin-left: 20px ;
+  border-radius: 10px;
+}
+
+.github-list-content{
+  padding: 20px
+}
+
+.github-content{
+  padding: 20px;
+}
+
+.header-and-info{
+  display: flex;
+  flex-direction: column;
+  padding-right: 20px;
+}
+
+.app-num-and-status{
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  padding-bottom: 5px;
+}
+
+h4 .app-num{
+  padding-left: 100px;
+}
+
+.application-info{
+  padding-left: 10px;
+}
+
 .application-list h3 {
   text-align: center;
   padding-top: 10px;
   padding-bottom: 10px;
   font-size: x-large;
-  border-bottom: 2px solid rgb(66, 64, 64);
-}
-
-.application-card h4 {
-  margin-top: 0;
-  padding-bottom: 15px;
 }
 
 .application-card ul {
@@ -399,10 +456,22 @@ header .image-text {
   margin-top: 1rem;
 }
 
+#remark{
+  resize: none;
+  border-radius: 10px;
+  width: 100%;
+  padding: 10px;
+}
+
+.remark-textarea::placeholder{
+  padding: 10px;
+}
+
 .remarks-chat {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  padding-bottom: 10px;
 }
 
 .remark-message {
