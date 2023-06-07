@@ -23,14 +23,13 @@ body {
   align-items: center;
   justify-content: center;
   background-color: #ffffff;
-  width: 600px;
-  height: 800px;
+  width: 500px;
+  height: 660px;
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   margin: auto;
-  padding: 40px;
   box-shadow: 0 15px 35px 0 rgba(180, 182, 248, 0.764), 0 4px 10px 0 rgb(0, 0, 0);
   border-radius: 5px;
   overflow: hidden;
@@ -62,7 +61,7 @@ input[type="text"],
 input[type="password"] {
   width: 100%;
   padding: 12px;
-  margin: 8px 0;
+  margin: 0;
   display: inline-block;
   border: 1px solid #ccc;
   box-sizing: border-box;
@@ -75,13 +74,13 @@ form {
 
 .form-row {
   display: flex;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
   flex-wrap: wrap;
 }
 
 .form-group {
   flex: 1;
-  margin-right: 10px;
+  margin-right: 5px;
 }
 
 label {
@@ -159,5 +158,5 @@ label {
   height: 80px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
