@@ -40,23 +40,40 @@ export default function PdfModal({ setpdfModal }) {
     }
   };
 
+  const fetchApproverDetails = async () => {
+    try {
+      if (userData.adviser) {
+        const response = await fetch(
+          `http://localhost:3001/getapproverdetails?docRef=${userData.adviser}`
+        );
+        if (response.ok) {
+          const body = await response.json();
+          setAdviserName(body.fullName);
+        } else {
+          console.error("Failed to fetch approver details");
+        }
+      }
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
   useEffect(() => {
-    const initialFetch = async () => {
+    const fetchData = async () => {
       let result = await fetchUserData();
       if (result) {
         setDataLoaded(true);
       }
     };
 
-    initialFetch();
+    fetchData();
   }, []);
 
   useEffect(() => {
-    alert(userData.adviser)
-    fetch(`http://localhost:3001/getapproverdetails?docRef=${userData.adviser}`)
-      .then((response) => response.json())
-      .then((body) => setAdviserName(body.fullName));
-  }, []);
+    if (dataLoaded) {
+      fetchApproverDetails();
+    }
+  }, [dataLoaded]);
 
   // view pdf
   const pdfViewer = (applicationDetails) => {

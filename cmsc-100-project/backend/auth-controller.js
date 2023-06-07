@@ -278,7 +278,7 @@ const getLoggedInUserData = async (req, res) => {
     "THIS_IS_A_SECRET_STRING"
   );
   const user = await User.findById(tokenPayload._id);
-
+    
   res.send(user);
 };
 

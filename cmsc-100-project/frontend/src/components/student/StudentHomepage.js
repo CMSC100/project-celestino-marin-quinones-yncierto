@@ -78,7 +78,6 @@ export default function StudentHomepage() {
       console.log("Error:", error);
     }
   };
-
   // ===========================================================================
   // fetch applications of the current user
   const fetchApplications = async () => {
