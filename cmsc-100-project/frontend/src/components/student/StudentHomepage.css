@@ -35,6 +35,12 @@
   color: #fff;
 }
 
+.application-list-wrapper {
+  height: calc(100vh - 150px);
+  overflow-y: auto;
+}
+
+
 .status.pending {
   background-color: #17a2b8;
   color: #fff;
