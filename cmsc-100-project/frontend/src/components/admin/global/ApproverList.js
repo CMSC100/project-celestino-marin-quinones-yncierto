@@ -381,7 +381,7 @@ export default function Admin(props) {
                                 <input className='field' id="s-fname" type="text" placeholder="Enter first name" name="fname" required />
 
                                 <label style={{color: theme.palette.mode === 'dark' ? 'white' : 'black', fontSize: '13px'}} htmlFor="mname"><b>Middle Name</b></label>
-                                <input className='field' id="s-mname" type="text" placeholder="Enter middle name" name="mname" required />
+                                <input className='field' id="s-mname" type="text" placeholder="Enter middle name" name="mname" />
                             </div>
 
                             <div className='secondCol'>
