@@ -107,6 +107,11 @@ form .cleared-text {
   margin:0 0.25%;
 }
 
+.nav-button{
+  display: flex;
+  flex-direction: row-reverse;
+}
+
 /* ===SideBar=== */
 .app-nav {
   position: fixed;
@@ -114,13 +119,19 @@ form .cleared-text {
   left: 0;
   height: 100%;
   width: 250px;
-  padding: 10px 14px;
+  padding: 20px;
   background-color: #fff;
   z-index: 100;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.text date:hover{
+  border-radius: 5px;
 }
 
 .app-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   margin-top: 5px;
   margin-bottom: 15px;
 }
@@ -193,13 +204,20 @@ form .cleared-text {
 
 .app-nav header .app-image-text {
   display: flex;
+  flex-direction: row;
+  width: 100%;
   align-items: center;
+  justify-content: space-between;
 }
 
 .app-nav .filter-bar .filter-title {
   padding-top: 15px;
   font-size: medium;
   font-weight: 500;
+}
+
+.filters{
+  padding: 20px;
 }
 
 header .app-image-text .header-text {
@@ -257,6 +275,7 @@ header .app-image-text .header-text {
 .date-btn {
   display: flex;
   flex-direction: column;
+
 }
 
 .date-btn button{

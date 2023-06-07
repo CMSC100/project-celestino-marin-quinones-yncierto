@@ -6,7 +6,13 @@ import { IoIosPodium } from "react-icons/io";
 import { MdPendingActions } from "react-icons/md";
 import { BsFillPersonLinesFill } from "react-icons/bs";
 import { BiLogOut } from "react-icons/bi";
-
+import { Icon, IconButton, Typography, useTheme } from '@mui/material';
+import { tokens } from "../../theme";
+import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import DateRangeRoundedIcon from '@mui/icons-material/DateRangeRounded';
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
+import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import "./Approver.css";
 
 export default function ApproverHomepage() {
@@ -23,7 +29,9 @@ export default function ApproverHomepage() {
   const [remarks, setRemarks] = useState(""); // for storing the remarks
   const [showRemarks, setShowRemarks] = useState(false); // for toggling the remarks input field visibility
   const [returnUserID, setReturnUserID] = useState(""); // hold the ID of the user who made the remarks
-
+  const [isCollapsed, setIsCollapsed] = useState(true);
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
   const navigate = useNavigate();
 
   const [sideBar, setSideBar] = useState(false);
@@ -156,6 +164,10 @@ export default function ApproverHomepage() {
     setSearch("");
   };
 
+  const handleCollapse = function() {
+    setIsCollapsed(!isCollapsed);
+}
+
   const changeSortButton = (event) => {
     // change css of sort buttons
     const buttons = document.getElementsByName(event.target.name);
@@ -218,7 +230,7 @@ export default function ApproverHomepage() {
       );
     };
 
-    if (filter == "adviser") {
+    if (filter === "adviser") {
       // when filter is an adviser
       element = (
         <div className="adviser-list">
@@ -272,7 +284,7 @@ export default function ApproverHomepage() {
           {filterButton(2)}
         </form>
       );
-    } else if (filter == "status") {
+    } else if (filter === "status") {
       // when filter is status
       element = (
         <form onSubmit={onSubmit} className="status">
@@ -318,105 +330,198 @@ export default function ApproverHomepage() {
     return element;
   };
 
+  const appnavClass = `app-nav ${isCollapsed ? 'collapsed' : 'expanded'}`;
+
   if (dataLoaded) {
     return (
       <div>
-        <nav className="app-nav">
-          <header className="app-header">
-            <div className="app-image-text">
-              <span className="image">
-                <img src={require("./aprub.png")} className="app-logo" alt="" />
-              </span>
-              <div className="text header-text">
-                <span className="name">{userData.firstName}</span>
-                <span className="usertype">
-                  {userData.userType.toUpperCase()}
-                </span>
+        {isCollapsed ? 
+          <nav className={appnavClass}>
+            <header className="app-header" style={{justifyContent: "center"}}>
+              
+                <IconButton className="menuButton" onClick={handleCollapse} style={{color: theme.palette.mode === 'dark' ? 'white' : 'black'}}>
+                  <MenuOutlinedIcon/>
+                </IconButton>
+              
+            </header>
+
+            <div className="filter-bar">
+              <div className="filters">
+                
+                
+
+                {userData.userType === "officer" && (
+                  <li className="adviser-btn" name="filter-buttons" value={0}>
+                    
+                      
+                      <IconButton className="text adviser"
+                      onClick={(e) => changeFilter("adviser", e)}
+                      >
+                        <BsFillPersonLinesFill className="icon" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black'}}/>
+                      </IconButton>
+                    
+                    {filter === "adviser" && filterButtons()}
+                  </li>
+                )}
+
+                <li className="date-btn" value={1} name="filter-buttons">
+                  
+                    
+                    <IconButton
+                      className=" text date"
+                      onClick={(e) => changeFilter("createdAt", e)}
+                    ><DateRangeRoundedIcon className="menuButton" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black', width: '40px', height: '40px'}}/>
+                    </IconButton>
+                  
+                  {filter == "createdAt" && filterButtons()}
+                </li>
+
+                <li className="step-btn" value={2} name="filter-buttons">
+                  
+                    
+                    <button
+                      className=" text step"
+                      onClick={(e) => changeFilter("step", e)}
+                    ><FormatListNumberedIcon className="icon" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black'}}/>
+                    </button>
+                  
+                  {filter === "step" && filterButtons()}
+                </li>
+
+                <li className="status-btn" value={3} name="filter-buttons">
+                  
+                    <button
+                      className=" text status"
+                      onClick={(e) => changeFilter("status", e)}
+                    ><MdPendingActions className="icon" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black'}}/>
+                    </button>
+                  
+                  {filter == "status" && filterButtons()}
+                </li>
+
+                <div className="filter-buttons">
+                  <button
+                    onClick={() => {
+                      clearFilter();
+                    }}
+                  >
+                    Clear filter
+                  </button>
+                </div>
+              </div>
+
+              
+              <div className="bottom-content">
+                <li className="">
+                  
+                    
+                    <button className="text logout" onClick={handleLogout}>
+                    <LogoutOutlinedIcon className="icon" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black'}}/>
+                    </button>
+                 
+                </li>
               </div>
             </div>
-          </header>
+          </nav>
+         : 
+          <nav className={appnavClass}>
+            <header className="app-header">
+              <div className="app-image-text">
+                <span className="image">
+                  <img src={require("../logo.png")} style={{width: '100px',}} className="app-logo" alt="" />
+                </span>
+                <IconButton className="menuButton" onClick={handleCollapse} style={{color: theme.palette.mode === 'dark' ? 'white' : 'black'}}>
+                  <MenuOutlinedIcon/>
+                </IconButton>
+              </div>
+            </header>
 
-          <div className="filter-bar">
-            <div className="filters">
-              <hr/>
-              <p className="filter-title">Filters: </p>
+            <div className="filter-bar">
+              <div className="filters">
+                
+                <p className="filter-title">Filters: </p>
 
-              {userData.userType == "officer" && (
-                <li className="adviser-btn" name="filter-buttons" value={0}>
-                  <div className="active-filter">
-                    <BsFillPersonLinesFill className="icon" />
-                    <button className="text adviser"
-                    onClick={(e) => changeFilter("adviser", e)}
-                    >Adviser
+                {userData.userType === "officer" && (
+                  <li className="adviser-btn" name="filter-buttons" value={0}>
+                    <div className="active-filter">
+                      
+                      <button className="text adviser="
+                      onClick={(e) => changeFilter("adviser", e)}
+                      ><span style={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>Adviser</span>
+                        <BsFillPersonLinesFill className="icon" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black'}}/>
+                      </button>
+                    </div>
+                    {filter === "adviser" && filterButtons()}
+                  </li>
+                )}
+
+                <li className="date-btn" value={1} name="filter-buttons">
+                  <div>
+                    
+                    <button
+                      className="nav-button"
+                      onClick={(e) => changeFilter("createdAt", e)}
+                    >
+                      <span style={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>Date</span>
+                      <DateRangeRoundedIcon className="icon" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black'}}/>
                     </button>
                   </div>
-                  {filter == "adviser" && filterButtons()}
+                  {filter == "createdAt" && filterButtons()}
                 </li>
-              )}
 
-              <li className="date-btn" value={1} name="filter-buttons">
-                <div>
-                  <MdDateRange className="icon" />
+                <li className="step-btn" value={2} name="filter-buttons">
+                  <div name="filter-buttons">
+                    
+                    <button
+                      className="nav-button"
+                      onClick={(e) => changeFilter("step", e)}
+                    >
+                      <span style={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>Step</span>
+                      <FormatListNumberedIcon className="icon" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black'}}/>
+                    </button>
+                  </div>
+                  {filter === "step" && filterButtons()}
+                </li>
+
+                <li className="status-btn" value={3} name="filter-buttons">
+                  <div name="filter-buttons">
+                    <button
+                      className="nav-button"
+                      onClick={(e) => changeFilter("status", e)}
+                    >
+                      <span style={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>Status</span>
+                      <PendingActionsIcon className="icon" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black'}}/>
+                    </button>
+                  </div>
+                  {filter == "status" && filterButtons()}
+                </li>
+
+                <div className="filter-buttons">
                   <button
-                    className=" text date"
-                    onClick={(e) => changeFilter("createdAt", e)}
+                    onClick={() => {
+                      clearFilter();
+                    }}
                   >
-                    Date
+                    Clear filter
                   </button>
                 </div>
-                {filter == "createdAt" && filterButtons()}
-              </li>
+              </div>
 
-              <li className="step-btn" value={2} name="filter-buttons">
-                <div name="filter-buttons">
-                  <IoIosPodium className="icon" />
-                  <button
-                    className=" text step"
-                    onClick={(e) => changeFilter("step", e)}
-                  >
-                    Step
-                  </button>
-                </div>
-                {filter == "step" && filterButtons()}
-              </li>
-
-              <li className="status-btn" value={3} name="filter-buttons">
-                <div name="filter-buttons">
-                  <MdPendingActions className="icon" />
-                  <button
-                    className=" text status"
-                    onClick={(e) => changeFilter("status", e)}
-                  >
-                    Status
-                  </button>
-                </div>
-                {filter == "status" && filterButtons()}
-              </li>
-
-              <div className="filter-buttons">
-                <button
-                  onClick={() => {
-                    clearFilter();
-                  }}
-                >
-                  Clear filter
-                </button>
+              
+              <div className="bottom-content">
+                <li className="">
+                  <div>
+                    
+                    <button className="nav-button" onClick={handleLogout}>
+                      <span style={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>Log out</span>
+                      <BiLogOut className="icon" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black'}}/>
+                    </button>
+                  </div>
+                </li>
               </div>
             </div>
-
-            <hr/>
-            <div className="bottom-content">
-              <li className="">
-                <div>
-                  <BiLogOut className="icon" />
-                  <button className="text logout" onClick={handleLogout}>
-                    Logout
-                  </button>
-                </div>
-              </li>
-            </div>
-          </div>
-        </nav>
+          </nav>
+        }
 
         <div className="approver-body">
           <h1 className="app-greeting">

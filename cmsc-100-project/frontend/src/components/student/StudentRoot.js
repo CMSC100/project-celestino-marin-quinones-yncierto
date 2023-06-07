@@ -13,7 +13,6 @@ import StudentProfile from "../modal/StudentProfile";
 
 export default function StudentRoot() {
     const [theme, colorMode] = useMode();
-    const theme2 = useTheme();
     const colors = tokens(theme.palette.mode);
     const navigate = useNavigate();
     const [pdfModalOpen, setpdfModalOpen] = useState(false);

@@ -10,6 +10,8 @@ import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import '../../theme.js';
 import { tokens } from '../../theme';
+import LinkIcon from '@mui/icons-material/Link';
+import CommentRoundedIcon from '@mui/icons-material/CommentRounded';
 
 export default function StudentHomepage() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -186,6 +188,20 @@ export default function StudentHomepage() {
     }
   };
 
+  const handleSubmit = (value) => {
+    setRemarkContent(value);
+    console.log(remarkContent);
+  }
+
+  const handleTextareaChange = (e) => {
+    setRemarkContent(e.target.value);
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    handleSubmit(remarkContent);
+  };
+
   // ===========================================================================
   const submitApplication = async (application) => {
     // Validate GitHub link
@@ -302,21 +318,29 @@ export default function StudentHomepage() {
       </div> 
         
         {applications.length > 0 ? ( // If there are applications
-          <div className="application-list" style={{backgroundColor: theme.palette.mode === 'dark' ? colors.primary[200] : 'white'}}>
+          <div className="application-list" style={{ backgroundColor: theme.palette.mode === 'dark' ? colors.primary[400] : 'white' }}>
             <h3>APPLICATIONS</h3>
           
           <div className="application-cards">
-          {applications.map((application, index) => (
+              {applications.map((application, index) => (
                 <div
-                  className={`application-card ${
-                    application.status === "closed" ? "closed" : ""
-                  }`}
+                  className={`application-card ${application.status === "closed" ? "closed" : ""
+                    }`}
+                  style={{ background: application.status === 'closed' ? (theme.palette.mode === 'dark' ? colors.primary[100] : '#f5f4f7') : (theme.palette.mode === 'dark' ? 'linear-gradient(90deg, #4b6cb7 0%, #182848 100%)' : 'linear-gradient(90deg, #e3ffe7 0%, #d9e7ff 100%)')}}
                   key={index}
                 >
                   <div className="application-info">
                     {application.status !== "open" && (
                       <div>
-                        <button onClick={() => viewRemarks(application._id)}>
+                        <div className="app-num-and-status">
+                          <div className="status-bar">
+                            <span className={`status ${application.status}`} style={{margin:'0px'}}>
+                            {application.status}
+                            </span>
+                          </div>
+                          <h4 className="app-num" style={{fontSize: '18px'}}>APPLICATION {applications.length - index}</h4>
+                        </div>
+                        <button style={{margin:'0px', marginBottom: '10px' , backgroundColor: theme.palette.mode === 'dark' ? colors.blueAccent[500] : "#f5f47"}} onClick={() => viewRemarks(application._id)}>
                           {application.showRemarks
                             ? "Hide Remarks"
                             : "View Remarks"}
@@ -324,46 +348,55 @@ export default function StudentHomepage() {
                       </div>
                     )}
 
-                    <h4>Application {applications.length - index}</h4>
-                    <div className="status-bar">
-                      <span className={`status ${application.status}`}>
-                        {application.status}
-                      </span>
-                    </div>
-
                     {application.status === "open" &&
                     application.studentSubmission.length === 0 ? ( // If application is open and no submission yet
-                      <>
-                        <p>
-                          <b>Name:</b> {userData.fullName}
-                        </p>
-                        <p>
-                          <b>Student Number:</b> {userData.studentNumber}
-                        </p>
-                        <p>
-                          <b>Email:</b> {userData.email}
-                        </p>
-                        <p>
-                          <b>Adviser:</b> {adviserName || "Not yet assigned"}
-                        </p>
+                        <div className="info-and-link">
+                          <div className="header-and-info">
+                            <div className="app-num-and-status">
+                              <div className="status-bar">
+                                <span className={`status ${application.status}`} style={{margin:'0px'}}>
+                                {application.status}
+                                </span>
+                              </div>
+                              <h4 className="app-num" style={{fontSize: '18px'}}>APPLICATION {applications.length - index}</h4>
+                            </div>
+                            <div className="application-text-info">
+                              <p>
+                                <b>Name:</b> {userData.fullName}
+                              </p>
+                              <p>
+                                <b>Student Number:</b> {userData.studentNumber}
+                              </p>
+                              <p>
+                                <b>Email:</b> {userData.email}
+                              </p>
+                              <p>
+                                <b>Adviser:</b> {adviserName || "Not yet assigned"}
+                              </p>
+                            </div>
+                          </div>
+                          
 
-                        {application.step == 1 && ( // If application is in step 1
-                          <>
-                            <label>
-                              <b>Link to GitHub repository</b>
-                            </label>
-                            <input
-                              type="text"
-                              placeholder="https://github.com/..."
-                              value={githubLink}
-                              onChange={(e) => setGithubLink(e.target.value)}
-                            />
-                            {githubLinkError && (
-                              <p className="error-message">{githubLinkError}</p>
-                            )}
-                          </>
+                        {application.step === 1 && ( // If application is in step 1
+                          <div className="github-link-container" style={{backgroundColor: 'white' }}>
+                            <div className="github-content">
+                              <label>
+                                  <b style={{ color: 'black'}}>Link to GitHub repository</b>
+                              </label>
+                              <input
+                                type="text"
+                                placeholder="https://github.com/..."
+                                value={githubLink}
+                                onChange={(e) => setGithubLink(e.target.value)}
+                              />
+                              {githubLinkError && (
+                                <p className="error-message">{githubLinkError}</p>
+                              )}
+                            </div>  
+                              
+                          </div>
                         )}
-                      </>
+                      </div>
                     ) : application.studentSubmission.length > 0 ? ( // If application has submission
                       <>
                         <p>
@@ -378,24 +411,31 @@ export default function StudentHomepage() {
                         <p>
                           <b>Adviser:</b> {adviserName || "Not yet assigned"}
                         </p>
-                        <p>
-                          <b>GitHub Links:</b>
-                        </p>
-                        <ul style={{ listStyleType: "disc", marginLeft: "3em" }}>
-                          {application.studentSubmission.map(
-                            (submission, index) => (
-                              <li key={index}>
-                                <a
-                                  href={submission.githubLink}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                >
-                                  {submission.githubLink}
-                                </a>
-                              </li>
-                            )
-                          )}
-                        </ul>
+                        <div className="github-list" style={{backgroundColor: theme.palette.mode === 'dark' ? '#17A2B8' : 'white'}}>  
+                          <div className="github-list-content">
+                            <p>
+                                <b style={{fontSize: '14px'}}>GitHub Links:</b>
+                              </p>
+                              <ul style={{ marginLeft: "0" }}>
+                                {application.studentSubmission.map(
+                                  (submission, index) => (
+                                    <li key={index} style={{ listStyle: 'none', display: 'flex', flexDirection: 'row', alignItems: "center", justifyContent: 'start' }}>
+                                      <LinkIcon/>
+                                      <a
+                                        href={submission.githubLink}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{color: theme.palette.mode === 'dark' ? 'white' : 'black'}}
+                                      >
+                                        {submission.githubLink}
+                                      </a>
+                                    </li>
+                                  )
+                                )}
+                              </ul>
+                          </div>
+                            
+                        </div>   
                       </>
                     ) : (
                       <p>No application submitted yet</p>
@@ -404,14 +444,17 @@ export default function StudentHomepage() {
                     {application.showRemarks &&
                       application.remarks &&
                       application.remarks.length > 0 && ( // If application has remarks
-                        <div className="remarks-container">
-                          <h5>Remarks:</h5>
+                      <div className="remarks-container">
+                          <div className="logoAndLabel">
+                            <CommentRoundedIcon/>
+                            <h5 style={{paddingLeft: '3px'}}>Remarks:</h5>
+                          </div>
                           <div className="remarks-chat">
                             {application.remarks.map((remark, remarkIndex) => (
-                              <div className={`remark-message ${remark.userType}`} key={remarkIndex}>
+                              <div className={`remark-message ${remark.userType}`} key={remarkIndex}  style={{backgroundColor: theme.palette.mode === 'dark' ? "#f5f4f7" : 'white'}}>
                                 <div className="remark-info">
-                                  <p>
-                                    <b>Commenter:</b> {remark.commenter}
+                                  <p style={{color: 'black'}}>
+                                    <b>Commenter:</b> <b>{remark.commenter}</b>
                                   </p>
                                   <p className="remark-date">
                                     {new Date(remark.date).toLocaleString(
@@ -423,17 +466,22 @@ export default function StudentHomepage() {
                                     )}
                                   </p>
                                 </div>
-                                <p className="remark-content">{remark.remark}</p>
+                                <p className="remark-content" style={{color: 'black'}}>{remark.remark}</p>
                               </div>
                             ))}
                           </div>
                           {application.enableRemarks && (
                             <div className="add-remark">
-                              <textarea
-                                placeholder="Add a remark"
-                                value={remarkContent}
-                                onChange={(e) => setRemarkContent(e.target.value)}
-                              ></textarea>
+                              <form className='add-remark-content' onSubmit={handleFormSubmit}>
+                                <textarea
+                                  id="remark"
+                                  className="remark-textarea"
+                                  placeholder="Add a remark"
+                                  value={remarkContent}
+                                  onChange={handleTextareaChange}
+                                ></textarea>
+                                <button type="submit">Submit</button>
+                              </form>
                             </div>
                           )}
                         </div>

@@ -1,9 +1,17 @@
 import Cookies from "universal-cookie";
 import { useNavigate, Outlet, Link } from "react-router-dom";
+import { useState } from "react";
 import "./Approver.css";
+import { ColorModeContext, useMode, tokens } from '../../theme';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { IconButton, useTheme } from "@mui/material";
+import '../../theme'
 
 export default function ApproverRoot() {
+  const [theme, colorMode] = useMode();
   const navigate = useNavigate();
+  const colors = tokens(theme.palette.mode);
+  const [triggerFetchApp, setTriggerFetchApp] = useState(false);
 
   const handleLogout = (e) => {
     // Clear the authentication token (if applicable)
@@ -16,7 +24,8 @@ export default function ApproverRoot() {
   };
 
   return (
-    <div className="appnav-container">
+    <ColorModeContext.Provider value={colorMode}>
+      <div className="appnav-container">
       {/* <div className='topnav-header'>
                 <nav className='top-nav'>
                     <div className='logo-type'>
@@ -30,10 +39,11 @@ export default function ApproverRoot() {
                     <Outlet />
                 </div>
             </div> */}
-
-      <div className="main-content-app">
-        <Outlet />
+        <div className="main-content-app">
+          <Outlet />
+        </div>
       </div>
-    </div>
+    </ColorModeContext.Provider>
+    
   );
 }
