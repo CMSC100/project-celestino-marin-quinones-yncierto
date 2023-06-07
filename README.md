@@ -13,8 +13,8 @@ Repository for a web development project in CMSC 100: Web Programming - 2nd Sem 
 ## Program Description
 
 This program simulates a system for clearance approval in the Institute of Computer Science where one can open an application and submit a github link
-to make it easier for the approver to review the repository and decide whether to approve or reject the application. ```WHAT IS THIS This program uses Flutter with Dart as its tech stack and 
-utilizes the features of Firebase for their implementations; Cloud Firestore for the database, and Firebase Authentication for authentication. EDIT I2```
+to make it easier for the approver to review the repository and decide whether to approve or reject the application. This program uses JavaScript with React JS and Node Js as its tech stack and 
+utilizes the features of MongoDB for the database and authentication
 The program was split into two main components: Frontend for the UI elements, and the Backend for communicating with the remote database and authentication in MongoDB. 
 The program is only suitable for the Android environment.
 
@@ -24,7 +24,7 @@ The program is only suitable for the Android environment.
 2. Navigate to the project directory ```cd cmsc-100-project/frontend``` ```cmsc-100-project/backend```
 3. Run ```npm install``` in frontend and backend directories to obtain the dependencies.
 
-#### Deploying app in Android
+## Usage
 
 Run ```npm start``` in frontend and backend directories and wait for it to start the developement server.
 
@@ -60,4 +60,7 @@ Run ```npm start``` in frontend and backend directories and wait for it to start
 2. Can view students and pending accounts 
 3. Can approve or reject student account application requests
 4. Sort pending accounts or students by their full name or student number
-5. 
+5. Can edit, delete and create an account for approver
+6. Sort Approver in descending or ascending order
+7. Can upload a CSV file that automatically map students to thei adviser
+8. To logout, tap "Log out" button in the sidebar
