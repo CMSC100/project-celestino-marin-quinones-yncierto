@@ -66,7 +66,6 @@ export default function ApproverHomepage() {
       .then((response) => response.json())
       .then((body) => {
         setTriggerRebuild(!triggerRebuild);
-        alert(JSON.stringify(body));
         setShowRemarks(false); // Hide the remarks input field
         setRemarks(""); // Clear the remarks
         setReturnUserID(""); // Clear the user ID
@@ -143,7 +142,6 @@ export default function ApproverHomepage() {
       .then((response) => response.json())
       .then((body) => {
         setTriggerRebuild(!triggerRebuild);
-        alert(JSON.stringify(body));
       });
   };
 
