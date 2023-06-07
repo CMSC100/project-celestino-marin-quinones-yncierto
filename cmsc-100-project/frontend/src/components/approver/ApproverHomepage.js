@@ -16,6 +16,7 @@ import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import "./Approver.css";
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
+import CommentRoundedIcon from "@mui/icons-material/CommentRounded";
 
 export default function ApproverHomepage() {
   const [userData, setUserData] = useState({}); // current user data
@@ -107,24 +108,72 @@ export default function ApproverHomepage() {
       });
   };
 
-  const fetchApplications = () => {
-    fetch(`http://localhost:3001/getapplicationsapprover`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        adviserID: userData._id,
-        search: search,
-        filter: filter,
-        filterValue: filterValue,
-        sort: sort,
-        userType: userData.userType,
-      }),
-    })
-      .then((response) => response.json())
-      .then((body) => setApplications(body));
+  const fetchApplications = async () => {
+    try {
+      // Fetch applications based on the user ID
+      const applicationsResponse = await fetch(`http://localhost:3001/getapplicationsapprover`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          adviserID: userData._id,
+          search: search,
+          filter: filter,
+          filterValue: filterValue,
+          sort: sort,
+          userType: userData.userType,
+        }),
+      });
+
+      if (applicationsResponse.ok) {
+        const applicationsData = await applicationsResponse.json();
+
+        // Fetch commenter details for each application remark
+        const updatedApplications = await Promise.all(
+          applicationsData.map(async (app) => {
+            const updatedRemarks = await Promise.all(
+              app.remarks.map(async (remark) => {
+                try {
+                  // Fetch commenter details based on commenter's _id
+                  const commenterResponse = await fetch(
+                    `http://localhost:3001/getapproverdetails?docRef=${remark.commenter}`
+                  );
+                  if (commenterResponse.ok) {
+                    const commenterData = await commenterResponse.json();
+                    return {
+                      ...remark,
+                      commenter: commenterData.fullName,
+                      userType: commenterData.userType,
+                    };
+                  } else {
+                    console.error(
+                      "Failed to fetch commenter details:",
+                      commenterResponse
+                    );
+                    return remark;
+                  }
+                } catch (error) {
+                  console.error("Error fetching commenter details:", error);
+                  return remark;
+                }
+              })
+            );
+
+            return { ...app, remarks: updatedRemarks };
+          })
+        );
+
+        setApplications(updatedApplications.reverse());
+      } else {
+        console.error("Failed to fetch applications:", applicationsResponse);
+      }
+    } catch (error) {
+      console.log("Error:", error);
+    }
   };
+
+  
 
   const handleSearch = (e) => {
     console.log(e.target.value);
@@ -206,6 +255,16 @@ export default function ApproverHomepage() {
     for (let i in filterButtons) {
       filterButtons[i].classList?.remove("active-filter");
     }
+  };
+
+  const viewRemarks = (appID) => {
+    setApplications((prevApplications) =>
+      prevApplications.map((app) =>
+        app._id === appID
+          ? { ...app, showRemarks: !app.showRemarks, enableRemarks: true }
+          : app
+      )
+    );
   };
 
   const filterButtons = () => {
@@ -600,7 +659,60 @@ export default function ApproverHomepage() {
                         <b>Adviser:</b> {application["adviserData"][0]["fullName"]}{" "}
                         <br />
                         <b>Status:</b> {application.status} <br />
-                        <b>Step:</b> {application.step} <br />
+                        <b>Step: {" "}</b>{" "}
+                        {
+                          (application.step === 1)
+                            ? "Pre-Adviser"
+                            :  (application.step === 2)
+                              ? "Adviser"
+                              : "Clearance Officer"
+                        } <br />
+
+                      {application.showRemarks &&
+                        application.remarks &&
+                        application.remarks.length > 0 && ( // If application has remarks
+                          <div className="remarks-container">
+                            <div className="logoAndLabel">
+                              <CommentRoundedIcon />
+                              <h5 style={{ paddingLeft: "3px" }}>Remarks:</h5>
+                            </div>
+                            <div className="remarks-chat">
+                              {application.remarks.map((remark, remarkIndex) => (
+                                <div
+                                  className={`remark-message ${remark.userType}`}
+                                  key={remarkIndex}
+                                  style={{
+                                    backgroundColor:
+                                      theme.palette.mode === "dark"
+                                        ? "#f5f4f7"
+                                        : "white",
+                                  }}
+                                >
+                                  <div className="remark-info">
+                                    <p style={{ color: "black" }}>
+                                      <b>Commenter:</b> <b>{remark.commenter}</b>
+                                    </p>
+                                    <p className="remark-date">
+                                      {new Date(remark.date).toLocaleString(
+                                        undefined,
+                                        {
+                                          dateStyle: "short",
+                                          timeStyle: "short",
+                                        }
+                                      )}
+                                    </p>
+                                  </div>
+                                  <p
+                                    className="remark-content"
+                                    style={{ color: "black" }}
+                                  >
+                                    {remark.remark}
+                                  </p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}   
 
                         <div name={`app-${index}`} style={{display: "none"}} className="submit-remark">
                           <input
@@ -624,10 +736,25 @@ export default function ApproverHomepage() {
 
                       <div className="student-list-buttons">
                         <div className="divider"></div>
+                        <button
+                              className="common-btn view-remarks"
+                              style={{
+                                backgroundColor:
+                                  theme.palette.mode === "dark"
+                                    ? colors.blueAccent[500]
+                                    : "#f5f47",
+                              }}
+                              onClick={() => viewRemarks(application._id)}
+                            >
+                              {application.showRemarks
+                                ? "Hide Remarks"
+                                : "View Remarks"}
+                            </button>
                         {((userData.userType === "adviser" &&
                           application.step === 2) ||
                           (userData.userType === "officer" &&
                             application.step === 3)) && application.status !== "cleared" && (
+                          
                           <div style={{ marginTop: 10 }}>
                             <button
                               type="button"

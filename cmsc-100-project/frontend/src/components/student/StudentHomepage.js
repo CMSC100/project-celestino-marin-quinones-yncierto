@@ -197,6 +197,7 @@ export default function StudentHomepage() {
 
   const handleSubmit = (value) => {
     setRemarkContent(value);
+    postRemark
     console.log(remarkContent);
   };
 
@@ -407,10 +408,18 @@ export default function StudentHomepage() {
                               <b>Adviser:</b>{" "}
                               {adviserName || "Not yet assigned"}
                             </p>
-                          </div>
-                        </div>
-
-                        {application.step === 1 && ( // If application is in step 1
+                            <p>
+                              <b>Step: {" "}</b>{" "}
+                                {
+                                  (application.step === 1)
+                                    ? "Pre-Adviser"
+                                    :  (application.step === 2)
+                                      ? "Adviser"
+                                      : "Clearance Officer"
+                                }
+                            </p>
+    
+                            {application.step === 1 && ( // If application is in step 1
                           <div
                             className="github-link-container"
                             style={{ backgroundColor: "white" }}
@@ -435,6 +444,8 @@ export default function StudentHomepage() {
                             </div>
                           </div>
                         )}
+                          </div>
+                        </div>
                       </div>
                     ) : application.studentSubmission.length > 0 ? ( // If application has submission
                       <>
@@ -449,6 +460,16 @@ export default function StudentHomepage() {
                         </p>
                         <p>
                           <b>Adviser:</b> {adviserName || "Not yet assigned"}
+                        </p>
+                        <p>
+                          <b>Step: {" "}</b>{" "}
+                            {
+                              (application.step === 1)
+                                ? "Pre-Adviser"
+                                :  (application.step === 2)
+                                  ? "Adviser"
+                                  : "Clearance Officer"
+                            }
                         </p>
                         <div
                           className="github-list"
@@ -544,11 +565,15 @@ export default function StudentHomepage() {
                               </div>
                             ))}
                           </div>
-                          {application.enableRemarks && (
+                          {application.enableRemarks &&
+                          application.step == 3 && (
                             <div className="add-remark">
                               <form
                                 className="add-remark-content"
-                                onSubmit={handleFormSubmit}
+                                onSubmit={(e) => {
+                                  handleFormSubmit(e)
+                                  postRemark(application)
+                                }}
                               >
                                 <textarea
                                   id="remark"
@@ -564,7 +589,9 @@ export default function StudentHomepage() {
                         </div>
                       )}
 
-                    {application.isReturned && (
+                    {application.isReturned && 
+                    application.step !== 3 &&
+                    (
                       <>
                         <label>
                           <b>Resubmit GitHub repository</b>

@@ -207,7 +207,7 @@ const returnApplication = async (req, res) => {
     application.status = "pending";
 
     if (userType !== "student") {
-      application.step = application.step - 1; // Set the step to 1 for returning the application
+      if (userType !== "officer") application.step = application.step - 1; // Set the step to 1 for returning the application
       application.isReturned = true;
     }
 
