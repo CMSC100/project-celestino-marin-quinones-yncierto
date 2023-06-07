@@ -339,11 +339,6 @@ export default function StudentHomepage() {
                           </div>
                           <h4 className="app-num" style={{fontSize: '18px'}}>APPLICATION {applications.length - index}</h4>
                         </div>
-                        <button style={{margin:'0px', marginBottom: '10px' , backgroundColor: theme.palette.mode === 'dark' ? colors.blueAccent[500] : "#f5f47"}} onClick={() => viewRemarks(application._id)}>
-                          {application.showRemarks
-                            ? "Hide Remarks"
-                            : "View Remarks"}
-                        </button>
                       </div>
                     )}
 
@@ -520,44 +515,54 @@ export default function StudentHomepage() {
                   </div>
 
                   <div className="app-card-btns">
-                    {application.status === "cleared" && ( // If application is cleared, show print as PDF button
-                      <button className="print-app" onClick={handlePrintPDF}>
-                        Print as PDF
-                      </button>
-                    )}
+  {application.status === "cleared" && (
+    <button className="common-btn print-app" onClick={handlePrintPDF}>
+      Print as PDF
+    </button>
+  )}
 
-                    {
-                      application.status !== "cleared" &&
-                      <button
-                        className="close-app"
-                        onClick={() => {
-                          if (application.status !== "closed") {
-                            // If application is not closed, close application
-                            closeApplication(application._id);
-                            setTriggerFetchApp(!triggerFetchApp);
-                          }
-                        }}
-                        disabled={application.status === "closed"}
-                      >
-                        {/* If application is closed, show closed button */}
-                        {application.status === "closed"
-                          ? "Closed"
-                          : "Close Application"}
-                      </button>
-                    }
+  {application.status !== "cleared" && (
+    <button
+      className="common-btn close-app"
+      onClick={() => {
+        if (application.status !== "closed") {
+          // If application is not closed, close application
+          closeApplication(application._id);
+          setTriggerFetchApp(!triggerFetchApp);
+        }
+      }}
+      disabled={application.status === "closed"}
+    >
+      {/* If application is closed, show closed button */}
+      {application.status === "closed" ? "Closed" : "Close Application"}
+    </button>
+  )}
 
-                    {application.status === "open" &&
-                      application.studentSubmission.length === 0 && ( // If application is open and no submission yet, show submit application button
-                        
-                        <button
-                          className="submit-app"
-                          onClick={() => submitApplication(application)}
-                          disabled={!adviserName}
-                        >
-                          Submit Application
-                        </button>
-                      )}
-                  </div>
+  {application.status === "open" &&
+    application.studentSubmission.length === 0 && (
+      <button
+        className="common-btn submit-app"
+        onClick={() => submitApplication(application)}
+        disabled={!adviserName}
+      >
+        Submit Application
+      </button>
+    )}
+
+  <button
+    className="common-btn view-remarks"
+    style={{
+      backgroundColor:
+        theme.palette.mode === "dark"
+          ? colors.blueAccent[500]
+          : "#f5f47",
+    }}
+    onClick={() => viewRemarks(application._id)}
+  >
+    {application.showRemarks ? "Hide Remarks" : "View Remarks"}
+  </button>
+</div>
+
                 </div>
               ))}
           </div>
