@@ -14,6 +14,8 @@
     transition: width 0.10s ease-in-out; 
 }
 
+
+
 .whole.collapsed{
     width: 140px;
 }
@@ -34,6 +36,12 @@
 .indivCards{
     margin-top: 20px;
     margin-bottom: 20px;
+}
+
+.nav-button{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
 }
 
 .navButton{

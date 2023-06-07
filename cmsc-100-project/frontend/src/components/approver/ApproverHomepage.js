@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { MdDateRange } from "react-icons/md";
@@ -7,13 +7,15 @@ import { MdPendingActions } from "react-icons/md";
 import { BsFillPersonLinesFill } from "react-icons/bs";
 import { BiLogOut } from "react-icons/bi";
 import { Icon, IconButton, Typography, useTheme } from '@mui/material';
-import { tokens } from "../../theme";
+import { tokens, ColorModeContext } from "../../theme";
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import DateRangeRoundedIcon from '@mui/icons-material/DateRangeRounded';
-import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
+import FormatListNumberedRoundedIcon from '@mui/icons-material/FormatListNumberedRounded';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import "./Approver.css";
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 
 export default function ApproverHomepage() {
   const [userData, setUserData] = useState({}); // current user data
@@ -32,6 +34,7 @@ export default function ApproverHomepage() {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const colorMode = useContext(ColorModeContext);
   const navigate = useNavigate();
 
   const [sideBar, setSideBar] = useState(false);
@@ -334,10 +337,10 @@ export default function ApproverHomepage() {
 
   if (dataLoaded) {
     return (
-      <div>
+      <div className="sidebar-and-content" style={{width: '100%', height: '100%', margin: 0, marginRight: 0}}>
         {isCollapsed ? 
-          <nav className={appnavClass}>
-            <header className="app-header" style={{justifyContent: "center"}}>
+          <div className={appnavClass} style={{width: '140px', padding: '50px', backgroundColor: theme.palette.mode === 'dark' ? colors.primary[600] : 'white'}}>
+            <header className="app-header" style={{justifyContent: "center", paddingBottom: '48px'}}>
               
                 <IconButton className="menuButton" onClick={handleCollapse} style={{color: theme.palette.mode === 'dark' ? 'white' : 'black'}}>
                   <MenuOutlinedIcon/>
@@ -346,7 +349,7 @@ export default function ApproverHomepage() {
             </header>
 
             <div className="filter-bar">
-              <div className="filters">
+              <div className="filters" style={{justifyContent: 'center'}}>
                 
                 
 
@@ -355,9 +358,12 @@ export default function ApproverHomepage() {
                     
                       
                       <IconButton className="text adviser"
-                      onClick={(e) => changeFilter("adviser", e)}
+                      onClick={(e) => {
+                        changeFilter("adviser", e);
+                        handleCollapse();
+                      }}
                       >
-                        <BsFillPersonLinesFill className="icon" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black'}}/>
+                        <BsFillPersonLinesFill className="menuButton" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black', width: '40px', height: '40px'}}/>
                       </IconButton>
                     
                     {filter === "adviser" && filterButtons()}
@@ -369,7 +375,10 @@ export default function ApproverHomepage() {
                     
                     <IconButton
                       className=" text date"
-                      onClick={(e) => changeFilter("createdAt", e)}
+                    onClick={(e) => {
+                      changeFilter("createdAt", e)
+                      handleCollapse()
+                    }}
                     ><DateRangeRoundedIcon className="menuButton" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black', width: '40px', height: '40px'}}/>
                     </IconButton>
                   
@@ -379,56 +388,52 @@ export default function ApproverHomepage() {
                 <li className="step-btn" value={2} name="filter-buttons">
                   
                     
-                    <button
+                    <IconButton
                       className=" text step"
-                      onClick={(e) => changeFilter("step", e)}
-                    ><FormatListNumberedIcon className="icon" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black'}}/>
-                    </button>
+                    onClick={(e) => {
+                      changeFilter("step", e)
+                      handleCollapse()
+                    }}
+                    ><FormatListNumberedRoundedIcon className="menuButton" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black', width: '40px', height: '40px'}}/>
+                    </IconButton>
                   
                   {filter === "step" && filterButtons()}
                 </li>
 
                 <li className="status-btn" value={3} name="filter-buttons">
                   
-                    <button
+                    <IconButton
                       className=" text status"
-                      onClick={(e) => changeFilter("status", e)}
-                    ><MdPendingActions className="icon" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black'}}/>
-                    </button>
-                  
-                  {filter == "status" && filterButtons()}
-                </li>
-
-                <div className="filter-buttons">
-                  <button
-                    onClick={() => {
-                      clearFilter();
+                    onClick={(e) => {
+                      changeFilter("status", e)
+                      handleCollapse();
                     }}
-                  >
-                    Clear filter
-                  </button>
-                </div>
+                    ><MdPendingActions className="menuButton" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black', width: '40px', height: '40px'}}/>
+                    </IconButton>
+                  
+                  {filter === "status" && filterButtons()}
+                </li>
               </div>
 
               
               <div className="bottom-content">
-                <li className="">
+                
                   
                     
-                    <button className="text logout" onClick={handleLogout}>
-                    <LogoutOutlinedIcon className="icon" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black'}}/>
-                    </button>
+                    <IconButton className="text logout" onClick={handleLogout}>
+                    <LogoutOutlinedIcon className="menuButton" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black', width: '40px', height: '40px'}}/>
+                    </IconButton>
                  
-                </li>
+                
               </div>
             </div>
-          </nav>
+          </div>
          : 
-          <nav className={appnavClass}>
+          <div className={appnavClass} style={{backgroundColor: theme.palette.mode === 'dark' ? colors.primary[600] : 'white', padding: "50px", width: '400px'}}>
             <header className="app-header">
               <div className="app-image-text">
                 <span className="image">
-                  <img src={require("../logo.png")} style={{width: '100px',}} className="app-logo" alt="" />
+                  <img src={theme.palette.mode==='dark' ? require("../logo-white.png") : require('../logo.png')} style={{width: '100px',}} className="app-logo" alt="" />
                 </span>
                 <IconButton className="menuButton" onClick={handleCollapse} style={{color: theme.palette.mode === 'dark' ? 'white' : 'black'}}>
                   <MenuOutlinedIcon/>
@@ -439,16 +444,16 @@ export default function ApproverHomepage() {
             <div className="filter-bar">
               <div className="filters">
                 
-                <p className="filter-title">Filters: </p>
+                <span className="filter-title" style={{fontSize: '16px', fontWeight: 'bold'}}>Filters: </span>
 
                 {userData.userType === "officer" && (
                   <li className="adviser-btn" name="filter-buttons" value={0}>
-                    <div className="active-filter">
+                    <div className="nav-button">
                       
-                      <button className="text adviser="
-                      onClick={(e) => changeFilter("adviser", e)}
-                      ><span style={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>Adviser</span>
-                        <BsFillPersonLinesFill className="icon" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black'}}/>
+                      <button className="nav-button"
+                      onClick={(e) => changeFilter("adviser", e)} style={{display: 'flex', flexDirection: 'row-reverse', alignItems: 'center', paddingTop: 0, paddingBottom: 0}}
+                      ><span style={{ color: theme.palette.mode === 'dark' ? 'white' : 'black', fontSize: '16px', fontWeight: 'bold' }}>Adviser</span>
+                        <BsFillPersonLinesFill className="icon" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black', width: '25px', height: '25px'}}/>
                       </button>
                     </div>
                     {filter === "adviser" && filterButtons()}
@@ -456,17 +461,18 @@ export default function ApproverHomepage() {
                 )}
 
                 <li className="date-btn" value={1} name="filter-buttons">
-                  <div>
+                  <div className="nav-button">
                     
                     <button
                       className="nav-button"
                       onClick={(e) => changeFilter("createdAt", e)}
+                      style={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'center' }}
                     >
-                      <span style={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>Date</span>
-                      <DateRangeRoundedIcon className="icon" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black'}}/>
+                      <span style={{ color: theme.palette.mode === 'dark' ? 'white' : 'black', fontSize: '16px', fontWeight: 'bold'  }}>Date</span>
+                      <DateRangeRoundedIcon className="icon" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black', width: '25px', height: '25px'}}/>
                     </button>
                   </div>
-                  {filter == "createdAt" && filterButtons()}
+                  {filter === "createdAt" && filterButtons()}
                 </li>
 
                 <li className="step-btn" value={2} name="filter-buttons">
@@ -475,9 +481,10 @@ export default function ApproverHomepage() {
                     <button
                       className="nav-button"
                       onClick={(e) => changeFilter("step", e)}
+                      style={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'center' }}
                     >
-                      <span style={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>Step</span>
-                      <FormatListNumberedIcon className="icon" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black'}}/>
+                      <span style={{ color: theme.palette.mode === 'dark' ? 'white' : 'black', fontSize: '16px', fontWeight: 'bold'  }}>Step</span>
+                      <FormatListNumberedRoundedIcon className="icon" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black', width: '25px', height: '25px'}}/>
                     </button>
                   </div>
                   {filter === "step" && filterButtons()}
@@ -488,15 +495,16 @@ export default function ApproverHomepage() {
                     <button
                       className="nav-button"
                       onClick={(e) => changeFilter("status", e)}
+                      style={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'center' }}
                     >
-                      <span style={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>Status</span>
-                      <PendingActionsIcon className="icon" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black'}}/>
+                      <span style={{ color: theme.palette.mode === 'dark' ? 'white' : 'black', fontSize: '16px', fontWeight: 'bold'  }}>Status</span>
+                      <PendingActionsIcon className="icon" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black', width: '25px', height: '25px'}}/>
                     </button>
                   </div>
-                  {filter == "status" && filterButtons()}
+                  {filter === "status" && filterButtons()}
                 </li>
 
-                <div className="filter-buttons">
+                <div className="filter-buttons" style={{display: 'flex', justifyContent: 'center', width: '100%', paddingTop: '5px'}}>
                   <button
                     onClick={() => {
                       clearFilter();
@@ -508,129 +516,141 @@ export default function ApproverHomepage() {
               </div>
 
               
-              <div className="bottom-content">
+              <div className="bottom-content" style={{display:'flex', justifyContent: 'start'}}>
                 <li className="">
                   <div>
                     
-                    <button className="nav-button" onClick={handleLogout}>
-                      <span style={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>Log out</span>
-                      <BiLogOut className="icon" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black'}}/>
+                    <button className="nav-button" onClick={handleLogout} style={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'center' }}>
+                      <span style={{ color: theme.palette.mode === 'dark' ? 'white' : 'black',fontSize: '16px', fontWeight: 'bold' }}>Log out</span>
+                      <BiLogOut className="icon" style={{color: theme.palette.mode === 'dark' ? 'white' : 'black', width: '25px', height: '25px'}}/>
                     </button>
                   </div>
                 </li>
               </div>
             </div>
-          </nav>
+          </div>
         }
 
         <div className="approver-body">
-          <h1 className="app-greeting">
-            Hello, {userData.fullName}! 
-          </h1>
+          <div className="approverbody-content">
+            <div className="greet-and-switch">
+              <h1 className="app-greeting">
+                Hello, {userData.fullName}! 
+              </h1>
 
-          <div className="search-list">
-            <h3 className="app-title">Student Applications</h3>
-            <div className="search-bar">
-              <input
-                type="text"
-                id="search-text"
-                onChange={handleSearch}
-                placeholder="Search for Name or Student No."
-              />
-              <button type="button" className="search-btn" onClick={clearSearch}>
-                Clear Search
-              </button>
+              <IconButton onClick={colorMode.toggleColorMode}>
+                {theme.palette.mode === "light" ? (
+                    <LightModeIcon />
+                ) : (<DarkModeIcon />)}
+              </IconButton>
             </div>
+            
 
-            <div style={{ display: "flex", columnGap: 5, alignItems: "center" }}>
-              <h4>Sort by:</h4>
-              <button
-                type="button"
-                name="sort-buttons"
-                className="active"
-                onClick={(e) => changeSort({ date: -1 }, e)}
-              >
-                Date (Descending)
-              </button>
-              <button
-                type="button"
-                name="sort-buttons"
-                onClick={(e) => changeSort({ "studentData.0.fullName": 1 }, e)}
-              >
-                Name (Ascending)
-              </button>
-              <button
-                type="button"
-                name="sort-buttons"
-                onClick={(e) => changeSort({ "studentData.0.fullName": -1 }, e)}
-              >
-                Name (Descending)
-              </button>
-            </div>
-            <br/>
-            <div style={{ display: "flex", flexDirection: "column", rowGap: 10 }}>
-              {applications.map((application, index) => {
-                return (
-                  <div className="officer-student-list"
-                    key={index}
-                    >
-                    <div>
-                      <b>Name:</b> {application["studentData"][0]["fullName"]}{" "}
-                      <br />
-                      <b>Student Number:</b>{" "}
-                      {application["studentData"][0]["studentNumber"]}
-                      <br />
-                      <b>Adviser:</b> {application["adviserData"][0]["fullName"]}{" "}
-                      <br />
-                      <b>Status:</b> {application.status} <br />
-                      <b>Step:</b> {application.step} <br />
+            <div className="search-list" style={{ backgroundColor: theme.palette.mode === 'dark' ? colors.primary[400] : 'white'}}>
+              <h3 className="app-title">Student Applications</h3>
+              <div className="search-bar">
+                <input
+                  type="text"
+                  id="search-text"
+                  onChange={handleSearch}
+                  placeholder="Search for Name or Student No."
+                />
+                <button type="button" className="search-btn" onClick={clearSearch}>
+                  Clear Search
+                </button>
+              </div>
 
-                      {showRemarks && (
-                        <div className="submit-remark">
-                          <input
-                            type="text"
-                            placeholder="Enter remarks"
-                            value={remarks}
-                            onChange={(e) => setRemarks(e.target.value)}
-                          />
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setReturnUserID(userData._id);
-                              returnApplication(application._id);
-                            }}
-                          >
-                            Submit Remarks
-                          </button>
-                        </div>
-                      )}
+              <div style={{ display: "flex", columnGap: 5, alignItems: "center" }}>
+                <h4>Sort by:</h4>
+                <button
+                  type="button"
+                  name="sort-buttons"
+                  className="active"
+                  onClick={(e) => changeSort({ date: -1 }, e)}
+                >
+                  Date (Descending)
+                </button>
+                <button
+                  type="button"
+                  name="sort-buttons"
+                  onClick={(e) => changeSort({ "studentData.0.fullName": 1 }, e)}
+                >
+                  Name (Ascending)
+                </button>
+                <button
+                  type="button"
+                  name="sort-buttons"
+                  onClick={(e) => changeSort({ "studentData.0.fullName": -1 }, e)}
+                >
+                  Name (Descending)
+                </button>
+              </div>
+              <br/>
+              <div style={{ display: "flex", flexDirection: "column", rowGap: 10 }}>
+                {applications.map((application, index) => {
+                  return (
+                    <div className="officer-student-list"
+                      key={index}
+                      style={{backgroundColor: theme.palette.mode === 'dark' ? colors.primary[500] : colors.gray[900], overflow: 'auto', maxHeight: '500px'}}
+                      >
+                      <div>
+                        <b>Name:</b> {application["studentData"][0]["fullName"]}{" "}
+                        <br />
+                        <b>Student Number:</b>{" "}
+                        {application["studentData"][0]["studentNumber"]}
+                        <br />
+                        <b>Adviser:</b> {application["adviserData"][0]["fullName"]}{" "}
+                        <br />
+                        <b>Status:</b> {application.status} <br />
+                        <b>Step:</b> {application.step} <br />
+
+                        {showRemarks && (
+                          <div className="submit-remark">
+                            <input
+                              type="text"
+                              placeholder="Enter remarks"
+                              value={remarks}
+                              onChange={(e) => setRemarks(e.target.value)}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setReturnUserID(userData._id);
+                                returnApplication(application._id);
+                              }}
+                            >
+                              Submit Remarks
+                            </button>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="student-list-buttons">
+                        <div className="divider"></div>
+                        {((userData.userType === "adviser" &&
+                          application.step === 2) ||
+                          (userData.userType === "officer" &&
+                            application.step === 3)) && application.status !== "cleared" && (
+                          <div style={{ marginTop: 10 }}>
+                            <button
+                              type="button"
+                              onClick={() => approveApplication(application._id)}
+                            >
+                              Approve
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setShowRemarks(true)}
+                            >
+                              Return with Remarks
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
-
-                    <div className="student-list-buttons">
-                      <div className="divider"></div>
-                      {((userData.userType === "adviser" &&
-                        application.step === 2) ||
-                        (userData.userType === "officer" &&
-                          application.step === 3)) && application.status !== "cleared" && (
-                        <div style={{ marginTop: 10 }}>
-                          <button
-                            type="button"
-                            onClick={() => approveApplication(application._id)}
-                          >
-                            Approve
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setShowRemarks(true)}
-                          >
-                            Return with Remarks
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>

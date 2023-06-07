@@ -8,13 +8,14 @@
 .main-content-app {
   /* position: relative; */
   top: 0;
-  overflow: auto;
   padding-top: 20px;
-  padding-left: 40px;
-  padding-right: 40px;
-  padding-bottom: 20px;
-  height: 100vh;
+  height: 100%;
   background-color: #e4e9f7;
+}
+
+.sidebar-and-content{
+  display: flex;
+  flex-direction: row;
 }
 
 .app-title {
@@ -45,11 +46,17 @@ form .cleared-text {
 }
 
 .approver-body {
-  position: relative;
-  top: 0;
-  left: 250px;
-  height: 100vh;
-  width: calc(100% - 250px);
+  width: 100%
+}
+
+.approverbody-content{
+  padding: 50px;
+}
+
+.greet-and-switch{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .search-list {
@@ -114,7 +121,6 @@ form .cleared-text {
 
 /* ===SideBar=== */
 .app-nav {
-  position: fixed;
   top: 0;
   left: 0;
   height: 100%;
@@ -124,8 +130,17 @@ form .cleared-text {
   z-index: 100;
 }
 
-.text date:hover{
+.text date:not(:hover){
   border-radius: 5px;
+}
+
+.text adviser{
+
+}
+
+.bottom-content{
+  display: flex;
+  justify-content: center;
 }
 
 .app-header {
@@ -217,6 +232,9 @@ form .cleared-text {
 }
 
 .filters{
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
   padding: 20px;
 }
 
@@ -307,7 +325,19 @@ header .app-image-text .header-text {
   text-align: center !important;
   margin-top: 5px;
   margin-bottom: 15px;
+  width: fit-content;
   /* background-color: #4f4f4f !important; */
+}
+
+.clear-button{
+  width: fit-content;
+  margin: 0;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.menuButton:hover{
+  border-radius: 5px;
 }
 
 .filter-buttons button {

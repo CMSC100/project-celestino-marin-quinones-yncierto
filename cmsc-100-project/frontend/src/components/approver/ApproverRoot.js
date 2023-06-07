@@ -25,24 +25,27 @@ export default function ApproverRoot() {
 
   return (
     <ColorModeContext.Provider value={colorMode}>
-      <div className="appnav-container">
-      {/* <div className='topnav-header'>
-                <nav className='top-nav'>
-                    <div className='logo-type'>
-                        <img src= {require("./logo.png")} className='app-logo' alt=""/>
-                        <div className='text'><p className='usertype'>ADVISER</p></div>
-                    </div>
+      <ThemeProvider theme={theme}>
+        <CssBaseline/>
+        <div className="appnav-container" style={{width:'100%', height: '100%'}}>
+        {/* <div className='topnav-header'>
+                  <nav className='top-nav'>
+                      <div className='logo-type'>
+                          <img src= {require("./logo.png")} className='app-logo' alt=""/>
+                          <div className='text'><p className='usertype'>ADVISER</p></div>
+                      </div>
 
-                    <button onClick={handleLogout} >Logout</button>
-                </nav>
-                <div className='main-content-app'>
-                    <Outlet />
-                </div>
-            </div> */}
-        <div className="main-content-app">
-          <Outlet />
+                      <button onClick={handleLogout} >Logout</button>
+                  </nav>
+                  <div className='main-content-app'>
+                      <Outlet />
+                  </div>
+              </div> */}
+          
+            <Outlet />
+          
         </div>
-      </div>
+      </ThemeProvider>
     </ColorModeContext.Provider>
     
   );
