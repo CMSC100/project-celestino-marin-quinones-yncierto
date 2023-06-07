@@ -165,7 +165,6 @@ export default function SignUp() {
                       name="mname"
                       value={middleName}
                       onChange={(e) => setMiddleName(e.target.value)}
-                      required
                     />
                   </div>
 
